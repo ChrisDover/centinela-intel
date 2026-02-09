@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/centinela-weekly-brief-001", "destination": "/briefs/001", "permanent": true },
+    { "source": "/centinela-landing", "destination": "/", "permanent": true }
+  ]
+}
