@@ -79,6 +79,69 @@
     font-size: 0.95rem;
   }
 
+  .hero-subscribe {
+    margin-top: 2.5rem;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-subscribe-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .hero-subscribe-form {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .hero-subscribe-form input[type="email"] {
+    flex: 1;
+    padding: 0.85rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-accent);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .hero-subscribe-form input[type="email"]:focus {
+    border-color: var(--accent);
+  }
+
+  .hero-subscribe-form button {
+    padding: 0.85rem 1.5rem;
+    white-space: nowrap;
+  }
+
+  .hero-subscribe-fine {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .hero-subscribe-fine a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  @media (max-width: 600px) {
+    .hero-subscribe-form {
+      flex-direction: column;
+    }
+    .hero-subscribe-form button {
+      width: 100%;
+    }
+  }
+
   .hero-proof {
     margin-top: 4rem;
     display: flex;
@@ -879,7 +942,8 @@
   .hero h1 { animation: fade-up 0.6s ease-out 0.1s both; }
   .hero-sub { animation: fade-up 0.6s ease-out 0.2s both; }
   .hero-ctas { animation: fade-up 0.6s ease-out 0.3s both; }
-  .hero-proof { animation: fade-up 0.6s ease-out 0.4s both; }
+  .hero-subscribe { animation: fade-up 0.6s ease-out 0.4s both; }
+  .hero-proof { animation: fade-up 0.6s ease-out 0.5s both; }
 </style>
 </head>
 <body>
@@ -909,6 +973,14 @@
   <div class="hero-ctas">
     <a href="/contact" class="btn-primary">Request a Briefing</a>
     <a href="/briefs/001" class="btn-outline">View Sample Report</a>
+  </div>
+  <div class="hero-subscribe">
+    <p class="hero-subscribe-label">Free weekly LatAm intel brief — every Monday at 0600</p>
+    <form class="hero-subscribe-form" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; window.location.href = 'https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email);">
+      <input type="email" placeholder="Enter your email" required>
+      <button type="submit" class="btn-primary">Subscribe Free</button>
+    </form>
+    <p class="hero-subscribe-fine">No spam. Unsubscribe anytime. <a href="/briefs/001">Read Issue #001</a></p>
   </div>
   <div class="hero-proof">
     <div class="proof-item">
@@ -1196,7 +1268,7 @@
     <div class="price-card">
       <div class="price-tier">Essentials</div>
       <div class="price-name">Regional Watch</div>
-      <div class="price-amount">$750<span>/mo</span></div>
+      <div class="price-amount">$497<span>/mo</span></div>
       <div class="price-desc">Single country or region monitoring — the intelligence baseline every team needs.</div>
       <ul class="price-features">
         <li>Weekly intelligence brief — 1 country/region</li>
@@ -1270,36 +1342,6 @@
       <p>We've built full security departments from the ground up. We've advised boards of directors, worked alongside general counsels, reported to CEOs. We've managed executive protection programs, designed duty of care frameworks, and coordinated with insurance carriers on complex risk portfolios. We've consulted for defense contractors and protected HNW families — all while living and operating across Colombia, Mexico, and Central America for nearly a decade.</p>
       <p>That's why Centinela exists. We know exactly what intelligence your security team needs, because <strong>we've been your security team</strong>. We built our AI-powered platform to deliver the kind of intelligence we always wanted but could never get — at machine speed, with operator judgment, at a price point that doesn't require board approval.</p>
       <p>Centinela Intel is a service of <strong>Enfocado Capital LLC</strong>.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ WEEKLY BRIEF SIGNUP ============ -->
-<section style="padding: 4rem 2rem 2rem;">
-  <div style="max-width: 640px; margin: 0 auto; text-align: center;">
-    <div class="section-label" style="text-align: center;">// Weekly Intelligence</div>
-    <h2 class="section-title" style="text-align: center;">The Centinela Brief</h2>
-    <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem;">
-      A free weekly LatAm security intelligence brief delivered every Monday at 0600. AI-synthesized OSINT, operator-reviewed analysis, zero fluff. Join security professionals who need ground truth, not headlines.
-    </p>
-    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem;">
-      <form style="display: flex; gap: 0.75rem;" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; window.location.href = 'https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email);">
-        <input type="email" placeholder="Enter your email" required style="
-          flex: 1;
-          padding: 0.85rem 1.25rem;
-          background: var(--bg-secondary);
-          border: 1px solid var(--border-accent);
-          border-radius: 8px;
-          color: var(--text-primary);
-          font-size: 0.95rem;
-          font-family: 'DM Sans', sans-serif;
-          outline: none;
-        " />
-        <button type="submit" class="btn-primary" style="padding: 0.85rem 2rem; white-space: nowrap; font-size: 0.95rem;">
-          Subscribe Free
-        </button>
-      </form>
-      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.75rem;">No spam. Unsubscribe anytime. Your data stays with us.</p>
     </div>
   </div>
 </section>
