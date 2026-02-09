@@ -976,7 +976,7 @@
   </div>
   <div class="hero-subscribe">
     <p class="hero-subscribe-label">Free weekly LatAm intel brief — every Monday at 0600</p>
-    <form class="hero-subscribe-form" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; window.location.href = 'https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email);">
+    <form class="hero-subscribe-form" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; fetch('https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email), {mode:'no-cors'}); window.location.href = '/welcome';">
       <input type="email" placeholder="Enter your email" required>
       <button type="submit" class="btn-primary">Subscribe Free</button>
     </form>
