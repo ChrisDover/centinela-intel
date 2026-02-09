@@ -521,7 +521,7 @@
   <div class="brief-subscribe-cta">
     <h3>Get the Brief Every Monday</h3>
     <p>Free weekly LatAm security intelligence. AI-synthesized OSINT, operator-reviewed. Zero fluff.</p>
-    <form class="brief-subscribe-form" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; var f = document.createElement('iframe'); f.style.display='none'; f.src='https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email); document.body.appendChild(f); setTimeout(function(){ window.location.href='/welcome'; }, 1500);">
+    <form class="brief-subscribe-form" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; var w = window.open('https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email), 'beehiiv', 'width=1,height=1,top=0,left=0'); setTimeout(function(){ try{w.close();}catch(e){} window.location.href='/welcome'; }, 2000);">
       <input type="email" placeholder="Enter your email" required>
       <button type="submit" class="btn-primary">Subscribe Free</button>
     </form>
