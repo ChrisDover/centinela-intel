@@ -167,8 +167,8 @@
     </ul>
 
     <div class="subscribe-form-card">
-      <form class="subscribe-form" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; var w = window.open('https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email), 'beehiiv', 'width=1,height=1,top=0,left=0'); setTimeout(function(){ try{w.close();}catch(e){} window.location.href='/welcome'; }, 2000);">
-        <input type="email" placeholder="Enter your email" required>
+      <form class="subscribe-form" action="/api/subscribe" method="POST">
+        <input type="email" name="email" placeholder="Enter your email" required>
         <button type="submit" class="btn-primary">Subscribe Free</button>
       </form>
       <p class="subscribe-fine-print">Your email is never shared, sold, or used to train AI models. Unsubscribe anytime.</p>
