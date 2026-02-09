@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centinela Intel — AI-Powered Security Risk Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #0a0e17;
+    --bg-secondary: #0f1420;
+    --bg-card: #141a28;
+    --bg-card-hover: #1a2236;
+    --border: #1e2a3f;
+    --border-accent: #2a3a55;
+    --text-primary: #e8ecf4;
+    --text-secondary: #8a96ad;
+    --text-muted: #5a6680;
+    --accent: #00d4aa;
+    --accent-dim: rgba(0, 212, 170, 0.15);
+    --accent-glow: rgba(0, 212, 170, 0.3);
+    --danger: #ff4757;
+    --warning: #ffb347;
+    --safe: #00d4aa;
+    --info: #4da6ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ============ ANIMATED GRID BACKGROUND ============ */
+  .grid-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .grid-bg::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse 800px 600px at 50% 0%, rgba(0, 212, 170, 0.06), transparent);
+  }
+
+  /* ============ NAVIGATION ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 14, 23, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nav-logo {
+    width: 36px; height: 36px;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .nav-logo::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent-glow);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .nav-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.35rem;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+  }
+
+  .nav-name span {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    margin-left: 0.5rem;
+    font-weight: 400;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg-primary);
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover {
+    background: #00e8bb;
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+
+  .btn-outline {
+    border: 1px solid var(--border-accent);
+    color: var(--text-primary);
+    padding: 0.6rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+    background: transparent;
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 10rem 2rem 6rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: var(--accent-dim);
+    border: 1px solid rgba(0, 212, 170, 0.25);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-ctas .btn-primary {
+    padding: 0.85rem 2.2rem;
+    font-size: 0.95rem;
+  }
+
+  .hero-ctas .btn-outline {
+    padding: 0.85rem 2.2rem;
+    font-size: 0.95rem;
+  }
+
+  .hero-proof {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .proof-item {
+    text-align: center;
+  }
+
+  .proof-item .number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .proof-item .label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+  }
+
+  /* ============ SECTION STYLING ============ */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 1rem;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+
+  .section-desc {
+    color: var(--text-secondary);
+    max-width: 600px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  /* ============ THREAT CONTEXT BANNER ============ */
+  .threat-banner {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .threat-inner {
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.08), rgba(255, 179, 71, 0.05));
+    border: 1px solid rgba(255, 71, 87, 0.2);
+    border-radius: 16px;
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .threat-stat {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .threat-stat .value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--danger);
+  }
+
+  .threat-stat .desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  /* ============ WHAT YOU GET (DELIVERABLES) ============ */
+  .deliverables-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .deliverable-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s;
+  }
+
+  .deliverable-card:hover {
+    border-color: var(--accent);
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .deliverable-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-dim);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    font-size: 1.2rem;
+  }
+
+  .deliverable-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .deliverable-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .deliverable-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ============ SAMPLE INTELLIGENCE BRIEF ============ */
+  .brief-preview {
+    margin-top: 3rem;
+  }
+
+  .brief-mockup {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .brief-header {
+    background: linear-gradient(135deg, #0f1420, #141a28);
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .brief-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .brief-class {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+
+  .class-confidential {
+    background: rgba(255, 71, 87, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(255, 71, 87, 0.3);
+  }
+
+  .brief-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .brief-body {
+    padding: 2rem;
+  }
+
+  .brief-title-line {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .brief-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .brief-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .brief-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brief-section p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .threat-level-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .threat-level-indicator {
+    display: flex;
+    gap: 4px;
+  }
+
+  .threat-pip {
+    width: 28px; height: 8px;
+    border-radius: 4px;
+    background: var(--border);
+  }
+
+  .threat-pip.active-danger { background: var(--danger); }
+  .threat-pip.active-warning { background: var(--warning); }
+  .threat-pip.active-safe { background: var(--safe); }
+
+  .threat-level-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .threat-level-label.high { color: var(--danger); }
+  .threat-level-label.moderate { color: var(--warning); }
+
+  .incident-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .incident-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .incident-list li:last-child { border-bottom: none; }
+
+  .incident-severity {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    font-weight: 600;
+  }
+
+  .sev-high { background: rgba(255, 71, 87, 0.15); color: var(--danger); }
+  .sev-med { background: rgba(255, 179, 71, 0.15); color: var(--warning); }
+  .sev-low { background: rgba(0, 212, 170, 0.15); color: var(--safe); }
+
+  /* ============ DASHBOARD MOCKUP ============ */
+  .dashboard-preview {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+
+  .dash-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(15, 20, 32, 0.8);
+  }
+
+  .dash-tabs {
+    display: flex;
+    gap: 0;
+  }
+
+  .dash-tab {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    background: transparent;
+  }
+
+  .dash-tab:first-child { border-radius: 6px 0 0 6px; }
+  .dash-tab:last-child { border-radius: 0 6px 6px 0; }
+
+  .dash-tab.active {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border-color: rgba(0, 212, 170, 0.3);
+  }
+
+  .dash-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .dash-metric {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .dash-metric .metric-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .dash-metric .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+
+  .dash-metric .metric-change {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+  }
+
+  .metric-change.up { color: var(--danger); }
+  .metric-change.down { color: var(--safe); }
+  .metric-change.neutral { color: var(--text-muted); }
+
+  .dash-body {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .dash-map-area {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    min-height: 320px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dash-map-area::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; height: 60%;
+    background:
+      radial-gradient(circle 3px at 25% 40%, var(--danger) 0%, transparent 100%),
+      radial-gradient(circle 3px at 55% 35%, var(--warning) 0%, transparent 100%),
+      radial-gradient(circle 3px at 70% 60%, var(--safe) 0%, transparent 100%),
+      radial-gradient(circle 3px at 35% 65%, var(--danger) 0%, transparent 100%),
+      radial-gradient(circle 3px at 45% 50%, var(--warning) 0%, transparent 100%),
+      radial-gradient(circle 3px at 80% 45%, var(--info) 0%, transparent 100%),
+      radial-gradient(circle 2px at 20% 55%, var(--danger) 0%, transparent 100%),
+      radial-gradient(circle 2px at 60% 70%, var(--safe) 0%, transparent 100%);
+    opacity: 0.8;
+  }
+
+  .dash-map-area::after {
+    content: 'ACTIVE MONITORING — LATIN AMERICA REGION';
+    position: absolute;
+    bottom: 1rem; left: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* Map outline approximation */
+  .map-outline {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%; height: 70%;
+    border: 1px solid rgba(0, 212, 170, 0.08);
+    border-radius: 40% 60% 55% 45% / 50% 40% 60% 50%;
+  }
+
+  .map-ping {
+    position: absolute;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    animation: map-ping 3s ease-in-out infinite;
+  }
+
+  .map-ping::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  @keyframes map-ping {
+    0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+    50% { box-shadow: 0 0 0 8px transparent; }
+  }
+
+  .ping-1 { top: 30%; left: 35%; color: var(--danger); }
+  .ping-2 { top: 55%; left: 50%; color: var(--warning); }
+  .ping-3 { top: 40%; left: 65%; color: var(--safe); }
+  .ping-4 { top: 60%; left: 30%; color: var(--danger); }
+
+  .dash-feed {
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+
+  .feed-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .feed-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .feed-item:last-child { border-bottom: none; }
+
+  .feed-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .feed-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .feed-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    margin-top: 0.35rem;
+  }
+
+  .tag-critical { background: rgba(255, 71, 87, 0.15); color: var(--danger); }
+  .tag-advisory { background: rgba(255, 179, 71, 0.15); color: var(--warning); }
+  .tag-info { background: rgba(77, 166, 255, 0.15); color: var(--info); }
+
+  /* ============ DIFFERENTIATOR SECTION ============ */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .diff-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .diff-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .diff-card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .diff-card p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  /* ============ PRICING / TIERS ============ */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .price-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .price-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-4px);
+  }
+
+  .price-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, rgba(0, 212, 170, 0.05), var(--bg-card));
+  }
+
+  .price-card.featured::before {
+    content: 'MOST POPULAR';
+    position: absolute;
+    top: -0.75rem; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    background: var(--accent);
+    color: var(--bg-primary);
+    padding: 0.3rem 1rem;
+    border-radius: 100px;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .price-tier {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .price-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .price-amount {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .price-amount span {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .price-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  .price-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+  }
+
+  .price-features li {
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .price-features li::before {
+    content: '→';
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .price-cta {
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+  }
+
+  .price-cta.primary {
+    background: var(--accent);
+    color: var(--bg-primary);
+    border: none;
+  }
+
+  .price-cta.primary:hover {
+    background: #00e8bb;
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+
+  .price-cta.secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-accent);
+  }
+
+  .price-cta.secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ============ SECURE INFRASTRUCTURE ============ */
+  .infra-highlight {
+    background: linear-gradient(135deg, rgba(0, 212, 170, 0.05), rgba(77, 166, 255, 0.03));
+    border: 1px solid rgba(0, 212, 170, 0.15);
+    border-radius: 16px;
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  .infra-text h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+
+  .infra-text p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .infra-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .infra-feat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .infra-feat::before {
+    content: '◆';
+    color: var(--accent);
+    font-size: 0.5rem;
+  }
+
+  .infra-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .infra-line {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: rgba(10, 14, 23, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .infra-line .status {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .infra-line .status.green { background: var(--safe); box-shadow: 0 0 8px var(--accent-glow); }
+  .infra-line .status.blue { background: var(--info); box-shadow: 0 0 8px rgba(77, 166, 255, 0.3); }
+
+  /* ============ CREDIBILITY / ABOUT ============ */
+  .cred-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+    align-items: start;
+    margin-top: 2rem;
+  }
+
+  .cred-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .cred-stat {
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .cred-stat .value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .cred-stat .label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+  }
+
+  .cred-text p {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .cred-text strong {
+    color: var(--text-primary);
+  }
+
+  /* ============ CTA FOOTER ============ */
+  .cta-section {
+    text-align: center;
+    padding: 8rem 2rem;
+  }
+
+  .cta-section h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+
+  .cta-section p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .footer-left span {
+    color: var(--text-secondary);
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .footer-right a {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-right a:hover { color: var(--accent); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 900px) {
+    .deliverables-grid,
+    .pricing-grid,
+    .diff-grid { grid-template-columns: 1fr; }
+    .threat-inner { grid-template-columns: 1fr; }
+    .dash-grid { grid-template-columns: 1fr 1fr; }
+    .dash-body { grid-template-columns: 1fr; }
+    .infra-highlight { grid-template-columns: 1fr; }
+    .cred-content { grid-template-columns: 1fr; }
+    nav { padding: 1rem; }
+    .nav-links { gap: 1rem; }
+    .nav-links a:not(.btn-primary) { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 8rem 1.5rem 4rem; }
+    .hero-proof { gap: 1.5rem; }
+    .dash-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-badge { animation: fade-up 0.6s ease-out; }
+  .hero h1 { animation: fade-up 0.6s ease-out 0.1s both; }
+  .hero-sub { animation: fade-up 0.6s ease-out 0.2s both; }
+  .hero-ctas { animation: fade-up 0.6s ease-out 0.3s both; }
+  .hero-proof { animation: fade-up 0.6s ease-out 0.4s both; }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- ============ NAVIGATION ============ -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"></div>
+    <div class="nav-name">Centinela<span>Intel</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#dashboard">Platform</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="btn-primary">Request Briefing</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-badge">Live Intelligence Monitoring</div>
+  <h1>Security Intelligence<br>for a <em>Volatile World</em></h1>
+  <p class="hero-sub">AI-powered threat intelligence and risk analysis for organizations operating in Latin America and high-threat environments. Built by operators, for operators.</p>
+  <div class="hero-ctas">
+    <a href="#contact" class="btn-primary">Request a Briefing</a>
+    <a href="#brief" class="btn-outline">View Sample Report</a>
+  </div>
+  <div class="hero-proof">
+    <div class="proof-item">
+      <div class="number">25+</div>
+      <div class="label">Years Experience</div>
+    </div>
+    <div class="proof-item">
+      <div class="number">8+</div>
+      <div class="label">Years In-Country LatAm</div>
+    </div>
+    <div class="proof-item">
+      <div class="number">2,000+</div>
+      <div class="label">Personnel Managed</div>
+    </div>
+    <div class="proof-item">
+      <div class="number">24/7</div>
+      <div class="label">AI Monitoring</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THREAT CONTEXT ============ -->
+<div class="threat-banner">
+  <div class="threat-inner">
+    <div class="threat-stat">
+      <div class="value">73%</div>
+      <div class="desc">of multinational corporations report increased security incidents in Latin American operations since 2022</div>
+    </div>
+    <div class="threat-stat">
+      <div class="value">$4.2B</div>
+      <div class="desc">estimated annual losses from corporate security incidents across the region</div>
+    </div>
+    <div class="threat-stat">
+      <div class="value">18 min</div>
+      <div class="desc">average response time advantage with AI-powered early warning vs. traditional intelligence services</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WHAT YOU GET ============ -->
+<section id="services">
+  <div class="section-label">// Deliverables</div>
+  <h2 class="section-title">What You Get</h2>
+  <p class="section-desc">Every Centinela engagement delivers actionable intelligence products designed for decision-makers, not raw data dumps.</p>
+
+  <div class="deliverables-grid">
+    <div class="deliverable-card">
+      <div class="deliverable-icon">📡</div>
+      <h3>Daily Intelligence Briefs</h3>
+      <p>AI-synthesized morning reports covering threat developments, political shifts, criminal activity, and operational impacts across your areas of interest. Reviewed and annotated by senior analysts with ground truth.</p>
+      <span class="deliverable-tag">Delivered 0600 Local</span>
+    </div>
+    <div class="deliverable-card">
+      <div class="deliverable-icon">🗺️</div>
+      <h3>Travel Risk Assessments</h3>
+      <p>Route-specific threat analysis for executive travel. Covers ground transportation, lodging, meeting venues, and contingency recommendations based on real-time conditions — not outdated State Department advisories.</p>
+      <span class="deliverable-tag">48hr Turnaround</span>
+    </div>
+    <div class="deliverable-card">
+      <div class="deliverable-icon">⚡</div>
+      <h3>Incident Alerts</h3>
+      <p>Real-time notifications when events occur that affect your personnel, operations, or travel routes. AI-monitored OSINT across Spanish and Portuguese language sources, triaged by severity and proximity.</p>
+      <span class="deliverable-tag">Real-Time Push</span>
+    </div>
+    <div class="deliverable-card">
+      <div class="deliverable-icon">📊</div>
+      <h3>Quarterly Threat Landscape</h3>
+      <p>Deep-dive strategic analysis of evolving threats, political risk, cartel dynamics, regulatory changes, and security trend forecasts. Designed for board-level and C-suite consumption.</p>
+      <span class="deliverable-tag">Executive Format</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SAMPLE BRIEF ============ -->
+<section id="brief">
+  <div class="section-label">// Sample Output</div>
+  <h2 class="section-title">Daily Intelligence Brief</h2>
+  <p class="section-desc">This is what lands in your inbox every morning. Actionable, concise, analyst-reviewed.</p>
+
+  <div class="brief-preview">
+    <div class="brief-mockup">
+      <div class="brief-header">
+        <div class="brief-header-left">
+          <span class="brief-class class-confidential">Confidential</span>
+          <span style="font-family: 'Instrument Serif', serif; font-size: 1rem;">Centinela Intel</span>
+        </div>
+        <div class="brief-date">09 FEB 2026 — 0600 CST</div>
+      </div>
+      <div class="brief-body">
+        <div class="brief-title-line">Mexico & Northern Triangle — Daily Situation Report</div>
+        <div class="brief-subtitle">PREPARED FOR: [CLIENT] // ANALYST: C. MARTINEZ // PERIOD: 08-09 FEB 2026</div>
+
+        <div class="brief-section">
+          <div class="brief-section-title">Regional Threat Level</div>
+          <div class="threat-level-bar">
+            <div class="threat-level-indicator">
+              <div class="threat-pip active-danger"></div>
+              <div class="threat-pip active-danger"></div>
+              <div class="threat-pip active-danger"></div>
+              <div class="threat-pip active-warning"></div>
+              <div class="threat-pip"></div>
+            </div>
+            <span class="threat-level-label high">ELEVATED — Trending Higher</span>
+          </div>
+        </div>
+
+        <div class="brief-section">
+          <div class="brief-section-title">Key Developments</div>
+          <ul class="incident-list">
+            <li>
+              <span class="incident-severity sev-high">HIGH</span>
+              <span>Jalisco — Armed roadblock reported on Highway 15D between Guadalajara and Tepic. Two commercial vehicles seized. CJNG-attributed activity. <strong>Impact: Avoid GDL-Tepic corridor until further notice.</strong></span>
+            </li>
+            <li>
+              <span class="incident-severity sev-med">MED</span>
+              <span>Guatemala City — National Police announced heightened checkpoint activity in zones 9 and 10 following diplomatic summit. Expect 15-30 min delays on Roosevelt Ave corridor through Friday.</span>
+            </li>
+            <li>
+              <span class="incident-severity sev-med">MED</span>
+              <span>Colombia — Port workers union in Buenaventura announced 48-hour work stoppage beginning Wednesday. Cargo delays expected for Pacific coast operations.</span>
+            </li>
+            <li>
+              <span class="incident-severity sev-low">LOW</span>
+              <span>Honduras — San Pedro Sula international airport runway maintenance on track for completion. No further delays expected beyond published NOTAM schedule.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="brief-section">
+          <div class="brief-section-title">Analyst Assessment</div>
+          <p>The GDL-Tepic corridor disruption follows a pattern of CJNG territorial enforcement actions observed over the past 72 hours. We assess this is linked to an ongoing internal dispute within the organization's Nayarit plaza structure. Recommend all client personnel avoid ground transit on this route for a minimum 96-hour period. Air alternatives via Volaris/VivaAerobus GDL-TIJ remain unaffected. Full route analysis available upon request.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD PREVIEW ============ -->
+<section id="dashboard">
+  <div class="section-label">// Platform</div>
+  <h2 class="section-title">Real-Time Threat Dashboard</h2>
+  <p class="section-desc">Your dedicated intelligence portal. Live monitoring, historical analysis, and threat mapping — all in one secure interface.</p>
+
+  <div class="dashboard-preview">
+    <div class="dash-toolbar">
+      <div class="dash-tabs">
+        <button class="dash-tab active">Overview</button>
+        <button class="dash-tab">Incidents</button>
+        <button class="dash-tab">Routes</button>
+        <button class="dash-tab">Reports</button>
+      </div>
+      <div class="dash-time">LIVE — Last updated 0547 CST</div>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-metric">
+        <div class="metric-label">Active Alerts</div>
+        <div class="metric-value" style="color: var(--danger);">7</div>
+        <div class="metric-change up">↑ 3 from yesterday</div>
+      </div>
+      <div class="dash-metric">
+        <div class="metric-label">Monitored Regions</div>
+        <div class="metric-value" style="color: var(--info);">12</div>
+        <div class="metric-change neutral">— stable</div>
+      </div>
+      <div class="dash-metric">
+        <div class="metric-label">Incidents (7d)</div>
+        <div class="metric-value" style="color: var(--warning);">34</div>
+        <div class="metric-change up">↑ 12% WoW</div>
+      </div>
+      <div class="dash-metric">
+        <div class="metric-label">Risk Score</div>
+        <div class="metric-value" style="color: var(--danger);">7.2</div>
+        <div class="metric-change up">↑ 0.4 from last week</div>
+      </div>
+    </div>
+    <div class="dash-body">
+      <div class="dash-map-area">
+        <div class="map-outline"></div>
+        <div class="map-ping ping-1"></div>
+        <div class="map-ping ping-2"></div>
+        <div class="map-ping ping-3"></div>
+        <div class="map-ping ping-4"></div>
+      </div>
+      <div class="dash-feed">
+        <div class="feed-title">Live Intelligence Feed</div>
+        <div class="feed-item">
+          <div class="feed-time">0543 CST</div>
+          <div class="feed-text">Armed roadblock confirmed on HWY 15D near Compostela, Nayarit. Two vehicles seized.</div>
+          <span class="feed-tag tag-critical">CRITICAL</span>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">0521 CST</div>
+          <div class="feed-text">Buenaventura port union confirms 48hr stoppage starting Wed. Pacific cargo ops affected.</div>
+          <span class="feed-tag tag-advisory">ADVISORY</span>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">0508 CST</div>
+          <div class="feed-text">Guatemala City — Increased PNC checkpoint activity zones 9-10 confirmed via local sources.</div>
+          <span class="feed-tag tag-advisory">ADVISORY</span>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">0445 CST</div>
+          <div class="feed-text">Medellín — Protest activity near El Poblado subsided overnight. Normal operations resumed.</div>
+          <span class="feed-tag tag-info">RESOLVED</span>
+        </div>
+        <div class="feed-item">
+          <div class="feed-time">0412 CST</div>
+          <div class="feed-text">Mexico City — Presidential security detail movement observed near Los Pinos. Likely related to Wed summit.</div>
+          <span class="feed-tag tag-info">MONITOR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY CENTINELA ============ -->
+<section>
+  <div class="section-label">// Why Centinela</div>
+  <h2 class="section-title">Not Another Consulting Firm</h2>
+  <p class="section-desc">We built Centinela because the market is broken — overpriced generalists or cheap, useless data feeds. There's nothing in between.</p>
+
+  <div class="diff-grid">
+    <div class="diff-card">
+      <h3>Operator-Built Intelligence</h3>
+      <p>Our analysis comes from decades of direct operational experience in Latin America — managing large-scale security operations, running executive protection details, and navigating the actual threat environment. We don't summarize headlines. We provide ground truth.</p>
+    </div>
+    <div class="diff-card">
+      <h3>AI-Accelerated, Human-Verified</h3>
+      <p>Our AI agents monitor thousands of OSINT sources 24/7 across Spanish, Portuguese, and English. Every brief and alert is reviewed by a senior analyst before delivery. You get machine speed with human judgment.</p>
+    </div>
+    <div class="diff-card">
+      <h3>Secure by Default</h3>
+      <p>Available with locally-hosted AI processing on dedicated infrastructure. Your intelligence never touches third-party APIs. For clients who require it, we offer fully air-gapped analysis environments.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECURE INFRASTRUCTURE ============ -->
+<section>
+  <div class="infra-highlight">
+    <div class="infra-text">
+      <h3>Hyper-Secure Intelligence Infrastructure</h3>
+      <p>For clients in defense, government, and ultra-high-net-worth protection, we offer dedicated AI infrastructure that keeps your intelligence fully contained. No data leaves your environment.</p>
+      <div class="infra-features">
+        <div class="infra-feat">Air-gapped AI processing</div>
+        <div class="infra-feat">Dedicated GPU compute</div>
+        <div class="infra-feat">Zero third-party API exposure</div>
+        <div class="infra-feat">Encrypted at rest & in transit</div>
+        <div class="infra-feat">SOC 2 aligned controls</div>
+        <div class="infra-feat">Custom deployment options</div>
+      </div>
+    </div>
+    <div class="infra-visual">
+      <div class="infra-line">
+        <div class="status green"></div>
+        <span>OSINT Collection Engine ........ ACTIVE</span>
+      </div>
+      <div class="infra-line">
+        <div class="status green"></div>
+        <span>NLP Analysis Pipeline .......... ACTIVE</span>
+      </div>
+      <div class="infra-line">
+        <div class="status blue"></div>
+        <span>Threat Correlation Model ........ v3.2.1</span>
+      </div>
+      <div class="infra-line">
+        <div class="status green"></div>
+        <span>Local LLM Instance ............ RUNNING</span>
+      </div>
+      <div class="infra-line">
+        <div class="status green"></div>
+        <span>Encrypted Data Store .......... NOMINAL</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing">
+  <div class="section-label">// Service Tiers</div>
+  <h2 class="section-title">Intelligence Packages</h2>
+  <p class="section-desc">Scalable coverage built around your operational footprint. All tiers include analyst-reviewed deliverables.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Essentials</div>
+      <div class="price-name">Regional Watch</div>
+      <div class="price-amount">$1,500<span>/mo</span></div>
+      <div class="price-desc">Single country or region monitoring with daily intelligence.</div>
+      <ul class="price-features">
+        <li>Daily intelligence briefs — 1 region</li>
+        <li>Monthly threat landscape report</li>
+        <li>Email-based incident alerts</li>
+        <li>Dashboard access (read-only)</li>
+        <li>Email analyst support</li>
+      </ul>
+      <a href="#contact" class="price-cta secondary">Get Started</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tier">Professional</div>
+      <div class="price-name">Operations Intelligence</div>
+      <div class="price-amount">$3,500<span>/mo</span></div>
+      <div class="price-desc">Multi-country coverage with travel risk and real-time alerts.</div>
+      <ul class="price-features">
+        <li>Daily briefs — up to 3 countries</li>
+        <li>10 travel risk assessments / month</li>
+        <li>Real-time incident alerts (push)</li>
+        <li>Full dashboard with custom views</li>
+        <li>Monthly analyst strategy call</li>
+        <li>Quarterly threat landscape report</li>
+      </ul>
+      <a href="#contact" class="price-cta primary">Request Briefing</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Enterprise</div>
+      <div class="price-name">Dedicated Intelligence Cell</div>
+      <div class="price-amount">$5,000+<span>/mo</span></div>
+      <div class="price-desc">Custom coverage with dedicated analyst time and secure infrastructure.</div>
+      <ul class="price-features">
+        <li>Unlimited country coverage</li>
+        <li>Unlimited travel risk assessments</li>
+        <li>Dedicated analyst hours</li>
+        <li>Air-gapped local AI processing</li>
+        <li>White-label option available</li>
+        <li>Custom reporting and integration</li>
+        <li>Weekly strategy calls</li>
+      </ul>
+      <a href="#contact" class="price-cta secondary">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CREDIBILITY ============ -->
+<section id="about">
+  <div class="section-label">// Who We Are</div>
+  <h2 class="section-title">Built by Operators</h2>
+
+  <div class="cred-content">
+    <div class="cred-stats">
+      <div class="cred-stat">
+        <div class="value">25+</div>
+        <div class="label">Years in security & intelligence</div>
+      </div>
+      <div class="cred-stat">
+        <div class="value">8+</div>
+        <div class="label">Years living and operating in Latin America</div>
+      </div>
+      <div class="cred-stat">
+        <div class="value">2,000+</div>
+        <div class="label">Security personnel managed across the region</div>
+      </div>
+    </div>
+    <div class="cred-text">
+      <p>Centinela Intel was founded by a <strong>U.S. Marine veteran</strong> with over two decades of experience at the intersection of <strong>security operations, quantitative analysis, and emerging technology</strong>.</p>
+      <p>Our founder has lived and operated in Colombia, Mexico, and across Central America for nearly a decade — managing large-scale executive protection and security operations for major defense contractors, building intelligence networks, and navigating the complex threat landscape firsthand.</p>
+      <p>That ground truth is what separates Centinela from desk-bound analysts and generic data feeds. We've built our AI-powered intelligence platform on a foundation of <strong>real operational experience</strong>, combining the speed and scale of machine learning with the judgment that only comes from years on the ground.</p>
+      <p>Centinela Intel is a service of <strong>Enfocado Capital LLC</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WEEKLY BRIEF SIGNUP ============ -->
+<section style="padding: 4rem 2rem 2rem;">
+  <div style="max-width: 640px; margin: 0 auto; text-align: center;">
+    <div class="section-label" style="text-align: center;">// Weekly Intelligence</div>
+    <h2 class="section-title" style="text-align: center;">The Centinela Brief</h2>
+    <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem;">
+      A free weekly LatAm security intelligence brief delivered every Monday at 0600. AI-synthesized OSINT, operator-reviewed analysis, zero fluff. Join security professionals who need ground truth, not headlines.
+    </p>
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem;">
+      <!-- BEEHIIV EMBED: Replace this div with your Beehiiv embed code -->
+      <!-- Get it from: Beehiiv Dashboard → Grow → Embeds → Inline Form -->
+      <form style="display: flex; gap: 0.75rem;" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Subscribed'; this.querySelector('input').disabled=true;">
+        <input type="email" placeholder="Enter your email" required style="
+          flex: 1;
+          padding: 0.85rem 1.25rem;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-accent);
+          border-radius: 8px;
+          color: var(--text-primary);
+          font-size: 0.95rem;
+          font-family: 'DM Sans', sans-serif;
+          outline: none;
+        " />
+        <button type="submit" class="btn-primary" style="padding: 0.85rem 2rem; white-space: nowrap; font-size: 0.95rem;">
+          Subscribe Free
+        </button>
+      </form>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.75rem;">No spam. Unsubscribe anytime. Your data stays with us.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-section" id="contact">
+  <h2>See What You're Missing</h2>
+  <p>Request a complimentary briefing for your region of interest. No obligation, no sales pitch — just intelligence.</p>
+  <div class="cta-buttons">
+    <a href="mailto:intel@centinelaintel.com" class="btn-primary" style="padding: 0.85rem 2.5rem; font-size: 1rem;">Request a Briefing</a>
+    <a href="#brief" class="btn-outline" style="padding: 0.85rem 2.5rem; font-size: 1rem;">View Sample Report</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-left">
+    © 2026 Centinela Intel — <span>A service of Enfocado Capital LLC</span>
+  </div>
+  <div class="footer-right">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="mailto:intel@centinelaintel.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
