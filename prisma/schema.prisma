@@ -1,0 +1,76 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Subscriber {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  name             String?
+  status           String    @default("active") // active, unsubscribed, bounced
+  subscribedAt     DateTime  @default(now())
+  unsubscribedAt   DateTime?
+  unsubscribeToken String    @unique @default(cuid())
+
+  // Engagement tracking
+  emailsSent       Int       @default(0)
+  emailsOpened     Int       @default(0)
+  emailsClicked    Int       @default(0)
+  engagementScore  Int       @default(0)
+
+  // Source tracking
+  source           String? // homepage, subscribe-page, brief, contact
+
+  emailEvents      EmailEvent[]
+
+  @@map("subscribers")
+}
+
+model EmailCampaign {
+  id              String   @id @default(cuid())
+  type            String // brief, broadcast, welcome, alert
+  subject         String
+  fromEmail       String   @default("Centinela Intel <intel@centinelaintel.com>")
+  sentAt          DateTime @default(now())
+
+  recipientCount  Int      @default(0)
+  deliveredCount  Int      @default(0)
+  openedCount     Int      @default(0)
+  clickedCount    Int      @default(0)
+  bouncedCount    Int      @default(0)
+  complainedCount Int      @default(0)
+
+  openRate        Float?
+  clickRate       Float?
+
+  tags            String?
+  notes           String?
+
+  emailEvents     EmailEvent[]
+
+  @@map("email_campaigns")
+}
+
+model EmailEvent {
+  id           String         @id @default(cuid())
+  subscriberId String?
+  campaignId   String?
+  emailId      String? // Resend email ID
+  type         String // delivered, opened, clicked, bounced, complained
+  timestamp    DateTime       @default(now())
+  metadata     String? // JSON string
+
+  subscriber   Subscriber?    @relation(fields: [subscriberId], references: [id])
+  campaign     EmailCampaign? @relation(fields: [campaignId], references: [id])
+
+  @@index([subscriberId])
+  @@index([campaignId])
+  @@index([emailId])
+  @@map("email_events")
+}
