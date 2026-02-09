@@ -3,7 +3,8 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "redirects": [
-    { "source": "/centinela-weekly-brief-001", "destination": "/briefs/001", "permanent": true },
+    { "source": "/centinela-weekly-brief-001", "destination": "/briefs/2026-02-10", "permanent": true },
+    { "source": "/briefs/001", "destination": "/briefs/2026-02-10", "permanent": true },
     { "source": "/centinela-landing", "destination": "/", "permanent": true }
   ]
 }
