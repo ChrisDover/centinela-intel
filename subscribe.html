@@ -167,7 +167,7 @@
     </ul>
 
     <div class="subscribe-form-card">
-      <form class="subscribe-form" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; fetch('https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email), {mode:'no-cors'}); window.location.href = '/welcome';">
+      <form class="subscribe-form" onsubmit="event.preventDefault(); var email = this.querySelector('input').value; var f = document.createElement('iframe'); f.style.display='none'; f.src='https://magic.beehiiv.com/v1/db534200-5b71-4bd3-9ebd-f3f6153ab37d?email=' + encodeURIComponent(email); document.body.appendChild(f); setTimeout(function(){ window.location.href='/welcome'; }, 1500);">
         <input type="email" placeholder="Enter your email" required>
         <button type="submit" class="btn-primary">Subscribe Free</button>
       </form>
