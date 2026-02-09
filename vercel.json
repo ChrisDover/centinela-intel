@@ -1,4 +1,6 @@
 {
+  "buildCommand": "prisma generate",
+  "outputDirectory": ".",
   "cleanUrls": true,
   "redirects": [
     { "source": "/centinela-weekly-brief-001", "destination": "/briefs/001", "permanent": true },
