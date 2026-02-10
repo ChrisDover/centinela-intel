@@ -52,16 +52,7 @@ export async function GET(request: NextRequest) {
   if (!tokenResponse.ok) {
     const text = await tokenResponse.text();
     return NextResponse.json(
-      {
-        error: "Token exchange failed",
-        details: text,
-        debug: {
-          redirectUri,
-          clientId,
-          secretLength: clientSecret.length,
-          secretPrefix: clientSecret.slice(0, 8) + "...",
-        },
-      },
+      { error: "Token exchange failed", details: text },
       { status: 400 }
     );
   }
