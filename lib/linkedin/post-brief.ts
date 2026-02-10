@@ -29,33 +29,42 @@ function formatBriefForLinkedIn(brief: BriefData): string {
 
   const developments = brief.developments
     .slice(0, 5)
-    .map((d) => `\u2192 ${d}`)
-    .join("\n");
+    .map((d) => `-> ${d}`)
+    .join("\n\n");
 
   const countries = brief.countries
     .slice(0, 4)
     .map((c) => `${c.name}: ${c.summary}`)
-    .join("\n");
+    .join("\n\n");
 
   // Trim analyst note to first 2-3 sentences (~300 chars)
   const analystTrimmed = trimToSentences(brief.analystNote, 300);
 
-  const post = `${threatEmoji} CENTINELA BRIEF \u2014 ${brief.threatLevel}
-${brief.date} | Latin America Security Intelligence
+  // Use ASCII-safe characters — Unicode arrows/em-dashes cause LinkedIn truncation
+  const lines = [
+    `${threatEmoji} CENTINELA BRIEF - ${brief.threatLevel}`,
+    brief.date,
+    "Latin America Security Intelligence",
+    "",
+    "KEY DEVELOPMENTS:",
+    "",
+    developments,
+    "",
+    "COUNTRY WATCH:",
+    "",
+    countries,
+    "",
+    "ANALYST ASSESSMENT:",
+    "",
+    analystTrimmed,
+    "",
+    "Read the full brief: centinelaintel.com",
+    "Subscribe free: centinelaintel.com/subscribe",
+    "",
+    "#CentinelaIntel #LatinAmerica #SecurityIntelligence #ThreatAssessment #OSINT",
+  ];
 
-KEY DEVELOPMENTS:
-${developments}
-
-COUNTRY WATCH:
-${countries}
-
-ANALYST ASSESSMENT:
-${analystTrimmed}
-
-Read the full brief \u2192 centinelaintel.com
-Subscribe free \u2192 centinelaintel.com/subscribe
-
-#CentinelaIntel #LatinAmerica #SecurityIntelligence #ThreatAssessment #OSINT`;
+  const post = lines.join("\n");
 
   // LinkedIn max is 3000 chars — truncate if needed
   if (post.length > 3000) {
