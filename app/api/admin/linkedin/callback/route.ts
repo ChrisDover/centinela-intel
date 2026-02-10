@@ -51,6 +51,10 @@ export async function GET(request: NextRequest) {
 
   if (!tokenResponse.ok) {
     const text = await tokenResponse.text();
+    console.error("LinkedIn token exchange failed:", text, {
+      redirectUri,
+      clientIdPrefix: clientId.slice(0, 4) + "...",
+    });
     return NextResponse.json(
       { error: "Token exchange failed", details: text },
       { status: 400 }
