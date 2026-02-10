@@ -20,14 +20,14 @@ export default function HomePage() {
         </p>
         <div className={styles.heroSubscribe}>
           <p className={styles.heroSubscribeLabel}>
-            Free weekly LatAm intel brief — every Monday at 0600
+            Free daily LatAm intel brief — every morning at 0600
           </p>
           <form className={styles.heroSubscribeForm} action="/api/subscribe" method="POST">
             <input type="email" name="email" placeholder="Enter your email" required />
             <button type="submit" className="btn-primary">Subscribe Free</button>
           </form>
           <p className={styles.heroSubscribeFine}>
-            Your email is never shared or sold. <a href="/briefs/2026-02-10">Read this week&#39;s brief</a>
+            Your email is never shared or sold. <a href="/briefs/2026-02-10">Read today&#39;s brief</a>
           </p>
         </div>
         <div className={styles.heroProof}>
@@ -434,7 +434,7 @@ export default function HomePage() {
               Single country or region monitoring — the intelligence baseline every team needs.
             </div>
             <ul className={styles.priceFeatures}>
-              <li>Weekly intelligence brief — 1 country/region</li>
+              <li>Daily intelligence brief — 1 country/region</li>
               <li>Monthly threat landscape summary</li>
               <li>Email-based incident alerts</li>
               <li>Dashboard access (read-only)</li>
@@ -481,7 +481,7 @@ export default function HomePage() {
               <li>Board-ready reporting &amp; presentations</li>
               <li>Air-gapped local AI processing</li>
               <li>Crisis response support</li>
-              <li>Weekly strategy calls</li>
+              <li>Weekly strategy calls + daily briefs</li>
               <li>Custom integrations &amp; white-label</li>
             </ul>
             <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaSecondary}`}>

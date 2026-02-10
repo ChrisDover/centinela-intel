@@ -209,7 +209,7 @@ export default function WelcomePage() {
       <div className="welcome-page">
         <div className="welcome-status">Subscription confirmed</div>
         <h1>You&apos;re on the list.</h1>
-        <p className="welcome-intro">The Centinela Brief lands every Monday at 0600. AI-accelerated LatAm security intelligence, verified by analysts with 25+ years on the ground. Your email is never shared or used to train AI models.</p>
+        <p className="welcome-intro">The Centinela Brief lands every morning at 0600. AI-accelerated LatAm security intelligence, verified by analysts with 25+ years on the ground. Your email is never shared or used to train AI models.</p>
 
         <div className="welcome-confirm">
           <div className="welcome-confirm-icon">&#10003;</div>
@@ -221,7 +221,7 @@ export default function WelcomePage() {
         <div className="welcome-section-label">// Your First Brief</div>
 
         <div className="welcome-brief-card">
-          <h3>Latin America Weekly Security Brief — 10 February 2026</h3>
+          <h3>Latin America Daily Security Brief — 10 February 2026</h3>
           <div className="brief-meta">Week of 10 Feb 2026 // Open Source — For Distribution</div>
           <p>Sinaloa mine worker kidnapping, Guayaquil car bombing, Ecuador-Colombia trade war, 37 cartel members transferred to U.S. custody, and more. Full regional threat assessment with country-by-country operational guidance.</p>
           <a href="/briefs/2026-02-10">Read the brief now &#8594;</a>
@@ -230,7 +230,7 @@ export default function WelcomePage() {
         <div className="welcome-expect">
           <h3>What to expect</h3>
           <ul className="expect-list">
-            <li><strong>Every Monday at 0600 CST</strong> — a concise threat assessment covering Mexico, Central America, Colombia, Ecuador, and the wider region</li>
+            <li><strong>Every morning at 0600 CST</strong> — a concise threat assessment covering Mexico, Central America, Colombia, Ecuador, and the wider region</li>
             <li><strong>Top developments</strong> — ranked by severity with operational impact analysis, not just headlines</li>
             <li><strong>Country-by-country guidance</strong> — actionable recommendations for security teams and travelers</li>
             <li><strong>Analyst assessment</strong> — forward-looking indicators and dynamics to watch over the coming weeks</li>
@@ -238,7 +238,7 @@ export default function WelcomePage() {
         </div>
 
         <div className="welcome-cta">
-          <p>Need more than a weekly brief? Custom daily intelligence, travel risk assessments, and dedicated analyst support start at $497/mo.</p>
+          <p>Need more than our daily brief? Custom intelligence packages, travel risk assessments, and dedicated analyst support start at $497/mo.</p>
           <a href="/contact">Request a briefing for your operations &#8594;</a>
         </div>
       </div>

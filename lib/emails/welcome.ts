@@ -23,9 +23,9 @@ export function welcomeEmail(email: string, unsubscribeToken: string) {
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">You're in.</p>
 
-<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Welcome to The Centinela Brief — a weekly Latin America security intelligence report delivered every Monday at 0600.</p>
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Welcome to The Centinela Brief — a daily Latin America security intelligence report delivered every morning at 0600.</p>
 
-<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Here's what you'll get each week:</p>
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Here's what you'll get each day:</p>
 
 <p style="margin: 0 0 6px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">&bull; Regional threat assessment with risk levels and trend analysis</p>
 <p style="margin: 0 0 6px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">&bull; Top security developments across Mexico, Central America, Colombia, Ecuador</p>
@@ -34,7 +34,7 @@ export function welcomeEmail(email: string, unsubscribeToken: string) {
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">AI-accelerated OSINT collection. Human-verified analysis. Signal, not noise.</p>
 
-<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Your first brief arrives Monday. In the meantime, you can read the latest one here:<br><a href="${briefUrl}" style="color: #1a1a1a; text-decoration: underline;">${briefUrl}</a></p>
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Your first brief arrives tomorrow morning. In the meantime, you can read the latest one here:<br><a href="${briefUrl}" style="color: #1a1a1a; text-decoration: underline;">${briefUrl}</a></p>
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">— Centinela Intel</p>
 

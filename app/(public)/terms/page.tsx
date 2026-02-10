@@ -67,7 +67,7 @@ export default function TermsPage() {
 
         <h2>Use of Intelligence Products</h2>
         <p>Intelligence products delivered to clients are for the exclusive use of the subscribing organization and its authorized personnel. Redistribution, resale, or public disclosure of client-specific intelligence products is prohibited without written consent.</p>
-        <p>The Centinela Brief (our free weekly newsletter) is classified as open-source and may be shared freely with attribution.</p>
+        <p>The Centinela Brief (our free daily newsletter) is classified as open-source and may be shared freely with attribution.</p>
 
         <h2>Disclaimer</h2>
         <p>Our intelligence products represent our best assessment based on available information at the time of publication. Threat environments are inherently dynamic and unpredictable. Centinela Intel does not guarantee the accuracy, completeness, or timeliness of any intelligence product. Our assessments should be considered one input among many in your security decision-making process.</p>

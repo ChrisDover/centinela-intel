@@ -1,5 +1,5 @@
 /**
- * Weekly brief template — structured intelligence format.
+ * Daily brief template — structured intelligence format.
  * B&W plaintext style, threat levels as text, bullet-point developments.
  */
 
@@ -76,6 +76,6 @@ ${countriesList}
     content,
     unsubscribeUrl,
     ctaBlock,
-    preheader: `${brief.threatLevel} — ${brief.developments[0] || "Weekly LatAm security intelligence"}`,
+    preheader: `${brief.threatLevel} — ${brief.developments[0] || "Daily LatAm security intelligence"}`,
   });
 }

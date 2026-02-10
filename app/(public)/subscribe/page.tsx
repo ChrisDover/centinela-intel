@@ -140,12 +140,12 @@ export default function SubscribePage() {
 
       <div className="subscribe-page">
         <div className="subscribe-container">
-          <div className="section-label" style={{ textAlign: "center" }}>// Weekly Intelligence</div>
+          <div className="section-label" style={{ textAlign: "center" }}>// Daily Intelligence</div>
           <h1>The Centinela <em>Brief</em></h1>
-          <p className="subscribe-intro">A free weekly Latin America security intelligence brief delivered every Monday at 0600. AI-accelerated OSINT collection, human-verified analysis. Signal, not noise.</p>
+          <p className="subscribe-intro">A free daily Latin America security intelligence brief delivered every morning at 0600. AI-accelerated OSINT collection, human-verified analysis. Signal, not noise.</p>
 
           <ul className="subscribe-benefits">
-            <li>Weekly LatAm threat assessment with regional risk levels and trend analysis</li>
+            <li>Daily LatAm threat assessment with regional risk levels and trend analysis</li>
             <li>Top security developments across Mexico, Central America, Colombia, and Ecuador</li>
             <li>Country-by-country operational guidance and travel risk updates</li>
             <li>Analyst assessment with forward-looking indicators to watch</li>

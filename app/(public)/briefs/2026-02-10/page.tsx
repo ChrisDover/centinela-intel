@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Centinela Intel — Weekly Brief — 10 Feb 2026",
+  title: "Centinela Intel — Daily Brief — 10 Feb 2026",
 };
 
 export default function BriefPage() {
@@ -385,7 +385,7 @@ export default function BriefPage() {
             </div>
             <span className="classification">Open Source — For Distribution</span>
           </div>
-          <h1 className="masthead-title">Latin America Weekly Security Brief</h1>
+          <h1 className="masthead-title">Latin America Daily Security Brief</h1>
           <div className="masthead-meta">
             <span>Week of 10 February 2026</span>
             <span>10 Feb 2026</span>
@@ -510,7 +510,7 @@ export default function BriefPage() {
         {/* SUBSCRIBE CTA */}
         <div className="brief-subscribe-cta">
           <h3>Get the Brief Every Monday</h3>
-          <p>Free weekly LatAm security intelligence. AI-synthesized OSINT, operator-reviewed. Zero fluff.</p>
+          <p>Free daily LatAm security intelligence. AI-synthesized OSINT, operator-reviewed. Zero fluff.</p>
           <form className="brief-subscribe-form" action="/api/subscribe" method="POST">
             <input type="email" name="email" placeholder="Enter your email" required />
             <button type="submit" className="btn-primary">Subscribe Free</button>

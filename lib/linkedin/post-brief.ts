@@ -1,5 +1,5 @@
 /**
- * Format a weekly brief into a LinkedIn text post and publish it.
+ * Format a daily brief into a LinkedIn text post and publish it.
  * Target: 1500-2000 chars (max 3000).
  */
 

@@ -72,7 +72,7 @@ export default function ThankYouPage() {
           <p className="thankyou-message">Your briefing request has been received. Our intelligence team will respond within 24 hours with a tailored assessment for your region of interest.</p>
           <div className="thankyou-links">
             <a href="/" className="btn-outline">Back to Home</a>
-            <a href="/subscribe" className="btn-primary">Subscribe to Weekly Brief</a>
+            <a href="/subscribe" className="btn-primary">Subscribe to Daily Brief</a>
           </div>
         </div>
       </div>

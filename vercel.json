@@ -3,7 +3,7 @@
   "crons": [
     {
       "path": "/api/cron/send-brief",
-      "schedule": "0 10 * * 1"
+      "schedule": "0 10 * * *"
     },
     {
       "path": "/api/cron/analyze-engagement",
