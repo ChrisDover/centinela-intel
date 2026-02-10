@@ -1,0 +1,532 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Centinela Intel — Weekly Brief — 10 Feb 2026",
+};
+
+export default function BriefPage() {
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{__html: `
+        /* Aliases for brief-specific var names */
+        :root {
+          --bg: var(--bg-primary);
+          --bg2: var(--bg-secondary);
+          --bg3: var(--bg-card);
+          --text: var(--text-primary);
+          --text2: var(--text-secondary);
+          --muted: var(--text-muted);
+        }
+
+        .brief-container {
+          max-width: 720px;
+          margin: 0 auto;
+          padding: 7rem 2rem 2rem;
+        }
+
+        /* Header */
+        .brief-masthead {
+          border-bottom: 2px solid var(--accent);
+          padding-bottom: 1.5rem;
+          margin-bottom: 2rem;
+        }
+
+        .masthead-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+
+        .masthead-brand {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .brand-mark {
+          width: 32px; height: 32px;
+          border: 2px solid var(--accent);
+          border-radius: 6px;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        .brand-mark::before {
+          content: '';
+          width: 6px; height: 6px;
+          background: var(--accent);
+          border-radius: 50%;
+        }
+
+        .brand-name {
+          font-family: 'Instrument Serif', serif;
+          font-size: 1.2rem;
+        }
+
+        .brand-name span {
+          color: var(--text-muted);
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.8rem;
+          margin-left: 0.4rem;
+        }
+
+        .classification {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.65rem;
+          padding: 0.25rem 0.6rem;
+          border-radius: 3px;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          font-weight: 600;
+          background: rgba(77, 166, 255, 0.15);
+          color: var(--info);
+          border: 1px solid rgba(77, 166, 255, 0.3);
+        }
+
+        .masthead-title {
+          font-family: 'Instrument Serif', serif;
+          font-size: 1.8rem;
+          line-height: 1.2;
+          margin-bottom: 0.5rem;
+          font-weight: 400;
+        }
+
+        .masthead-meta {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          display: flex;
+          gap: 2rem;
+          flex-wrap: wrap;
+        }
+
+        /* Sections */
+        .section {
+          margin-bottom: 2.5rem;
+        }
+
+        .section-head {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.7rem;
+          color: var(--accent);
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid var(--border);
+          margin-bottom: 1rem;
+        }
+
+        .section h3 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-bottom: 0.75rem;
+        }
+
+        .section p {
+          color: var(--text-secondary);
+          font-size: 0.925rem;
+          margin-bottom: 1rem;
+        }
+
+        .section p strong {
+          color: var(--text-primary);
+        }
+
+        /* Threat Level */
+        .threat-bar {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1.25rem;
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          margin-bottom: 1rem;
+        }
+
+        .pips {
+          display: flex;
+          gap: 4px;
+        }
+
+        .pip {
+          width: 32px; height: 8px;
+          border-radius: 4px;
+          background: var(--border);
+        }
+
+        .pip.r { background: var(--danger); }
+        .pip.y { background: var(--warning); }
+        .pip.g { background: var(--safe); }
+
+        .threat-label {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+
+        .threat-label.high { color: var(--danger); }
+        .threat-label.elevated { color: var(--warning); }
+
+        .threat-sub {
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          margin-top: 0.5rem;
+        }
+
+        /* Country blocks */
+        .country-block {
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          padding: 1.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .country-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.75rem;
+        }
+
+        .country-name {
+          font-weight: 600;
+          font-size: 1rem;
+        }
+
+        .country-level {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.65rem;
+          padding: 0.2rem 0.6rem;
+          border-radius: 3px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .level-high { background: rgba(255, 71, 87, 0.15); color: var(--danger); }
+        .level-elevated { background: rgba(255, 179, 71, 0.15); color: var(--warning); }
+        .level-moderate { background: rgba(77, 166, 255, 0.15); color: var(--info); }
+
+        .country-block p {
+          color: var(--text-secondary);
+          font-size: 0.875rem;
+          margin-bottom: 0.75rem;
+          line-height: 1.7;
+        }
+
+        .action-item {
+          background: rgba(0, 212, 170, 0.08);
+          border-left: 3px solid var(--accent);
+          padding: 0.75rem 1rem;
+          margin-top: 0.75rem;
+          border-radius: 0 6px 6px 0;
+        }
+
+        .action-item p {
+          font-size: 0.825rem;
+          color: var(--accent);
+          margin: 0;
+          font-weight: 500;
+        }
+
+        .action-item .label {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          margin-bottom: 0.25rem;
+          color: var(--text-muted);
+        }
+
+        /* Key Developments list */
+        .dev-item {
+          padding: 0.75rem 0;
+          border-bottom: 1px solid var(--border);
+          display: flex;
+          gap: 0.75rem;
+          align-items: flex-start;
+        }
+
+        .dev-item:last-child { border-bottom: none; }
+
+        .dev-sev {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 0.6rem;
+          padding: 0.2rem 0.5rem;
+          border-radius: 3px;
+          font-weight: 600;
+          flex-shrink: 0;
+          margin-top: 0.15rem;
+        }
+
+        .sev-crit { background: rgba(255, 71, 87, 0.15); color: var(--danger); }
+        .sev-high { background: rgba(255, 71, 87, 0.15); color: var(--danger); }
+        .sev-med { background: rgba(255, 179, 71, 0.15); color: var(--warning); }
+        .sev-low { background: rgba(0, 212, 170, 0.15); color: var(--safe); }
+
+        .dev-text {
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
+
+        .dev-text strong { color: var(--text-primary); }
+
+        /* Analyst note */
+        .analyst-note {
+          background: linear-gradient(135deg, rgba(0, 212, 170, 0.05), rgba(77, 166, 255, 0.03));
+          border: 1px solid rgba(0, 212, 170, 0.15);
+          border-radius: 10px;
+          padding: 1.5rem;
+        }
+
+        .analyst-note p {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          line-height: 1.8;
+        }
+
+        /* Brief Footer */
+        .brief-footer {
+          border-top: 1px solid var(--border);
+          padding-top: 1.5rem;
+          margin-top: 3rem;
+          text-align: center;
+        }
+
+        .brief-footer p {
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          margin-bottom: 0.5rem;
+        }
+
+        .divider {
+          border: none;
+          border-top: 1px solid var(--border);
+          margin: 2rem 0;
+        }
+
+        /* Subscribe CTA at bottom */
+        .brief-subscribe-cta {
+          background: var(--bg-card);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 2rem;
+          text-align: center;
+          margin-top: 2rem;
+        }
+
+        .brief-subscribe-cta h3 {
+          font-family: 'Instrument Serif', serif;
+          font-size: 1.4rem;
+          font-weight: 400;
+          margin-bottom: 0.5rem;
+        }
+
+        .brief-subscribe-cta p {
+          color: var(--text-secondary);
+          font-size: 0.9rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .brief-subscribe-form {
+          display: flex;
+          gap: 0.75rem;
+          max-width: 440px;
+          margin: 0 auto;
+        }
+
+        .brief-subscribe-form input[type="email"] {
+          flex: 1;
+          padding: 0.85rem 1.25rem;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-accent);
+          border-radius: 8px;
+          color: var(--text-primary);
+          font-size: 0.95rem;
+          font-family: 'DM Sans', sans-serif;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+
+        .brief-subscribe-form input[type="email"]:focus {
+          border-color: var(--accent);
+        }
+
+        .brief-subscribe-form button {
+          padding: 0.85rem 1.5rem;
+          white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+          .brief-subscribe-form {
+            flex-direction: column;
+          }
+          .brief-subscribe-form button {
+            width: 100%;
+          }
+          .masthead-meta {
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+        }
+      `}} />
+
+      <div className="brief-container">
+
+        {/* MASTHEAD */}
+        <div className="brief-masthead">
+          <div className="masthead-top">
+            <div className="masthead-brand">
+              <div className="brand-mark"></div>
+              <div className="brand-name">Centinela<span>Intel</span></div>
+            </div>
+            <span className="classification">Open Source — For Distribution</span>
+          </div>
+          <h1 className="masthead-title">Latin America Weekly Security Brief</h1>
+          <div className="masthead-meta">
+            <span>Week of 10 February 2026</span>
+            <span>10 Feb 2026</span>
+            <span>centinelaintel.com</span>
+          </div>
+        </div>
+
+        {/* REGIONAL THREAT LEVEL */}
+        <div className="section">
+          <div className="section-head">Regional Threat Assessment</div>
+          <div className="threat-bar">
+            <div>
+              <div className="pips">
+                <div className="pip r"></div>
+                <div className="pip r"></div>
+                <div className="pip r"></div>
+                <div className="pip y"></div>
+                <div className="pip"></div>
+              </div>
+              <div className="threat-sub">LatAm composite threat index</div>
+            </div>
+            <span className="threat-label high">ELEVATED — Trending Higher</span>
+          </div>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>Regional threat conditions remain elevated this week driven by three converging dynamics: escalating U.S. pressure on Mexican cartels with continued FTO designations, the Ecuador-Colombia trade war spilling into security cooperation, and persistent cartel fragmentation creating unpredictable violence patterns across multiple states. Organizations operating in Mexico, Ecuador, and the Northern Triangle should review contingency plans.</p>
+        </div>
+
+        {/* TOP DEVELOPMENTS */}
+        <div className="section">
+          <div className="section-head">Top Developments This Week</div>
+
+          <div className="dev-item">
+            <span className="dev-sev sev-crit">CRIT</span>
+            <div className="dev-text"><strong>Mexico: Sinaloa mine workers still missing as military operations intensify.</strong> Ten workers from a Vizsla Silver project in Cosala, Sinaloa remain unaccounted for after an apparent kidnapping. Federal forces have intensified search operations in a region contested between Sinaloa Cartel factions. The incident underscores the expanding risk to extractive industry personnel operating in cartel-contested zones.</div>
+          </div>
+
+          <div className="dev-item">
+            <span className="dev-sev sev-high">HIGH</span>
+            <div className="dev-text"><strong>Ecuador: Car bomb detonated near Sheraton Hotel in Guayaquil.</strong> An improvised explosive device in a vehicle exploded near the Sheraton Hotel and Mall del Sol in Guayaquil, with additional explosions reported on major roads in Guayas and El Oro provinces. The 60-day state of emergency remains in effect across nine provinces. Ecuador recorded over 9,200 homicides in 2025 — a 30% increase year-over-year — making it now the most violent country in the region per capita.</div>
+          </div>
+
+          <div className="dev-item">
+            <span className="dev-sev sev-high">HIGH</span>
+            <div className="dev-text"><strong>Ecuador-Colombia trade war escalates with security implications.</strong> President Noboa imposed 30% &ldquo;security tariffs&rdquo; on Colombian imports effective Feb 1, citing Colombia&apos;s failure to cooperate on border security. Colombia retaliated with matching tariffs and suspended electricity exports. Ecuador receives 8-10% of its power from Colombia — expect energy instability and potential supply chain disruptions for organizations operating in northern Ecuador.</div>
+          </div>
+
+          <div className="dev-item">
+            <span className="dev-sev sev-high">HIGH</span>
+            <div className="dev-text"><strong>Mexico transfers 37 cartel members to U.S. — third batch in under a year.</strong> Mexico transferred 37 alleged cartel operatives from CJNG, Sinaloa, Beltran-Leyva, and Cartel del Noreste to U.S. custody. Five were targets of an HSI El Paso investigation into FTO-designated cells. Total transfers now stand at 92. While the transfers demonstrate cooperation, they also signal potential retaliatory violence from affected organizations — particularly in border corridictions and transit corridors.</div>
+          </div>
+
+          <div className="dev-item">
+            <span className="dev-sev sev-med">MED</span>
+            <div className="dev-text"><strong>Michoacan: Military casualties rise as Carteles Unidos clashes intensify.</strong> Mexican soldiers were attacked in Michoacan, where President Sheinbaum has deployed thousands of additional troops. Carteles Unidos — recently designated as a U.S. Foreign Terrorist Organization — has been using IEDs against military convoys. The organization operates as a loosely centralized militia alliance, complicating conventional counterforce operations.</div>
+          </div>
+
+          <div className="dev-item">
+            <span className="dev-sev sev-med">MED</span>
+            <div className="dev-text"><strong>Mexico: Business confidence hits 3-year low amid security and diplomatic headwinds.</strong> Business confidence indices declined to their lowest point since 2023, driven by U.S. tariff threats, cartel violence in key economic corridors, and remittance declines (steepest drop in 16 years). The Sheinbaum administration announced a 5.6-trillion-peso infrastructure plan to counterbalance declining investment sentiment.</div>
+          </div>
+        </div>
+
+        <hr className="divider" />
+
+        {/* COUNTRY ASSESSMENTS */}
+        <div className="section">
+          <div className="section-head">Country Assessments</div>
+
+          <div className="country-block">
+            <div className="country-header">
+              <span className="country-name">Mexico</span>
+              <span className="country-level level-high">High</span>
+            </div>
+            <p>The Sinaloa Cartel&apos;s internal rift continues to redraw criminal alliances nationwide, with the ACLED noting that the organizational split is creating contested territories and new conflict dynamics beyond Sinaloa state itself. Simultaneously, Trump administration rhetoric around potential military action inside Mexico remains elevated, with Brookings analysts assessing that cartel retaliation to U.S. strikes could include attacks on infrastructure, government officials, and potentially foreign nationals.</p>
+            <p>The Sheinbaum government&apos;s &ldquo;Plan Michoacan&rdquo; has shown some success — reporting a 43% reduction in homicides in that state — but this has come at the cost of military deployments that stretch resources thin elsewhere. Tequila&apos;s mayor was arrested this week on cartel-linked extortion charges, underscoring how deeply organized crime penetrates local governance.</p>
+            <div className="action-item">
+              <div className="label">Operational Guidance</div>
+              <p>Avoid ground transit in Sinaloa, western Michoacan, and the GDL-Tepic corridor. Monitor U.S.-Mexico diplomatic developments closely — any escalation of military rhetoric could trigger cartel checkpoint activity and highway disruptions with minimal warning. Executive travel to Mexico City, Monterrey, and Cancun remains manageable with standard precautions.</p>
+            </div>
+          </div>
+
+          <div className="country-block">
+            <div className="country-header">
+              <span className="country-name">Ecuador</span>
+              <span className="country-level level-high">High</span>
+            </div>
+            <p>Ecuador enters February 2026 in a declared state of internal armed conflict with a parallel state of emergency across nine provinces. The Guayaquil car bombing near the Sheraton — a major business hotel — signals that criminal organizations are now willing to target commercial and tourism infrastructure, a significant escalation from prison-centered violence.</p>
+            <p>The Ecuador-U.S. joint security operations planned for 2026 (focusing on the northern border, Pacific routes, and port security) could improve conditions medium-term but will likely trigger near-term disruption as criminal organizations adjust. Airports in Quito and Guayaquil remain operational during curfew hours for travelers with documentation.</p>
+            <div className="action-item">
+              <div className="label">Operational Guidance</div>
+              <p>Avoid all travel within 20km of the Colombia border except the Tulcan crossing. Heightened caution in Guayaquil, Manta, and Esmeraldas. Verify curfew schedules before evening travel. Organizations with port-dependent supply chains should plan for disruptions as security operations expand into terminal areas.</p>
+            </div>
+          </div>
+
+          <div className="country-block">
+            <div className="country-header">
+              <span className="country-name">Colombia</span>
+              <span className="country-level level-elevated">Elevated</span>
+            </div>
+            <p>The trade dispute with Ecuador has introduced new friction to an already complex border security environment. Colombia&apos;s retaliatory tariffs and electricity export suspension create economic pressure on Ecuador that could destabilize the northern border region further. Meanwhile, FARC dissident factions (particularly the Oliver Sinisterra front) continue operating along the Ecuador border in Esmeraldas, and the ELN maintains presence across multiple frontier provinces.</p>
+            <p>Domestically, President Petro&apos;s policies of reducing coca eradication have contributed to a 53% increase in cocaine production, driving increased trafficking volume through Ecuador and along Pacific routes. This is the upstream dynamic fueling Ecuador&apos;s violence crisis.</p>
+            <div className="action-item">
+              <div className="label">Operational Guidance</div>
+              <p>Standard elevated precautions for Bogota, Medellin, and Cartagena. Avoid Cauca, Narino, and Putumayo departments. Organizations with supply chains crossing the Colombia-Ecuador border should prepare for customs delays and possible shortages of Colombian-origin goods in Ecuador.</p>
+            </div>
+          </div>
+        </div>
+
+        <hr className="divider" />
+
+        {/* ANALYST ASSESSMENT */}
+        <div className="section">
+          <div className="section-head">Analyst Assessment — The Week Ahead</div>
+          <div className="analyst-note">
+            <p>Three dynamics deserve close monitoring over the next 7-14 days:</p>
+            <p><strong>1. U.S. military posture toward Mexico.</strong> Trump&apos;s comment that the U.S. will &ldquo;start now hitting land&rdquo; regarding cartels — combined with the FTO designations and the cartel member transfers — creates conditions for an escalation cycle. Even if no direct action occurs, the rhetoric itself can trigger cartel defensive posturing that increases checkpoint activity, highway disruptions, and territorial enforcement operations.</p>
+            <p><strong>2. Ecuador-Colombia economic decoupling.</strong> The electricity suspension is the most consequential near-term risk. Ecuador already faces infrastructure strain; losing 8-10% of power supply while fighting an internal armed conflict creates cascading risks across the commercial sector. Watch for rolling blackouts and their second-order effects on security (reduced lighting, alarm system failures, communication disruptions).</p>
+            <p><strong>3. Sinaloa Cartel realignment.</strong> The rift between factions is still actively redrawing the criminal map of Mexico. As new alliances form and territories are contested, violence will appear in previously stable areas. This is not a crisis that resolves quickly — expect 6-12 months of elevated instability in cartel-affected corridors.</p>
+            <p>Organizations operating in the region should ensure their emergency communication plans are current and tested, that personnel have clear escalation procedures, and that travel approvals require current intelligence — not last quarter&apos;s assessment.</p>
+          </div>
+        </div>
+
+        {/* SUBSCRIBE CTA */}
+        <div className="brief-subscribe-cta">
+          <h3>Get the Brief Every Monday</h3>
+          <p>Free weekly LatAm security intelligence. AI-synthesized OSINT, operator-reviewed. Zero fluff.</p>
+          <form className="brief-subscribe-form" action="/api/subscribe" method="POST">
+            <input type="email" name="email" placeholder="Enter your email" required />
+            <button type="submit" className="btn-primary">Subscribe Free</button>
+          </form>
+        </div>
+
+        {/* FOOTER */}
+        <div className="brief-footer">
+          <p><strong>Centinela Intel</strong> — AI-Powered Security Risk Intelligence</p>
+          <p>A service of Enfocado Capital LLC</p>
+          <p style={{ marginTop: "1rem" }}>This brief is generated using AI-synthesized OSINT analysis, reviewed and annotated by senior analysts with operational experience across Latin America. Sources include government advisories, local media, ACLED conflict data, and proprietary monitoring.</p>
+          <p style={{ marginTop: "1.5rem", color: "var(--text-secondary)" }}>Want deeper coverage? <a href="/contact" style={{ color: "var(--accent)", textDecoration: "none" }}>Request a custom briefing</a> for your operations.</p>
+          <p style={{ marginTop: "1.5rem" }}>centinelaintel.com &middot; intel@centinelaintel.com</p>
+        </div>
+
+      </div>
+    </>
+  );
+}
