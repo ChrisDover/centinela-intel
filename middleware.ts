@@ -18,6 +18,7 @@ const protectedApiPaths = [
   "/api/admin/ab-tests",
   "/api/admin/cta-analytics",
   "/api/admin/logout",
+  "/api/admin/linkedin",
 ];
 
 export async function middleware(request: NextRequest) {

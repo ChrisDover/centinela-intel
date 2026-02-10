@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { sendCampaign } from "@/lib/campaigns/send-brief";
+import { postBriefToLinkedIn, type BriefData } from "@/lib/linkedin/post-brief";
 
 // POST /api/cron/send-brief — triggered by Vercel cron
 export async function POST(request: NextRequest) {
@@ -25,9 +26,26 @@ export async function POST(request: NextRequest) {
 
   try {
     const result = await sendCampaign(campaign.id);
+
+    // Post to LinkedIn (non-blocking — email send is the priority)
+    let linkedinResult: { success: boolean; postId?: string; error?: string } | null = null;
+    if (campaign.htmlContent) {
+      try {
+        const briefData: BriefData = JSON.parse(campaign.htmlContent);
+        linkedinResult = await postBriefToLinkedIn(briefData, campaign.id);
+      } catch (linkedinError) {
+        console.error("LinkedIn post failed:", linkedinError);
+        linkedinResult = {
+          success: false,
+          error: linkedinError instanceof Error ? linkedinError.message : "LinkedIn post failed",
+        };
+      }
+    }
+
     return NextResponse.json({
       message: "Brief sent successfully",
       ...result,
+      linkedin: linkedinResult,
     });
   } catch (error) {
     console.error("Cron send-brief error:", error);
