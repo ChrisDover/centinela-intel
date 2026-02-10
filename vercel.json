@@ -1,3 +1,17 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/cron/send-brief",
+      "schedule": "0 10 * * 1"
+    },
+    {
+      "path": "/api/cron/analyze-engagement",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/evaluate-ab-tests",
+      "schedule": "0 4 * * *"
+    }
+  ]
 }

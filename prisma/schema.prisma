@@ -27,24 +27,33 @@ model Subscriber {
   // Source tracking
   source           String? // homepage, subscribe-page, brief, contact
 
-  emailEvents      EmailEvent[]
+  // Send-time optimization
+  timezone            String?   // IANA timezone e.g. "America/Mexico_City"
+  optimalSendHour     Int?      // 0-23, calculated from open history
+  sendTimeConfidence  Float     @default(0) // 0-1
+  lastOpenAnalyzedAt  DateTime?
+
+  emailEvents       EmailEvent[]
+  emailSends        EmailSend[]
+  abTestAssignments ABTestAssignment[]
+  ctaClicks         CTAClick[]
 
   @@map("subscribers")
 }
 
 model EmailCampaign {
-  id              String   @id @default(cuid())
-  type            String // brief, broadcast, welcome, alert
+  id              String    @id @default(cuid())
+  type            String    // brief, broadcast, welcome, alert
   subject         String
-  fromEmail       String   @default("Centinela Intel <intel@centinelaintel.com>")
-  sentAt          DateTime @default(now())
+  fromEmail       String    @default("Centinela Intel <intel@centinelaintel.com>")
+  sentAt          DateTime  @default(now())
 
-  recipientCount  Int      @default(0)
-  deliveredCount  Int      @default(0)
-  openedCount     Int      @default(0)
-  clickedCount    Int      @default(0)
-  bouncedCount    Int      @default(0)
-  complainedCount Int      @default(0)
+  recipientCount  Int       @default(0)
+  deliveredCount  Int       @default(0)
+  openedCount     Int       @default(0)
+  clickedCount    Int       @default(0)
+  bouncedCount    Int       @default(0)
+  complainedCount Int       @default(0)
 
   openRate        Float?
   clickRate       Float?
@@ -52,7 +61,16 @@ model EmailCampaign {
   tags            String?
   notes           String?
 
+  // New fields for intelligent platform
+  htmlContent     String?   // full email HTML
+  textContent     String?   // plain text fallback
+  abTestId        String?   // linked A/B test
+  status          String    @default("draft") // draft, sending, sent, scheduled
+  scheduledFor    DateTime?
+
   emailEvents     EmailEvent[]
+  emailSends      EmailSend[]
+  ctaClicks       CTAClick[]
 
   @@map("email_campaigns")
 }
@@ -73,4 +91,76 @@ model EmailEvent {
   @@index([campaignId])
   @@index([emailId])
   @@map("email_events")
+}
+
+model ABTest {
+  id            String    @id @default(cuid())
+  name          String
+  type          String    // subject, headline, layout, cta
+  status        String    @default("running") // running, completed, cancelled
+  variants      String    // JSON array of {id, value}
+  winnerVariant String?
+  metric        String    @default("open_rate") // open_rate, click_rate
+  minSampleSize Int       @default(30)
+  campaignId    String?
+  createdAt     DateTime  @default(now())
+  completedAt   DateTime?
+
+  assignments   ABTestAssignment[]
+
+  @@map("ab_tests")
+}
+
+model ABTestAssignment {
+  id           String  @id @default(cuid())
+  testId       String
+  subscriberId String
+  variantId    String
+  opened       Boolean @default(false)
+  clicked      Boolean @default(false)
+
+  test         ABTest     @relation(fields: [testId], references: [id])
+  subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
+
+  @@unique([testId, subscriberId])
+  @@index([testId])
+  @@index([subscriberId])
+  @@map("ab_test_assignments")
+}
+
+model EmailSend {
+  id             String    @id @default(cuid())
+  campaignId     String
+  subscriberId   String
+  resendEmailId  String?
+  variantId      String?
+  scheduledAt    DateTime?
+  sentAt         DateTime?
+  status         String    @default("pending") // pending, scheduled, sent, failed
+
+  campaign       EmailCampaign @relation(fields: [campaignId], references: [id])
+  subscriber     Subscriber    @relation(fields: [subscriberId], references: [id])
+
+  @@index([campaignId])
+  @@index([subscriberId])
+  @@index([resendEmailId])
+  @@map("email_sends")
+}
+
+model CTAClick {
+  id           String    @id @default(cuid())
+  subscriberId String?
+  campaignId   String?
+  ctaType      String    // trendlock, thunderdome, premium, briefing
+  ctaPosition  String?   // header, body, footer
+  url          String
+  clickedAt    DateTime  @default(now())
+
+  subscriber   Subscriber?    @relation(fields: [subscriberId], references: [id])
+  campaign     EmailCampaign? @relation(fields: [campaignId], references: [id])
+
+  @@index([subscriberId])
+  @@index([campaignId])
+  @@index([ctaType])
+  @@map("cta_clicks")
 }

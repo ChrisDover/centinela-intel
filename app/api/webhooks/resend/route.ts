@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
       ? await prisma.subscriber.findUnique({ where: { email: toEmail } })
       : null;
 
+    // Create EmailEvent record
     await prisma.emailEvent.create({
       data: {
         subscriberId: subscriber?.id || null,
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Update subscriber engagement metrics
     if (subscriber) {
       switch (type) {
         case "email.delivered":
@@ -73,7 +75,70 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Look up EmailSend by resendEmailId for granular tracking
     if (data.email_id) {
+      const emailSend = await prisma.emailSend.findFirst({
+        where: { resendEmailId: data.email_id },
+      });
+
+      if (emailSend) {
+        // Update EmailSend status on delivery
+        if (type === "email.delivered") {
+          await prisma.emailSend.update({
+            where: { id: emailSend.id },
+            data: { status: "sent", sentAt: new Date() },
+          });
+        }
+
+        // Update ABTestAssignment on open/click
+        if (
+          emailSend.variantId &&
+          (type === "email.opened" || type === "email.clicked")
+        ) {
+          const assignment = await prisma.aBTestAssignment.findFirst({
+            where: {
+              subscriberId: emailSend.subscriberId,
+              variantId: emailSend.variantId,
+            },
+          });
+
+          if (assignment) {
+            const updateData: { opened?: boolean; clicked?: boolean } = {};
+            if (type === "email.opened") updateData.opened = true;
+            if (type === "email.clicked") updateData.clicked = true;
+
+            await prisma.aBTestAssignment.update({
+              where: { id: assignment.id },
+              data: updateData,
+            });
+          }
+        }
+
+        // Track CTA clicks from UTM params
+        if (type === "email.clicked" && data.click?.link) {
+          try {
+            const url = new URL(data.click.link);
+            const utmContent = url.searchParams.get("utm_content");
+            const utmTerm = url.searchParams.get("utm_term");
+
+            if (utmContent) {
+              await prisma.cTAClick.create({
+                data: {
+                  subscriberId: emailSend.subscriberId,
+                  campaignId: emailSend.campaignId,
+                  ctaType: utmContent,
+                  ctaPosition: utmTerm || null,
+                  url: data.click.link,
+                },
+              });
+            }
+          } catch {
+            // URL parsing failed — skip CTA tracking
+          }
+        }
+      }
+
+      // Legacy campaign association via EmailEvent
       const campaignEvent = await prisma.emailEvent.findFirst({
         where: {
           emailId: data.email_id,
