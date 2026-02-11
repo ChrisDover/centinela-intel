@@ -14,6 +14,7 @@ export interface Incident {
   lng: number;
   severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
   category: string; // e.g. "cartel", "political", "crime", "infrastructure", "protest"
+  sourceUrl?: string; // URL of the source article from OSINT data
 }
 
 export interface RegionAssessment {
@@ -96,7 +97,7 @@ async function fetchCountryOSINT(countryName: string): Promise<string> {
       const results = allResults[i];
       if (results.length === 0) continue;
       const items = results
-        .map((r) => `- ${r.title}: ${r.description}`)
+        .map((r) => `- ${r.title}: ${r.description} [Source: ${r.url}]`)
         .join("\n");
       sections.push(`## ${queries[i]}\n${items}`);
     }
@@ -196,6 +197,11 @@ const COUNTRY_BRIEF_TOOL: Anthropic.Tool = {
                 "kidnapping",
                 "extortion",
               ],
+            },
+            sourceUrl: {
+              type: "string",
+              description:
+                "URL of the source article from OSINT data, if available. Include this when the incident is based on a specific news article from the provided OSINT feed.",
             },
           },
           required: [

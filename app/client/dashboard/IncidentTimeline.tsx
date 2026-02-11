@@ -50,18 +50,10 @@ export default function IncidentTimeline({ incidents }: IncidentTimelineProps) {
     <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
       {sorted.map((incident, i) => {
         const color = SEVERITY_COLORS[incident.severity] || "#ffb347";
-        return (
-          <div
-            key={i}
-            style={{
-              padding: "10px 12px",
-              borderLeft: `3px solid ${color}`,
-              background:
-                i % 2 === 0
-                  ? "rgba(20, 26, 40, 0.5)"
-                  : "transparent",
-            }}
-          >
+        const hasSource = !!incident.sourceUrl;
+
+        const content = (
+          <>
             <div
               style={{
                 display: "flex",
@@ -96,9 +88,28 @@ export default function IncidentTimeline({ incidents }: IncidentTimelineProps) {
                   fontSize: 11,
                   color: "var(--text-muted)",
                   marginLeft: "auto",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 4,
                 }}
               >
                 {incident.city}
+                {hasSource && (
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--text-muted)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                    <polyline points="15 3 21 3 21 9" />
+                    <line x1="10" y1="14" x2="21" y2="3" />
+                  </svg>
+                )}
               </span>
             </div>
             <div
@@ -119,6 +130,46 @@ export default function IncidentTimeline({ incidents }: IncidentTimelineProps) {
             >
               {incident.description}
             </div>
+          </>
+        );
+
+        const sharedStyle = {
+          padding: "10px 12px",
+          borderLeft: `3px solid ${color}`,
+          background:
+            i % 2 === 0
+              ? "rgba(20, 26, 40, 0.5)"
+              : "transparent",
+          display: "block" as const,
+          textDecoration: "none" as const,
+          color: "inherit" as const,
+          transition: "background 0.15s ease",
+        };
+
+        if (hasSource) {
+          return (
+            <a
+              key={i}
+              href={incident.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={sharedStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(0, 212, 170, 0.05)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background =
+                  i % 2 === 0 ? "rgba(20, 26, 40, 0.5)" : "transparent";
+              }}
+            >
+              {content}
+            </a>
+          );
+        }
+
+        return (
+          <div key={i} style={sharedStyle}>
+            {content}
           </div>
         );
       })}

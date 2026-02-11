@@ -8,6 +8,7 @@ import RegionBreakdown from "./RegionBreakdown";
 import ExportButton from "./ExportButton";
 import FocusAreas from "./FocusAreas";
 import CountrySelector from "./CountrySelector";
+import RunReportButton from "./RunReportButton";
 
 function getClientCountryCodes(client: {
   countries?: string | null;
@@ -151,6 +152,12 @@ export default async function ClientDashboard({
           </h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {activeCountry && (
+            <RunReportButton
+              countryCode={activeCountry}
+              countryName={activeCountryName}
+            />
+          )}
           {latestBrief && <ExportButton briefId={latestBrief.id} />}
           {latestBrief && (
             <div
