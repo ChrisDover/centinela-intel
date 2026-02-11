@@ -175,11 +175,13 @@ model Client {
   stripeCustomerId     String?   @unique
   stripeSubscriptionId String?   @unique
   plan                 String    @default("country-monitor")
+  planTier             String    @default("1-country") // 1-country, 2-country, 3-country, all-countries
   planStatus           String    @default("active") // active, past_due, cancelled
 
   // Country Monitor config
-  country              String? // selected country code e.g. "MX", "CO"
-  countryName          String? // display name e.g. "Mexico"
+  country              String? // primary country code (legacy, use countries)
+  countryName          String? // primary country name (legacy, use countries)
+  countries            String? // JSON array of {code, name} e.g. [{"code":"MX","name":"Mexico"}]
   focusAreas           String? // JSON array of focus areas e.g. ["Guadalajara","Sinaloa"]
 
   // Auth

@@ -2,21 +2,43 @@ import { getClientFromCookie } from "@/lib/client-auth";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
+function getClientCountryCodes(client: {
+  countries?: string | null;
+  country?: string | null;
+}): string[] {
+  if (client.countries) {
+    const parsed: { code: string }[] = JSON.parse(client.countries);
+    return parsed.map((c) => c.code);
+  }
+  if (client.country && client.country !== "ALL") return [client.country];
+  return [];
+}
+
 export default async function ClientBriefsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ id?: string }>;
+  searchParams: Promise<{ id?: string; country?: string }>;
 }) {
   const client = await getClientFromCookie();
   if (!client) redirect("/client/login");
 
   const params = await searchParams;
+  const countryCodes = getClientCountryCodes(client);
 
-  const briefs = client.country
+  // Filter by country if specified, otherwise show all monitored countries
+  const filterCountry = params.country && countryCodes.includes(params.country)
+    ? params.country
+    : null;
+
+  const briefs = countryCodes.length > 0
     ? await prisma.clientBrief.findMany({
-        where: { country: client.country },
+        where: {
+          country: filterCountry
+            ? filterCountry
+            : { in: countryCodes },
+        },
         orderBy: { createdAt: "desc" },
-        take: 30,
+        take: 60,
       })
     : [];
 
@@ -30,6 +52,10 @@ export default async function ClientBriefsPage({
     ? JSON.parse(selectedBrief.content)
     : null;
 
+  const countries: { code: string; name: string }[] = client.countries
+    ? JSON.parse(client.countries)
+    : [];
+
   return (
     <div style={{ maxWidth: 960, margin: "40px auto", padding: "0 20px" }}>
       <p
@@ -41,17 +67,58 @@ export default async function ClientBriefsPage({
           marginBottom: 4,
         }}
       >
-        BRIEF ARCHIVE — {client.countryName?.toUpperCase() || "ALL"}
+        BRIEF ARCHIVE{filterCountry ? ` — ${briefs[0]?.countryName?.toUpperCase() || filterCountry}` : ""}
       </p>
       <h1
         style={{
           fontFamily: "var(--font-instrument-serif), serif",
           fontSize: "1.75rem",
-          marginBottom: 32,
+          marginBottom: 16,
         }}
       >
         Intelligence Briefs
       </h1>
+
+      {/* Country filter tabs (multi-country clients) */}
+      {countries.length > 1 && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 24 }}>
+          <a
+            href="/client/briefs"
+            style={{
+              padding: "5px 12px",
+              fontSize: 12,
+              fontFamily: "monospace",
+              background: !filterCountry ? "var(--accent)" : "var(--bg-card)",
+              color: !filterCountry ? "#0a0e17" : "var(--text-secondary)",
+              border: !filterCountry ? "1px solid var(--accent)" : "1px solid var(--border)",
+              borderRadius: 4,
+              textDecoration: "none",
+              fontWeight: !filterCountry ? 600 : 400,
+            }}
+          >
+            All
+          </a>
+          {countries.map((c) => (
+            <a
+              key={c.code}
+              href={`/client/briefs?country=${c.code}`}
+              style={{
+                padding: "5px 12px",
+                fontSize: 12,
+                fontFamily: "monospace",
+                background: filterCountry === c.code ? "var(--accent)" : "var(--bg-card)",
+                color: filterCountry === c.code ? "#0a0e17" : "var(--text-secondary)",
+                border: filterCountry === c.code ? "1px solid var(--accent)" : "1px solid var(--border)",
+                borderRadius: 4,
+                textDecoration: "none",
+                fontWeight: filterCountry === c.code ? 600 : 400,
+              }}
+            >
+              {c.name}
+            </a>
+          ))}
+        </div>
+      )}
 
       <div
         style={{
@@ -76,7 +143,7 @@ export default async function ClientBriefsPage({
               return (
                 <a
                   key={b.id}
-                  href={`/client/briefs?id=${b.id}`}
+                  href={`/client/briefs?id=${b.id}${filterCountry ? `&country=${filterCountry}` : ""}`}
                   style={{
                     display: "block",
                     padding: "12px 16px",
@@ -93,15 +160,29 @@ export default async function ClientBriefsPage({
                   }}
                 >
                   <div style={{ fontSize: 14, marginBottom: 2 }}>{b.date}</div>
-                  <div
-                    style={{
-                      fontFamily: "monospace",
-                      fontSize: 11,
-                      color: tc,
-                      letterSpacing: 0.5,
-                    }}
-                  >
-                    {b.threatLevel}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span
+                      style={{
+                        fontFamily: "monospace",
+                        fontSize: 11,
+                        color: tc,
+                        letterSpacing: 0.5,
+                      }}
+                    >
+                      {b.threatLevel}
+                    </span>
+                    {countries.length > 1 && (
+                      <span
+                        style={{
+                          fontFamily: "monospace",
+                          fontSize: 10,
+                          color: "var(--text-muted)",
+                          letterSpacing: 0.5,
+                        }}
+                      >
+                        {b.countryName}
+                      </span>
+                    )}
                   </div>
                 </a>
               );

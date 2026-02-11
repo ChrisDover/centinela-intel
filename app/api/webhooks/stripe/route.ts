@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
           typeof session.subscription === "string"
             ? session.subscription
             : session.subscription?.id;
+        const tier = (session.metadata?.tier as string) || "1-country";
 
         if (!email || !customerId) {
           console.error("[Stripe Webhook] Missing email or customerId");
@@ -48,6 +49,7 @@ export async function POST(request: NextRequest) {
           update: {
             stripeCustomerId: customerId,
             stripeSubscriptionId: subscriptionId || null,
+            planTier: tier,
             planStatus: "active",
           },
           create: {
@@ -56,11 +58,12 @@ export async function POST(request: NextRequest) {
             stripeCustomerId: customerId,
             stripeSubscriptionId: subscriptionId || null,
             plan: "country-monitor",
+            planTier: tier,
             planStatus: "active",
           },
         });
 
-        console.log(`[Stripe Webhook] Client created/updated: ${email}`);
+        console.log(`[Stripe Webhook] Client created/updated: ${email} (${tier})`);
         break;
       }
 

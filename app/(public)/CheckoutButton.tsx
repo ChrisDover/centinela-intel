@@ -2,13 +2,25 @@
 
 import { useState } from "react";
 
-export function CheckoutButton({ className }: { className?: string }) {
+export function CheckoutButton({
+  className,
+  tier = "1-country",
+  label = "Get Started",
+}: {
+  className?: string;
+  tier?: string;
+  label?: string;
+}) {
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
     setLoading(true);
     try {
-      const res = await fetch("/api/checkout", { method: "POST" });
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier }),
+      });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -25,7 +37,7 @@ export function CheckoutButton({ className }: { className?: string }) {
       className={className}
       style={{ cursor: loading ? "wait" : "pointer" }}
     >
-      {loading ? "Loading..." : "Get Started"}
+      {loading ? "Loading..." : label}
     </button>
   );
 }

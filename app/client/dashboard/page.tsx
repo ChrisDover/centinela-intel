@@ -7,21 +7,56 @@ import IncidentTimeline from "./IncidentTimeline";
 import RegionBreakdown from "./RegionBreakdown";
 import ExportButton from "./ExportButton";
 import FocusAreas from "./FocusAreas";
+import CountrySelector from "./CountrySelector";
 
-export default async function ClientDashboard() {
+function getClientCountryCodes(client: {
+  countries?: string | null;
+  country?: string | null;
+}): string[] {
+  if (client.countries) {
+    const parsed: { code: string }[] = JSON.parse(client.countries);
+    return parsed.map((c) => c.code);
+  }
+  if (client.country && client.country !== "ALL") return [client.country];
+  return [];
+}
+
+export default async function ClientDashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ country?: string }>;
+}) {
   const client = await getClientFromCookie();
   if (!client) redirect("/client/login");
 
-  const latestBrief = client.country
+  const params = await searchParams;
+  const countryCodes = getClientCountryCodes(client);
+  const isAllCountries = client.country === "ALL" || countryCodes.length > 3;
+  const countries: { code: string; name: string }[] = client.countries
+    ? JSON.parse(client.countries)
+    : client.country && client.country !== "ALL"
+      ? [{ code: client.country, name: client.countryName || client.country }]
+      : [];
+
+  // Determine which country to show (default to first)
+  const activeCountry =
+    params.country && countryCodes.includes(params.country)
+      ? params.country
+      : countryCodes[0] || null;
+
+  const activeCountryName =
+    countries.find((c) => c.code === activeCountry)?.name || client.countryName || "Country Monitor";
+
+  const latestBrief = activeCountry
     ? await prisma.clientBrief.findFirst({
-        where: { country: client.country },
+        where: { country: activeCountry },
         orderBy: { createdAt: "desc" },
       })
     : null;
 
-  const recentBriefs = client.country
+  const recentBriefs = activeCountry
     ? await prisma.clientBrief.findMany({
-        where: { country: client.country },
+        where: { country: activeCountry },
         orderBy: { createdAt: "desc" },
         take: 30,
         select: { id: true, date: true, threatLevel: true },
@@ -112,7 +147,7 @@ export default async function ClientDashboard() {
               fontSize: "1.75rem",
             }}
           >
-            {client.countryName || "Country Monitor"}
+            {activeCountryName}
           </h1>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -153,6 +188,16 @@ export default async function ClientDashboard() {
           )}
         </div>
       </div>
+
+      {/* Country Selector (multi-country clients only) */}
+      {countries.length > 1 && (
+        <div style={{ marginBottom: 24 }}>
+          <CountrySelector
+            countries={countries}
+            activeCountry={activeCountry || ""}
+          />
+        </div>
+      )}
 
       {/* Stats row */}
       <div
@@ -226,7 +271,7 @@ export default async function ClientDashboard() {
       </div>
 
       {/* Threat Map */}
-      {incidents.length > 0 && client.country && (
+      {incidents.length > 0 && activeCountry && (
         <div style={{ marginBottom: 24 }}>
           <div
             style={{
@@ -237,9 +282,9 @@ export default async function ClientDashboard() {
               marginBottom: 8,
             }}
           >
-            THREAT MAP — {client.countryName?.toUpperCase()}
+            THREAT MAP — {activeCountryName.toUpperCase()}
           </div>
-          <ThreatMapWrapper incidents={incidents} countryCode={client.country} />
+          <ThreatMapWrapper incidents={incidents} countryCode={activeCountry} />
         </div>
       )}
 

@@ -11,42 +11,52 @@ export async function POST() {
   try {
     console.log("[Client Briefs] Starting daily client brief generation...");
 
-    // Get all active clients with a country set
+    // Get all active clients
     const clients = await prisma.client.findMany({
       where: {
         planStatus: "active",
-        country: { not: null },
-        countryName: { not: null },
       },
     });
 
     if (clients.length === 0) {
-      console.log("[Client Briefs] No active clients with countries");
+      console.log("[Client Briefs] No active clients");
       return NextResponse.json({ message: "No clients to process" });
     }
 
-    // Group by country to avoid duplicate generations
+    // Build a map of country -> { code, name, clientEmails, focusAreas }
+    // Handles both legacy single-country and new multi-country fields
     const countryMap = new Map<
       string,
       { code: string; name: string; clientEmails: string[]; focusAreas: string[] }
     >();
 
     for (const client of clients) {
-      const key = client.country!;
-      if (!countryMap.has(key)) {
-        countryMap.set(key, {
-          code: client.country!,
-          name: client.countryName!,
-          clientEmails: [],
-          focusAreas: [],
-        });
+      // Determine which countries this client monitors
+      let clientCountries: { code: string; name: string }[] = [];
+
+      if (client.countries) {
+        clientCountries = JSON.parse(client.countries);
+      } else if (client.country && client.country !== "ALL" && client.countryName) {
+        clientCountries = [{ code: client.country, name: client.countryName }];
       }
-      const entry = countryMap.get(key)!;
-      entry.clientEmails.push(client.email);
-      // Merge all clients' focus areas for this country
-      if (client.focusAreas) {
-        const areas: string[] = JSON.parse(client.focusAreas);
-        for (const a of areas) {
+
+      // Parse client focus areas once
+      const clientFocusAreas: string[] = client.focusAreas
+        ? JSON.parse(client.focusAreas)
+        : [];
+
+      for (const cc of clientCountries) {
+        if (!countryMap.has(cc.code)) {
+          countryMap.set(cc.code, {
+            code: cc.code,
+            name: cc.name,
+            clientEmails: [],
+            focusAreas: [],
+          });
+        }
+        const entry = countryMap.get(cc.code)!;
+        entry.clientEmails.push(client.email);
+        for (const a of clientFocusAreas) {
           if (!entry.focusAreas.includes(a)) entry.focusAreas.push(a);
         }
       }

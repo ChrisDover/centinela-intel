@@ -3,11 +3,30 @@ import getStripe from "@/lib/stripe";
 import prisma from "@/lib/prisma";
 import { sendMagicLink } from "@/lib/client-auth";
 
+// GET: Return the tier for a checkout session so the onboarding page knows the country limit
+export async function GET(request: NextRequest) {
+  const sessionId = request.nextUrl.searchParams.get("session_id");
+  if (!sessionId) {
+    return NextResponse.json({ tier: "1-country" });
+  }
+
+  try {
+    const stripe = getStripe();
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    return NextResponse.json({
+      tier: session.metadata?.tier || "1-country",
+    });
+  } catch {
+    return NextResponse.json({ tier: "1-country" });
+  }
+}
+
+// POST: Complete onboarding with country selection
 export async function POST(request: NextRequest) {
   try {
-    const { sessionId, country, countryName } = await request.json();
+    const { sessionId, countries } = await request.json();
 
-    if (!sessionId || !country || !countryName) {
+    if (!sessionId || !countries || !Array.isArray(countries) || countries.length === 0) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -38,11 +57,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Set primary country to first selected, store all in countries JSON
     await prisma.client.update({
       where: { id: client.id },
       data: {
-        country,
-        countryName,
+        country: countries.length === 22 ? "ALL" : countries[0].code,
+        countryName: countries.length === 22 ? "All Countries" : countries[0].name,
+        countries: JSON.stringify(countries),
         onboardedAt: new Date(),
       },
     });

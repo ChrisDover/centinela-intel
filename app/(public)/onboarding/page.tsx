@@ -28,6 +28,13 @@ const LATAM_COUNTRIES = [
   { code: "TT", name: "Trinidad & Tobago" },
 ];
 
+const TIER_LIMITS: Record<string, number> = {
+  "1-country": 1,
+  "2-country": 2,
+  "3-country": 3,
+  "all-countries": 999,
+};
+
 export default function OnboardingPage() {
   return (
     <Suspense
@@ -53,24 +60,52 @@ function OnboardingContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
 
-  const [selected, setSelected] = useState<{
-    code: string;
-    name: string;
-  } | null>(null);
+  const [selected, setSelected] = useState<{ code: string; name: string }[]>(
+    []
+  );
+  const [tier, setTier] = useState<string>("1-country");
   const [status, setStatus] = useState<
-    "selecting" | "submitting" | "done" | "error"
-  >("selecting");
+    "loading" | "selecting" | "submitting" | "done" | "error"
+  >("loading");
   const [error, setError] = useState("");
+
+  const maxCountries = TIER_LIMITS[tier] || 1;
+  const isAllCountries = tier === "all-countries";
 
   useEffect(() => {
     if (!sessionId) {
       setError("Missing session. Please complete checkout first.");
       setStatus("error");
+      return;
     }
+
+    // Fetch the tier from the session
+    fetch(`/api/onboarding?session_id=${sessionId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.tier) setTier(data.tier);
+        if (data.tier === "all-countries") {
+          setSelected(LATAM_COUNTRIES);
+        }
+        setStatus("selecting");
+      })
+      .catch(() => {
+        setStatus("selecting");
+      });
   }, [sessionId]);
 
+  function toggleCountry(c: { code: string; name: string }) {
+    if (isAllCountries) return;
+    setSelected((prev) => {
+      const exists = prev.find((s) => s.code === c.code);
+      if (exists) return prev.filter((s) => s.code !== c.code);
+      if (prev.length >= maxCountries) return prev;
+      return [...prev, c];
+    });
+  }
+
   async function handleSubmit() {
-    if (!selected || !sessionId) return;
+    if (selected.length === 0 || !sessionId) return;
 
     setStatus("submitting");
     try {
@@ -79,8 +114,7 @@ function OnboardingContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sessionId,
-          country: selected.code,
-          countryName: selected.name,
+          countries: selected,
         }),
       });
 
@@ -96,7 +130,26 @@ function OnboardingContent() {
     }
   }
 
+  if (status === "loading") {
+    return (
+      <section
+        style={{
+          maxWidth: 560,
+          margin: "80px auto",
+          padding: "0 20px",
+          textAlign: "center",
+        }}
+      >
+        <p style={{ color: "var(--text-secondary)" }}>Loading...</p>
+      </section>
+    );
+  }
+
   if (status === "done") {
+    const countryNames =
+      selected.length > 3
+        ? `${selected.length} countries`
+        : selected.map((s) => s.name).join(", ");
     return (
       <section
         style={{
@@ -133,9 +186,9 @@ function OnboardingContent() {
             color: "var(--text-secondary)",
           }}
         >
-          We&apos;ve sent a login link to your email. Click it to access your{" "}
-          {selected?.name} intelligence dashboard. The link expires in 30
-          minutes.
+          We&apos;ve sent a login link to your email. Click it to access your
+          intelligence dashboard monitoring {countryNames}. The link expires in
+          30 minutes.
         </p>
       </section>
     );
@@ -190,7 +243,11 @@ function OnboardingContent() {
           marginBottom: 8,
         }}
       >
-        Select Your Country
+        {isAllCountries
+          ? "All Countries Selected"
+          : maxCountries === 1
+            ? "Select Your Country"
+            : `Select ${maxCountries} Countries`}
       </h1>
       <p
         style={{
@@ -200,70 +257,85 @@ function OnboardingContent() {
           marginBottom: 32,
         }}
       >
-        Choose the country you want to monitor. You&apos;ll receive a daily
-        intelligence brief and threat alerts specific to this country.
+        {isAllCountries
+          ? "Your plan includes all 22 countries. You\u2019ll receive daily intelligence briefs for every country in Latin America and the Caribbean."
+          : maxCountries === 1
+            ? "Choose the country you want to monitor. You\u2019ll receive a daily intelligence brief and threat alerts specific to this country."
+            : `Choose up to ${maxCountries} countries. You\u2019ll receive daily intelligence briefs and threat alerts for each. (${selected.length}/${maxCountries} selected)`}
       </p>
 
       {error && (
         <p style={{ color: "var(--danger)", marginBottom: 16 }}>{error}</p>
       )}
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-          gap: 8,
-          marginBottom: 32,
-        }}
-      >
-        {LATAM_COUNTRIES.map((c) => (
-          <button
-            key={c.code}
-            onClick={() => setSelected(c)}
-            style={{
-              padding: "12px 16px",
-              background:
-                selected?.code === c.code
-                  ? "var(--accent)"
-                  : "var(--card-bg)",
-              color: selected?.code === c.code ? "#0a0e17" : "var(--text)",
-              border:
-                selected?.code === c.code
-                  ? "1px solid var(--accent)"
-                  : "1px solid var(--border)",
-              borderRadius: 6,
-              cursor: "pointer",
-              fontSize: 14,
-              fontWeight: selected?.code === c.code ? 600 : 400,
-              textAlign: "left",
-              transition: "all 0.15s",
-            }}
-          >
-            {c.name}
-          </button>
-        ))}
-      </div>
+      {!isAllCountries && (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+            gap: 8,
+            marginBottom: 32,
+          }}
+        >
+          {LATAM_COUNTRIES.map((c) => {
+            const isSelected = selected.some((s) => s.code === c.code);
+            const isDisabled =
+              !isSelected && selected.length >= maxCountries;
+            return (
+              <button
+                key={c.code}
+                onClick={() => toggleCountry(c)}
+                disabled={isDisabled}
+                style={{
+                  padding: "12px 16px",
+                  background: isSelected
+                    ? "var(--accent)"
+                    : "var(--card-bg)",
+                  color: isSelected ? "#0a0e17" : "var(--text)",
+                  border: isSelected
+                    ? "1px solid var(--accent)"
+                    : "1px solid var(--border)",
+                  borderRadius: 6,
+                  cursor: isDisabled ? "not-allowed" : "pointer",
+                  fontSize: 14,
+                  fontWeight: isSelected ? 600 : 400,
+                  textAlign: "left",
+                  transition: "all 0.15s",
+                  opacity: isDisabled ? 0.4 : 1,
+                }}
+              >
+                {c.name}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <button
         onClick={handleSubmit}
-        disabled={!selected || status === "submitting"}
+        disabled={selected.length === 0 || status === "submitting"}
         className="btn-primary"
         style={{
           width: "100%",
           padding: "14px 24px",
           fontSize: 15,
-          opacity: !selected || status === "submitting" ? 0.5 : 1,
+          opacity:
+            selected.length === 0 || status === "submitting" ? 0.5 : 1,
           cursor:
-            !selected || status === "submitting"
+            selected.length === 0 || status === "submitting"
               ? "not-allowed"
               : "pointer",
         }}
       >
         {status === "submitting"
           ? "Setting up..."
-          : selected
-            ? `Start Monitoring ${selected.name}`
-            : "Select a country to continue"}
+          : selected.length === 0
+            ? "Select a country to continue"
+            : isAllCountries
+              ? "Start Monitoring All Countries"
+              : selected.length === 1
+                ? `Start Monitoring ${selected[0].name}`
+                : `Start Monitoring ${selected.length} Countries`}
       </button>
     </section>
   );

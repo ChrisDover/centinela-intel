@@ -131,7 +131,14 @@ export default async function ClientLayout({
                   color: "var(--text-secondary)",
                 }}
               >
-                {client.countryName || "Not set"}
+                {client.countries
+                  ? (() => {
+                      const parsed = JSON.parse(client.countries);
+                      return parsed.length > 3
+                        ? `${parsed.length} Countries`
+                        : parsed.map((c: { name: string }) => c.name).join(", ");
+                    })()
+                  : client.countryName || "Not set"}
               </span>
               <ThemeToggle />
               <a

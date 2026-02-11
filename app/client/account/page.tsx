@@ -67,7 +67,14 @@ export default async function ClientAccountPage() {
               Plan
             </div>
             <div style={{ fontSize: 15, fontWeight: 500 }}>
-              Country Monitor — $497/mo
+              Country Monitor —{" "}
+              {client.planTier === "all-countries"
+                ? "$997/mo"
+                : client.planTier === "3-country"
+                  ? "$697/mo"
+                  : client.planTier === "2-country"
+                    ? "$597/mo"
+                    : "$497/mo"}
             </div>
           </div>
           <div>
@@ -105,10 +112,17 @@ export default async function ClientAccountPage() {
                 marginBottom: 4,
               }}
             >
-              Country
+              Countries
             </div>
             <div style={{ fontSize: 15, fontWeight: 500 }}>
-              {client.countryName || "Not selected"}
+              {client.countries
+                ? (() => {
+                    const parsed = JSON.parse(client.countries);
+                    return parsed.length > 3
+                      ? `${parsed.length} countries (All)`
+                      : parsed.map((c: { name: string }) => c.name).join(", ");
+                  })()
+                : client.countryName || "Not selected"}
             </div>
           </div>
           <div>

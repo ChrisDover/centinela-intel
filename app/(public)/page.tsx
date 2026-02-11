@@ -553,14 +553,14 @@ export default function HomePage() {
         <div className="section-label">// Pricing</div>
         <h2 className="section-title">Start With Intelligence. Scale When You&#39;re Ready.</h2>
         <p className="section-desc">
-          Centinela Watch is your entry point — real-time threat monitoring for a single country,
-          delivered daily. When you need more, we build around you.
+          Centinela Watch is your entry point — real-time threat monitoring delivered daily.
+          Add countries as your operational footprint grows.
         </p>
 
         <div className={styles.pricingGrid}>
-          <div className={`${styles.priceCard} ${styles.priceCardFeatured}`}>
+          <div className={styles.priceCard}>
             <div className={styles.priceTier}>Centinela Watch</div>
-            <div className={styles.priceName}>Country Monitor</div>
+            <div className={styles.priceName}>1 Country</div>
             <div className={styles.priceAmount}>$497<span>/mo</span></div>
             <div className={styles.priceDesc}>
               Threat monitoring for a single country — the intelligence baseline every security
@@ -569,35 +569,66 @@ export default function HomePage() {
             <ul className={styles.priceFeatures}>
               <li>Daily intelligence brief — 1 country</li>
               <li>Incident alerts via email</li>
-              <li>Read-only dashboard access</li>
+              <li>Live intelligence dashboard</li>
               <li>Monthly threat landscape summary</li>
               <li>Email analyst support</li>
-              <li>Additional countries available</li>
             </ul>
-            <CheckoutButton className={`${styles.priceCta} ${styles.priceCtaPrimary}`} />
+            <CheckoutButton tier="1-country" className={`${styles.priceCta} ${styles.priceCtaPrimary}`} />
           </div>
-          <div className={styles.priceCard}>
-            <div className={styles.priceTier}>Centinela Watch — Professional</div>
-            <div className={styles.priceName}>Multi-Country &amp; Custom Intelligence</div>
-            <div className={styles.priceAmount}>Contact Us</div>
+          <div className={`${styles.priceCard} ${styles.priceCardFeatured}`}>
+            <div className={styles.priceTier}>Centinela Watch</div>
+            <div className={styles.priceName}>2 Countries</div>
+            <div className={styles.priceAmount}>$597<span>/mo</span></div>
             <div className={styles.priceDesc}>
-              Multi-country coverage, travel risk assessments, executive monitoring, and duty of
-              care support — scoped to your operational footprint.
+              Expand your coverage. Monitor two countries with unified dashboard and cross-border
+              intelligence.
             </div>
             <ul className={styles.priceFeatures}>
-              <li>Multi-country daily intelligence briefs</li>
-              <li>Travel risk assessments</li>
-              <li>Real-time incident alerts (push)</li>
-              <li>Executive threat monitoring</li>
-              <li>Full dashboard with custom views</li>
-              <li>Analyst strategy calls</li>
-              <li>Quarterly threat landscape reports</li>
-              <li>Duty of care documentation support</li>
+              <li>Daily intelligence briefs — 2 countries</li>
+              <li>Cross-border incident correlation</li>
+              <li>Unified dashboard with country toggle</li>
+              <li>Monthly threat landscape summary</li>
+              <li>Email analyst support</li>
             </ul>
-            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaSecondary}`}>
-              Request Briefing
-            </a>
+            <CheckoutButton tier="2-country" className={`${styles.priceCta} ${styles.priceCtaPrimary}`} />
           </div>
+          <div className={styles.priceCard}>
+            <div className={styles.priceTier}>Centinela Watch</div>
+            <div className={styles.priceName}>3 Countries</div>
+            <div className={styles.priceAmount}>$697<span>/mo</span></div>
+            <div className={styles.priceDesc}>
+              Regional coverage for organizations with operations spanning multiple countries in
+              Latin America.
+            </div>
+            <ul className={styles.priceFeatures}>
+              <li>Daily intelligence briefs — 3 countries</li>
+              <li>Cross-border incident correlation</li>
+              <li>Unified dashboard with country toggle</li>
+              <li>Quarterly threat landscape reports</li>
+              <li>Email analyst support</li>
+            </ul>
+            <CheckoutButton tier="3-country" className={`${styles.priceCta} ${styles.priceCtaPrimary}`} />
+          </div>
+          <div className={styles.priceCard}>
+            <div className={styles.priceTier}>Centinela Watch</div>
+            <div className={styles.priceName}>All Countries</div>
+            <div className={styles.priceAmount}>$997<span>/mo</span></div>
+            <div className={styles.priceDesc}>
+              Full regional coverage — every country in Latin America and the Caribbean. Built for
+              organizations with broad operational footprints.
+            </div>
+            <ul className={styles.priceFeatures}>
+              <li>Daily intelligence briefs — all 22 countries</li>
+              <li>Cross-border incident correlation</li>
+              <li>Unified dashboard with country toggle</li>
+              <li>Quarterly threat landscape reports</li>
+              <li>Priority analyst support</li>
+            </ul>
+            <CheckoutButton tier="all-countries" className={`${styles.priceCta} ${styles.priceCtaPrimary}`} />
+          </div>
+        </div>
+
+        <div className={styles.pricingGrid} style={{ marginTop: 24 }}>
           <div className={styles.priceCard}>
             <div className={styles.priceTier}>Centinela Vault</div>
             <div className={styles.priceName}>Secure Platform</div>
