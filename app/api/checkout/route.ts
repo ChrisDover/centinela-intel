@@ -7,6 +7,7 @@ export async function POST() {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],
+      customer_creation: "always",
       line_items: [
         {
           price: process.env.STRIPE_PRICE_COUNTRY_MONITOR!,
