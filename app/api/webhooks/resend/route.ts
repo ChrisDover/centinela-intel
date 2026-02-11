@@ -1,8 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Webhook } from "svix";
 import prisma from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
-  const event = await request.json();
+  // Verify webhook signature
+  const webhookSecret = process.env.RESEND_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.error("RESEND_WEBHOOK_SECRET not configured");
+    return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+  }
+
+  const body = await request.text();
+  const svixId = request.headers.get("svix-id");
+  const svixTimestamp = request.headers.get("svix-timestamp");
+  const svixSignature = request.headers.get("svix-signature");
+
+  if (!svixId || !svixTimestamp || !svixSignature) {
+    return NextResponse.json({ error: "Missing signature headers" }, { status: 400 });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let event: { type: string; data: any };
+  try {
+    const wh = new Webhook(webhookSecret);
+    event = wh.verify(body, {
+      "svix-id": svixId,
+      "svix-timestamp": svixTimestamp,
+      "svix-signature": svixSignature,
+    }) as typeof event;
+  } catch (err) {
+    console.error("Webhook signature verification failed:", err);
+    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+  }
 
   if (!event?.type || !event?.data) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
