@@ -15,9 +15,10 @@ export default function PublicLayout({
         </a>
         <div className="nav-links">
           <a href="/#services">Services</a>
-          <a href="/#dashboard">Platform</a>
+          <a href="/#platform">Platform</a>
           <a href="/#pricing">Pricing</a>
           <a href="/#about">About</a>
+          <a href="/briefs/2026-02-10">Daily Brief</a>
           <a href="/contact" className="btn-primary">
             Request Briefing
           </a>

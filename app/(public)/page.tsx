@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import styles from './home.module.css';
 
 export const metadata: Metadata = {
-  title: "Centinela Intel — AI-Powered Security Risk Intelligence",
-  description: "Threat intelligence and risk analysis for organizations operating in Latin America. AI-accelerated monitoring, human-verified assessments.",
+  title: "Centinela Intel — Security Intelligence for a Volatile World",
+  description: "Threat intelligence and risk analysis for organizations operating in high-risk environments. AI-accelerated monitoring, human-verified assessments, delivered by security professionals with 25+ years of global security operations.",
 };
 
 export default function HomePage() {
@@ -14,20 +14,21 @@ export default function HomePage() {
         <div className={styles.heroBadge}>Live Intelligence Monitoring</div>
         <h1>Security Intelligence<br />for a <em>Volatile World</em></h1>
         <p className={styles.heroSub}>
-          Threat intelligence and risk analysis for organizations operating in Latin America.
-          AI-accelerated monitoring, human-verified assessments, delivered by security professionals
-          with 25+ years on the ground.
+          Threat intelligence and risk analysis for organizations operating in high-risk
+          environments. AI-accelerated monitoring, human-verified assessments, delivered by
+          security professionals with 25+ years of global security operations.
         </p>
         <div className={styles.heroSubscribe}>
           <p className={styles.heroSubscribeLabel}>
-            Free daily LatAm intel brief — every morning at 0600
+            Free daily threat briefing — delivered every morning at 0600
           </p>
           <form className={styles.heroSubscribeForm} action="/api/subscribe" method="POST">
             <input type="email" name="email" placeholder="Enter your email" required />
             <button type="submit" className="btn-primary">Subscribe Free</button>
           </form>
           <p className={styles.heroSubscribeFine}>
-            Your email is never shared or sold. <a href="/briefs/2026-02-10">Read today&#39;s brief</a>
+            Your email is never shared or sold.{' '}
+            <a href="/briefs/2026-02-10">Read today&#39;s brief &rarr;</a>
           </p>
         </div>
         <div className={styles.heroProof}>
@@ -36,12 +37,8 @@ export default function HomePage() {
             <div className="label">Years Experience</div>
           </div>
           <div className={styles.proofItem}>
-            <div className="number">8+</div>
-            <div className="label">Years In-Country LatAm</div>
-          </div>
-          <div className={styles.proofItem}>
-            <div className="number">2,000+</div>
-            <div className="label">Personnel Managed</div>
+            <div className="number">3</div>
+            <div className="label">Continents of Operations</div>
           </div>
           <div className={styles.proofItem}>
             <div className="number">24/7</div>
@@ -50,8 +47,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ============ THREAT CONTEXT ============ */}
+      {/* ============ THE OPERATING ENVIRONMENT ============ */}
       <div className={styles.threatBanner}>
+        <div className="section-label" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+          // The Operating Environment
+        </div>
         <div className={styles.threatInner}>
           <div className={styles.threatStat}>
             <div className="value">73%</div>
@@ -76,8 +76,62 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ============ WHAT YOU GET ============ */}
+      {/* ============ THREE PRODUCT LINES ============ */}
       <section id="services">
+        <div className="section-label">// Capabilities</div>
+        <h2 className="section-title">Three Capabilities. One Partner.</h2>
+        <p className="section-desc">
+          Most security firms sell you reports or bodies. Centinela delivers intelligence,
+          technology, and operations as an integrated platform — one partner, not five vendors.
+        </p>
+
+        <div className={styles.productGrid}>
+          <div className={styles.productCard}>
+            <div className={styles.productLabel}>Centinela Watch</div>
+            <h3>Intelligence Services</h3>
+            <p>
+              AI-accelerated threat intelligence and risk analysis for your areas of operation.
+              Daily briefs, travel risk assessments, incident alerts, and strategic reporting —
+              reviewed by senior analysts before it reaches you.
+            </p>
+            <div className={styles.productFor}>
+              For: Corporate security teams, risk managers, travel security, general counsels
+            </div>
+            <a href="#pricing" className={styles.productCta}>See Plans</a>
+          </div>
+          <div className={styles.productCard}>
+            <div className={styles.productLabel}>Centinela Vault</div>
+            <h3>Secure Intelligence Platform</h3>
+            <p>
+              Secure, dedicated AI infrastructure that keeps your intelligence fully contained.
+              We don&#39;t train public models with your data — or our own. No operational details
+              leave your environment. Nothing to explain to your GC or your board.
+            </p>
+            <div className={styles.productFor}>
+              For: Defense contractors, family offices, corporate security teams with data
+              sovereignty requirements
+            </div>
+            <a href="#vault" className={styles.productCta}>Learn More</a>
+          </div>
+          <div className={styles.productCard}>
+            <div className={styles.productLabel}>Centinela Shield</div>
+            <h3>Operational Security Services</h3>
+            <p>
+              Boots-on-the-ground security operations coordinated by professionals who have lived
+              and operated across Latin America, the Middle East, and the United States. We
+              don&#39;t just report threats — we respond to them.
+            </p>
+            <div className={styles.productFor}>
+              For: Organizations deploying personnel in high-risk regions, executives traveling to
+              threat environments
+            </div>
+            <a href="/contact" className={styles.productCta}>Request Consultation</a>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ INTELLIGENCE DELIVERABLES ============ */}
+      <section>
         <div className="section-label">// Deliverables</div>
         <h2 className="section-title">What You Get</h2>
         <p className="section-desc">
@@ -87,17 +141,14 @@ export default function HomePage() {
 
         <div className={styles.deliverablesGrid}>
           <div className={styles.deliverableCard}>
-            <div className={styles.deliverableIcon}>&#x1F4E1;</div>
             <h3>Daily Intelligence Briefs</h3>
             <p>
               AI-synthesized morning reports covering threat developments, political shifts, criminal
               activity, and operational impacts across your areas of interest. Reviewed and annotated
               by senior analysts. Formatted for duty of care documentation and board-level reporting.
             </p>
-            <span className={styles.deliverableTag}>Delivered 0600 Local</span>
           </div>
           <div className={styles.deliverableCard}>
-            <div className={styles.deliverableIcon}>&#x1F5FA;&#xFE0F;</div>
             <h3>Travel Risk Assessments</h3>
             <p>
               Route-specific threat analysis for executive and principal travel. Covers ground
@@ -105,27 +156,22 @@ export default function HomePage() {
               real-time conditions. Insurance-ready documentation your risk team and carriers
               actually need.
             </p>
-            <span className={styles.deliverableTag}>48hr Turnaround</span>
           </div>
           <div className={styles.deliverableCard}>
-            <div className={styles.deliverableIcon}>&#x26A1;</div>
             <h3>Incident Alerts</h3>
             <p>
-              Real-time notifications when events occur that affect your personnel, operations, or
-              travel routes. AI-monitored OSINT across Spanish and Portuguese language sources,
-              triaged by severity and proximity.
+              Notifications when events occur that affect your personnel, operations, or travel
+              routes. AI-monitored OSINT across Spanish and Portuguese language sources, triaged by
+              severity and proximity.
             </p>
-            <span className={styles.deliverableTag}>Real-Time Push</span>
           </div>
           <div className={styles.deliverableCard}>
-            <div className={styles.deliverableIcon}>&#x1F4CA;</div>
             <h3>Quarterly Threat Landscape</h3>
             <p>
               Deep-dive strategic analysis of evolving threats, political risk, cartel dynamics,
               regulatory changes, and security trend forecasts. Board-ready format designed for
               presentation to directors, general counsels, and C-suite leadership.
             </p>
-            <span className={styles.deliverableTag}>Executive Format</span>
           </div>
         </div>
       </section>
@@ -229,7 +275,7 @@ export default function HomePage() {
       </section>
 
       {/* ============ DASHBOARD PREVIEW ============ */}
-      <section id="dashboard">
+      <section id="platform">
         <div className="section-label">// Platform</div>
         <h2 className="section-title">Real-Time Threat Dashboard</h2>
         <p className="section-desc">
@@ -330,23 +376,284 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ============ CENTINELA VAULT — DEEP DIVE ============ */}
+      <section id="vault">
+        <div className="section-label">// Secure Infrastructure</div>
+        <h2 className="section-title">Centinela Vault: Your Intelligence Stays Yours</h2>
+        <p className="section-desc">
+          For organizations where data sovereignty isn&#39;t optional. Centinela Vault provides
+          secure, dedicated AI infrastructure purpose-built for security intelligence. Your
+          intelligence is fully contained.
+        </p>
+
+        <div className={styles.vaultTerminal}>
+          <div className={styles.vaultTerminalHeader}>
+            <span className={styles.vaultDot} style={{ background: 'var(--danger)' }}></span>
+            <span className={styles.vaultDot} style={{ background: 'var(--warning)' }}></span>
+            <span className={styles.vaultDot} style={{ background: 'var(--safe)' }}></span>
+            <span className={styles.vaultTerminalTitle}>vault-status — centinela-secure</span>
+          </div>
+          <div className={styles.vaultTerminalBody}>
+            <div className={styles.infraLine}>
+              <div className={`status ${styles.statusGreen}`}></div>
+              <span>VAULT STATUS ..................... ACTIVE</span>
+            </div>
+            <div className={styles.infraLine}>
+              <div className={`status ${styles.statusGreen}`}></div>
+              <span>OSINT Collection Engine ......... ACTIVE</span>
+            </div>
+            <div className={styles.infraLine}>
+              <div className={`status ${styles.statusGreen}`}></div>
+              <span>NLP Analysis Pipeline ........... ACTIVE</span>
+            </div>
+            <div className={styles.infraLine}>
+              <div className={`status ${styles.statusBlue}`}></div>
+              <span>Threat Correlation Model ........ v3.2.1</span>
+            </div>
+            <div className={styles.infraLine}>
+              <div className={`status ${styles.statusGreen}`}></div>
+              <span>Local LLM Instance .............. RUNNING</span>
+            </div>
+            <div className={styles.infraLine}>
+              <div className={`status ${styles.statusGreen}`}></div>
+              <span>Encrypted Data Store ............ NOMINAL</span>
+            </div>
+            <div className={styles.infraLine}>
+              <div className={`status ${styles.statusGreen}`}></div>
+              <span>Third-Party API Exposure ........ NONE</span>
+            </div>
+            <div className={styles.infraLine}>
+              <div className={`status ${styles.statusGreen}`}></div>
+              <span>Client Data Leakage ............. ZERO</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.vaultTiers}>
+          <div className={styles.vaultTierCard}>
+            <div className={styles.vaultTierLabel}>Vault — Managed Secure</div>
+            <h3>Your intelligence, our infrastructure, zero exposure.</h3>
+            <ul className={styles.vaultFeatures}>
+              <li>Dedicated secure environment for your organization&#39;s intelligence</li>
+              <li>All Centinela intelligence products delivered through encrypted private instance</li>
+              <li>No client data touches public AI models — ever</li>
+              <li>Zero third-party API exposure</li>
+              <li>Encrypted at rest and in transit</li>
+              <li>SOC 2 aligned controls</li>
+              <li>Custom threat models trained on your operational profile</li>
+              <li>Secure client portal with role-based access</li>
+              <li>Available as add-on to any Watch plan or standalone</li>
+            </ul>
+          </div>
+          <div className={styles.vaultTierCard}>
+            <div className={styles.vaultTierLabel}>Vault — Dedicated Infrastructure</div>
+            <h3>Full air-gap. Full sovereignty. Your environment, your rules.</h3>
+            <ul className={styles.vaultFeatures}>
+              <li>Everything in Managed Secure</li>
+              <li>Air-gapped AI processing on dedicated GPU compute</li>
+              <li>Custom deployment — private cloud or on-premise</li>
+              <li>Full data sovereignty — nothing leaves your environment</li>
+              <li>Custom model training on client operational data</li>
+              <li>API integrations with client security systems (GSOC platforms, travel management)</li>
+              <li>Dedicated security engineer for platform management</li>
+              <li>Incident response automation and playbook integration</li>
+            </ul>
+          </div>
+        </div>
+        <p className={styles.vaultNote}>
+          Vault pricing is scoped to your infrastructure requirements.{' '}
+          <a href="/contact">Contact us to discuss your environment.</a>
+        </p>
+      </section>
+
+      {/* ============ CENTINELA SHIELD ============ */}
+      <section id="shield">
+        <div className="section-label">// Operations</div>
+        <h2 className="section-title">Centinela Shield: When Intelligence Isn&#39;t Enough</h2>
+        <p className="section-desc">
+          Threat reports don&#39;t stop bullets. When your people are on the ground, you need a
+          partner who has operated in these environments — not one who has read about them.
+        </p>
+
+        <div className={styles.shieldGrid}>
+          <div className={styles.shieldCard}>
+            <h4>Security Program Design</h4>
+            <p>
+              Build or audit your security program from the ground up. Policies, protocols,
+              personnel, and technology aligned to your threat environment.
+            </p>
+          </div>
+          <div className={styles.shieldCard}>
+            <h4>Executive Protection</h4>
+            <p>
+              Close protection for executives, board members, and principals operating in or
+              traveling to high-risk regions. Bilingual, culturally fluent operators.
+            </p>
+          </div>
+          <div className={styles.shieldCard}>
+            <h4>Secure Transportation &amp; Logistics</h4>
+            <p>
+              Vetted vehicles, drivers, and routes. Advance work and real-time route monitoring
+              for ground movement in threat environments.
+            </p>
+          </div>
+          <div className={styles.shieldCard}>
+            <h4>Crisis Management &amp; Extraction</h4>
+            <p>
+              When things go wrong. Pre-planned extraction protocols, emergency coordination, and
+              crisis communication for personnel in hostile or deteriorating environments.
+            </p>
+          </div>
+          <div className={styles.shieldCard}>
+            <h4>Physical Security Assessments</h4>
+            <p>
+              Facility and project site security evaluations. Threat-informed recommendations for
+              access control, surveillance, personnel security, and hardening.
+            </p>
+          </div>
+          <div className={styles.shieldCard}>
+            <h4>Regulatory &amp; Political Risk Intelligence</h4>
+            <p>
+              Who&#39;s who in local government, where cartel-state dynamics affect operations, and
+              what your team needs to know before deploying.
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.shieldExtended}>
+          <div className={styles.shieldExtendedLabel}>Extended Capabilities — Through Vetted Partners</div>
+          <div className={styles.shieldExtendedGrid}>
+            <div className={styles.shieldExtendedCard}>
+              <h4>Kidnap &amp; Ransom Consulting</h4>
+              <p>
+                Crisis response advisory and coordination with K&amp;R specialists and insurance
+                carriers.
+              </p>
+            </div>
+            <div className={styles.shieldExtendedCard}>
+              <h4>Technical Surveillance Countermeasures (TSCM)</h4>
+              <p>
+                Electronic sweep and counter-surveillance for sensitive meetings, executive travel,
+                and facility security.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p className={styles.shieldNote}>
+          Every Shield engagement is custom-scoped to your operational footprint and threat
+          environment.{' '}
+          <a href="/contact">Contact us to discuss your requirements.</a>
+        </p>
+      </section>
+
+      {/* ============ PRICING ============ */}
+      <section id="pricing">
+        <div className="section-label">// Pricing</div>
+        <h2 className="section-title">Start With Intelligence. Scale When You&#39;re Ready.</h2>
+        <p className="section-desc">
+          Centinela Watch is your entry point — real-time threat monitoring for a single country,
+          delivered daily. When you need more, we build around you.
+        </p>
+
+        <div className={styles.pricingGrid}>
+          <div className={`${styles.priceCard} ${styles.priceCardFeatured}`}>
+            <div className={styles.priceTier}>Centinela Watch</div>
+            <div className={styles.priceName}>Country Monitor</div>
+            <div className={styles.priceAmount}>$497<span>/mo</span></div>
+            <div className={styles.priceDesc}>
+              Threat monitoring for a single country — the intelligence baseline every security
+              team needs.
+            </div>
+            <ul className={styles.priceFeatures}>
+              <li>Daily intelligence brief — 1 country</li>
+              <li>Incident alerts via email</li>
+              <li>Read-only dashboard access</li>
+              <li>Monthly threat landscape summary</li>
+              <li>Email analyst support</li>
+              <li>Additional countries available</li>
+            </ul>
+            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaPrimary}`}>
+              Get Started
+            </a>
+          </div>
+          <div className={styles.priceCard}>
+            <div className={styles.priceTier}>Centinela Watch — Professional</div>
+            <div className={styles.priceName}>Multi-Country &amp; Custom Intelligence</div>
+            <div className={styles.priceAmount}>Contact Us</div>
+            <div className={styles.priceDesc}>
+              Multi-country coverage, travel risk assessments, executive monitoring, and duty of
+              care support — scoped to your operational footprint.
+            </div>
+            <ul className={styles.priceFeatures}>
+              <li>Multi-country daily intelligence briefs</li>
+              <li>Travel risk assessments</li>
+              <li>Real-time incident alerts (push)</li>
+              <li>Executive threat monitoring</li>
+              <li>Full dashboard with custom views</li>
+              <li>Analyst strategy calls</li>
+              <li>Quarterly threat landscape reports</li>
+              <li>Duty of care documentation support</li>
+            </ul>
+            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaSecondary}`}>
+              Request Briefing
+            </a>
+          </div>
+          <div className={styles.priceCard}>
+            <div className={styles.priceTier}>Centinela Vault</div>
+            <div className={styles.priceName}>Secure Platform</div>
+            <div className={styles.priceAmount}>Contact Us</div>
+            <div className={styles.priceDesc}>
+              Secure, dedicated AI infrastructure for organizations that require data sovereignty
+              and zero third-party exposure.
+            </div>
+            <ul className={styles.priceFeatures}>
+              <li>Managed Secure and Dedicated Infrastructure options</li>
+              <li>Air-gapped AI processing available</li>
+              <li>SOC 2 aligned controls</li>
+              <li>Custom deployment options</li>
+              <li>Add to any Watch plan or standalone</li>
+            </ul>
+            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaSecondary}`}>
+              Contact Us
+            </a>
+          </div>
+          <div className={styles.priceCard}>
+            <div className={styles.priceTier}>Centinela Shield</div>
+            <div className={styles.priceName}>Operational Security</div>
+            <div className={styles.priceAmount}>Custom</div>
+            <div className={styles.priceDesc}>
+              Operational security services for organizations deploying personnel in high-risk
+              regions.
+            </div>
+            <ul className={styles.priceFeatures}>
+              <li>Executive protection</li>
+              <li>Secure transportation &amp; logistics</li>
+              <li>Crisis management &amp; extraction</li>
+              <li>Physical security assessments</li>
+              <li>Security program consulting</li>
+              <li>K&amp;R and TSCM through vetted partners</li>
+            </ul>
+            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaSecondary}`}>
+              Request Consultation
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ============ WHY CENTINELA ============ */}
       <section>
         <div className="section-label">// Why Centinela</div>
         <h2 className="section-title">Not Another Consulting Firm</h2>
-        <p className="section-desc">
-          We built Centinela because we&#39;ve lived the problem — overpriced firms that don&#39;t
-          understand your operations, or cheap data feeds your team ignores. Security leaders deserve
-          better.
-        </p>
 
         <div className={styles.diffGrid}>
           <div className={styles.diffCard}>
             <h3>Built from the Inside</h3>
             <p>
               Our team has built and led corporate security programs from the ground up — advising
-              boards of directors, working alongside general counsels and CEOs, managing enterprise
-              risk for multinationals and HNW families across Latin America. We&#39;ve sat in the
+              boards of directors, working alongside general counsels, reporting to CEOs. We&#39;ve
+              managed executive protection programs, designed duty of care frameworks, and
+              coordinated with insurance carriers on complex risk portfolios. We&#39;ve sat in the
               rooms where security decisions get made, and we built Centinela to fill the
               intelligence gap we saw firsthand.
             </p>
@@ -360,138 +667,27 @@ export default function HomePage() {
             </p>
           </div>
           <div className={styles.diffCard}>
+            <h3>Intelligence + Operations Under One Roof</h3>
+            <p>
+              Most firms sell you reports. Others sell you bodies. We do both — and the intelligence
+              informs the operations. When your travel risk assessment flags a deteriorating
+              corridor, the same team that wrote the report can reroute your executive&#39;s ground
+              transportation. One partner. One relationship. Full spectrum.
+            </p>
+          </div>
+          <div className={styles.diffCard}>
             <h3>Your Data Stays Yours</h3>
             <p>
-              Your intelligence never trains third-party models. No client data touches public AI
-              systems. No operational details are shared, sold, or exposed. Available with
-              locally-hosted AI processing and fully air-gapped environments for clients who require
-              it.
+              Your intelligence never trains public models. No client data touches third-party AI
+              systems. No operational details are shared, sold, or exposed. We don&#39;t train
+              public models with your data — or our own. Available with dedicated AI infrastructure
+              and fully air-gapped environments for clients who require it.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ============ SECURE INFRASTRUCTURE ============ */}
-      <section>
-        <div className={styles.infraHighlight}>
-          <div className={styles.infraText}>
-            <h3>Hyper-Secure Intelligence Infrastructure</h3>
-            <p>
-              For corporate security teams, family offices, and defense contractors who require it —
-              dedicated AI infrastructure that keeps your intelligence fully contained. No client
-              data trains public models. No operational details leave your environment. Nothing to
-              explain to your GC or your board.
-            </p>
-            <div className={styles.infraFeatures}>
-              <div className={styles.infraFeat}>Air-gapped AI processing</div>
-              <div className={styles.infraFeat}>Dedicated GPU compute</div>
-              <div className={styles.infraFeat}>Zero third-party API exposure</div>
-              <div className={styles.infraFeat}>Encrypted at rest &amp; in transit</div>
-              <div className={styles.infraFeat}>SOC 2 aligned controls</div>
-              <div className={styles.infraFeat}>Custom deployment options</div>
-            </div>
-          </div>
-          <div className={styles.infraVisual}>
-            <div className={styles.infraLine}>
-              <div className={`status ${styles.statusGreen}`}></div>
-              <span>OSINT Collection Engine ........ ACTIVE</span>
-            </div>
-            <div className={styles.infraLine}>
-              <div className={`status ${styles.statusGreen}`}></div>
-              <span>NLP Analysis Pipeline .......... ACTIVE</span>
-            </div>
-            <div className={styles.infraLine}>
-              <div className={`status ${styles.statusBlue}`}></div>
-              <span>Threat Correlation Model ........ v3.2.1</span>
-            </div>
-            <div className={styles.infraLine}>
-              <div className={`status ${styles.statusGreen}`}></div>
-              <span>Local LLM Instance ............ RUNNING</span>
-            </div>
-            <div className={styles.infraLine}>
-              <div className={`status ${styles.statusGreen}`}></div>
-              <span>Encrypted Data Store .......... NOMINAL</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ PRICING ============ */}
-      <section id="pricing">
-        <div className="section-label">// Service Tiers</div>
-        <h2 className="section-title">Intelligence Packages</h2>
-        <p className="section-desc">
-          Scalable coverage built around your operational footprint. From regional monitoring to a
-          fully embedded intelligence capability.
-        </p>
-
-        <div className={styles.pricingGrid}>
-          <div className={styles.priceCard}>
-            <div className={styles.priceTier}>Essentials</div>
-            <div className={styles.priceName}>Regional Watch</div>
-            <div className={styles.priceAmount}>$497<span>/mo</span></div>
-            <div className={styles.priceDesc}>
-              Single country or region monitoring — the intelligence baseline every team needs.
-            </div>
-            <ul className={styles.priceFeatures}>
-              <li>Daily intelligence brief — 1 country/region</li>
-              <li>Monthly threat landscape summary</li>
-              <li>Email-based incident alerts</li>
-              <li>Dashboard access (read-only)</li>
-              <li>Email analyst support</li>
-            </ul>
-            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaSecondary}`}>
-              Get Started
-            </a>
-          </div>
-          <div className={`${styles.priceCard} ${styles.priceCardFeatured}`}>
-            <div className={styles.priceTier}>Professional</div>
-            <div className={styles.priceName}>Operations Intelligence</div>
-            <div className={styles.priceAmount}>$5,000<span>/mo</span></div>
-            <div className={styles.priceDesc}>
-              Multi-country coverage with travel risk, real-time alerts, and duty of care support.
-            </div>
-            <ul className={styles.priceFeatures}>
-              <li>Daily intelligence briefs — up to 3 countries</li>
-              <li>10 travel risk assessments / month</li>
-              <li>Real-time incident alerts (push)</li>
-              <li>Executive threat monitoring</li>
-              <li>Full dashboard with custom views</li>
-              <li>Monthly analyst strategy call</li>
-              <li>Quarterly threat landscape report</li>
-              <li>Duty of care documentation support</li>
-            </ul>
-            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaPrimary}`}>
-              Request Briefing
-            </a>
-          </div>
-          <div className={styles.priceCard}>
-            <div className={styles.priceTier}>Enterprise</div>
-            <div className={styles.priceName}>Dedicated Intelligence Cell</div>
-            <div className={styles.priceAmount}>$10,000+<span>/mo</span></div>
-            <div className={styles.priceDesc}>
-              Your own intelligence team — dedicated analyst, board-ready reporting, secure
-              infrastructure.
-            </div>
-            <ul className={styles.priceFeatures}>
-              <li>Unlimited country coverage</li>
-              <li>Unlimited travel risk assessments</li>
-              <li>Dedicated senior analyst</li>
-              <li>Executive &amp; family threat assessments</li>
-              <li>Board-ready reporting &amp; presentations</li>
-              <li>Air-gapped local AI processing</li>
-              <li>Crisis response support</li>
-              <li>Weekly strategy calls + daily briefs</li>
-              <li>Custom integrations &amp; white-label</li>
-            </ul>
-            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaSecondary}`}>
-              Contact Us
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ============ CREDIBILITY ============ */}
+      {/* ============ ABOUT / FOUNDER ============ */}
       <section id="about">
         <div className="section-label">// Who We Are</div>
         <h2 className="section-title">We&#39;ve Done Your Job</h2>
@@ -500,33 +696,31 @@ export default function HomePage() {
           <div className={styles.credStats}>
             <div className={styles.credStat}>
               <div className="value">25+</div>
-              <div className="label">Years in security, risk &amp; intelligence</div>
+              <div className="label">Years in global security operations</div>
             </div>
             <div className={styles.credStat}>
-              <div className="value">8+</div>
-              <div className="label">Years living and operating in Latin America</div>
-            </div>
-            <div className={styles.credStat}>
-              <div className="value">2,000+</div>
-              <div className="label">Security personnel built, trained &amp; managed</div>
+              <div className="value">3</div>
+              <div className="label">Continents of operations</div>
             </div>
           </div>
           <div className={styles.credText}>
             <p>
-              Centinela Intel was founded by a <strong>U.S. Marine veteran</strong> who has spent
-              over two decades at the intersection of{' '}
+              Centinela Intel was founded by a <strong>U.S. Marine veteran and former
+              Department of State security professional</strong> who has spent over two decades at
+              the intersection of{' '}
               <strong>
-                corporate security, enterprise risk management, and emerging technology
+                diplomatic security, corporate risk management, and emerging technology
               </strong>
               .
             </p>
             <p>
-              We&#39;ve built full security departments from the ground up. We&#39;ve advised boards
-              of directors, worked alongside general counsels, reported to CEOs. We&#39;ve managed
-              executive protection programs, designed duty of care frameworks, and coordinated with
-              insurance carriers on complex risk portfolios. We&#39;ve consulted for defense
-              contractors and protected HNW families — all while living and operating across
-              Colombia, Mexico, and Central America for nearly a decade.
+              We&#39;ve provided security for heads of state and diplomatic missions. We&#39;ve
+              built full security departments from the ground up — advising boards of directors,
+              working alongside general counsels, reporting to CEOs. We&#39;ve managed executive
+              protection programs, designed duty of care frameworks, and coordinated with insurance
+              carriers on complex risk portfolios. We&#39;ve consulted for defense contractors and
+              protected HNW families — living and operating across Latin America, the Middle East,
+              and the United States throughout our career.
             </p>
             <p>
               That&#39;s why Centinela exists. We know exactly what intelligence your security team

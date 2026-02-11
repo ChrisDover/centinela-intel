@@ -186,6 +186,91 @@
   line-height: 1.5;
 }
 
+/* ============ THREE PRODUCT LINES ============ */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.productCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.productCard:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+}
+
+.productIcon {
+  width: 48px; height: 48px;
+  background: var(--accent-dim);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  font-size: 1.4rem;
+}
+
+.productLabel {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.productCard h3 {
+  font-family: var(--font-instrument-serif), 'Instrument Serif', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.productCard p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  flex: 1;
+}
+
+.productFor {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-style: italic;
+}
+
+.productCta {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.productCta:hover {
+  color: #00e8bb;
+}
+
+.productCta::after {
+  content: ' \2192';
+}
+
 /* ============ DELIVERABLES ============ */
 .deliverablesGrid {
   display: grid;
@@ -228,18 +313,6 @@
   color: var(--text-secondary);
   font-size: 0.9rem;
   line-height: 1.6;
-}
-
-.deliverableTag {
-  display: inline-block;
-  margin-top: 1rem;
-  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  color: var(--accent);
-  background: var(--accent-dim);
-  padding: 0.25rem 0.75rem;
-  border-radius: 100px;
-  letter-spacing: 0.05em;
 }
 
 /* ============ SAMPLE INTELLIGENCE BRIEF ============ */
@@ -602,10 +675,210 @@
 .tagAdvisory { background: rgba(255, 179, 71, 0.15); color: var(--warning); }
 .tagInfo { background: rgba(77, 166, 255, 0.15); color: var(--info); }
 
+/* ============ CENTINELA VAULT — DEEP DIVE ============ */
+.vaultTerminal {
+  margin-top: 3rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.vaultTerminalHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(15, 20, 32, 0.8);
+  border-bottom: 1px solid var(--border);
+}
+
+.vaultDot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+
+.vaultTerminalTitle {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-left: 0.75rem;
+}
+
+.vaultTerminalBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vaultTiers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.vaultTierCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  transition: all 0.3s;
+}
+
+.vaultTierCard:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.vaultTierLabel {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.vaultTierCard h3 {
+  font-family: var(--font-instrument-serif), 'Instrument Serif', serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.vaultFeatures {
+  list-style: none;
+  padding: 0;
+}
+
+.vaultFeatures li {
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.vaultFeatures li::before {
+  content: '\25C6';
+  color: var(--accent);
+  font-size: 0.5rem;
+  flex-shrink: 0;
+  margin-top: 0.35rem;
+}
+
+.vaultNote {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.vaultNote a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.vaultNote a:hover {
+  color: #00e8bb;
+}
+
+/* ============ CENTINELA SHIELD ============ */
+.shieldGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.shieldCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s;
+}
+
+.shieldCard:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+}
+
+.shieldCard h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.shieldCard p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.shieldExtended {
+  margin-top: 2rem;
+}
+
+.shieldExtendedLabel {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.shieldExtendedGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.shieldExtendedCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 2px solid var(--text-muted);
+}
+
+.shieldExtendedCard h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.shieldExtendedCard p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.shieldNote {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2rem;
+}
+
+.shieldNote a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.shieldNote a:hover {
+  color: #00e8bb;
+}
+
 /* ============ DIFFERENTIATOR SECTION ============ */
 .diffGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   margin-top: 3rem;
 }
@@ -642,7 +915,7 @@
 /* ============ PRICING ============ */
 .pricingGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-top: 3rem;
 }
@@ -651,7 +924,7 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 1.75rem;
   position: relative;
   transition: all 0.3s;
 }
@@ -667,7 +940,7 @@
 }
 
 .priceCardFeatured::before {
-  content: 'MOST POPULAR';
+  content: 'START HERE';
   position: absolute;
   top: -0.75rem; left: 50%;
   transform: translateX(-50%);
@@ -683,7 +956,7 @@
 
 .priceTier {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -692,19 +965,19 @@
 
 .priceName {
   font-family: var(--font-instrument-serif), 'Instrument Serif', serif;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   margin-bottom: 0.5rem;
 }
 
 .priceAmount {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 500;
   margin-bottom: 0.25rem;
 }
 
 .priceAmount span {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   font-weight: 400;
 }
@@ -723,8 +996,8 @@
 }
 
 .priceFeatures li {
-  padding: 0.5rem 0;
-  font-size: 0.875rem;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
   color: var(--text-secondary);
   display: flex;
   align-items: flex-start;
@@ -775,63 +1048,12 @@
   color: var(--accent);
 }
 
-/* ============ SECURE INFRASTRUCTURE ============ */
-.infraHighlight {
-  background: linear-gradient(135deg, rgba(0, 212, 170, 0.05), rgba(77, 166, 255, 0.03));
-  border: 1px solid rgba(0, 212, 170, 0.15);
-  border-radius: 16px;
-  padding: 3rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-  margin-top: 3rem;
-}
-
-.infraText h3 {
-  font-family: var(--font-instrument-serif), 'Instrument Serif', serif;
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  font-weight: 400;
-}
-
-.infraText p {
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: 1.5rem;
-}
-
-.infraFeatures {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-
-.infraFeat {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
-.infraFeat::before {
-  content: '\25C6';
-  color: var(--accent);
-  font-size: 0.5rem;
-}
-
-.infraVisual {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
+/* ============ SHARED INFRASTRUCTURE STYLES ============ */
 .infraLine {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1.25rem;
+  padding: 0.75rem 1rem;
   background: rgba(10, 14, 23, 0.6);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -895,15 +1117,18 @@
   color: var(--text-primary);
 }
 
-/* ============ PAGE-SPECIFIC RESPONSIVE ============ */
+/* ============ RESPONSIVE ============ */
 @media (max-width: 900px) {
+  .productGrid,
   .deliverablesGrid,
   .pricingGrid,
+  .shieldGrid,
   .diffGrid { grid-template-columns: 1fr; }
   .threatInner { grid-template-columns: 1fr; }
   .dashGrid { grid-template-columns: 1fr 1fr; }
   .dashBody { grid-template-columns: 1fr; }
-  .infraHighlight { grid-template-columns: 1fr; }
+  .vaultTiers { grid-template-columns: 1fr; }
+  .shieldExtendedGrid { grid-template-columns: 1fr; }
   .credContent { grid-template-columns: 1fr; }
 }
 
