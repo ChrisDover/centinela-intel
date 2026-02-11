@@ -6,6 +6,10 @@
       "schedule": "0 8 * * *"
     },
     {
+      "path": "/api/cron/generate-client-briefs",
+      "schedule": "0 9 * * *"
+    },
+    {
       "path": "/api/cron/send-brief",
       "schedule": "0 10 * * *"
     },
@@ -16,6 +20,10 @@
     {
       "path": "/api/cron/evaluate-ab-tests",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/generate-weekly-summary",
+      "schedule": "0 14 * * 5"
     }
   ]
 }

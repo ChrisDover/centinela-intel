@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import styles from './home.module.css';
+import { CheckoutButton } from './CheckoutButton';
 
 export const metadata: Metadata = {
   title: "Centinela Intel — Security Intelligence for a Volatile World",
@@ -573,9 +574,7 @@ export default function HomePage() {
               <li>Email analyst support</li>
               <li>Additional countries available</li>
             </ul>
-            <a href="/contact" className={`${styles.priceCta} ${styles.priceCtaPrimary}`}>
-              Get Started
-            </a>
+            <CheckoutButton className={`${styles.priceCta} ${styles.priceCtaPrimary}`} />
           </div>
           <div className={styles.priceCard}>
             <div className={styles.priceTier}>Centinela Watch — Professional</div>

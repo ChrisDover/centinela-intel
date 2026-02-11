@@ -4,7 +4,8 @@
 
 /* ============ CENTINELA INTEL — SHARED STYLES ============ */
 
-:root {
+:root,
+[data-theme="dark"] {
   --bg-primary: #0a0e17;
   --bg-secondary: #0f1420;
   --bg-card: #141a28;
@@ -21,6 +22,25 @@
   --warning: #ffb347;
   --safe: #00d4aa;
   --info: #4da6ff;
+}
+
+[data-theme="light"] {
+  --bg-primary: #f5f7fa;
+  --bg-secondary: #edf0f5;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f0f2f7;
+  --border: #d8dde6;
+  --border-accent: #bfc7d4;
+  --text-primary: #1a1f2e;
+  --text-secondary: #5a6680;
+  --text-muted: #8a96ad;
+  --accent: #009b7d;
+  --accent-dim: rgba(0, 155, 125, 0.1);
+  --accent-glow: rgba(0, 155, 125, 0.2);
+  --danger: #e03e4e;
+  --warning: #d9922e;
+  --safe: #009b7d;
+  --info: #3b8ed6;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,6 +70,16 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background: radial-gradient(ellipse 800px 600px at 50% 0%, rgba(0, 212, 170, 0.06), transparent);
+}
+
+[data-theme="light"] .grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 155, 125, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 155, 125, 0.05) 1px, transparent 1px);
+}
+
+[data-theme="light"] .grid-bg::after {
+  background: radial-gradient(ellipse 800px 600px at 50% 0%, rgba(0, 155, 125, 0.04), transparent);
 }
 
 /* ============ NAVIGATION ============ */

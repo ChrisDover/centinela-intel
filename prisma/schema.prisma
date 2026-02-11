@@ -164,3 +164,46 @@ model CTAClick {
   @@index([ctaType])
   @@map("cta_clicks")
 }
+
+model Client {
+  id                   String    @id @default(cuid())
+  email                String    @unique
+  name                 String?
+  company              String?
+
+  // Stripe
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  plan                 String    @default("country-monitor")
+  planStatus           String    @default("active") // active, past_due, cancelled
+
+  // Country Monitor config
+  country              String? // selected country code e.g. "MX", "CO"
+  countryName          String? // display name e.g. "Mexico"
+  focusAreas           String? // JSON array of focus areas e.g. ["Guadalajara","Sinaloa"]
+
+  // Auth
+  magicLinkToken       String?
+  magicLinkExpiresAt   DateTime?
+  sessionToken         String?   @unique
+  sessionExpiresAt     DateTime?
+
+  createdAt            DateTime  @default(now())
+  onboardedAt          DateTime?
+
+  @@map("clients")
+}
+
+model ClientBrief {
+  id          String   @id @default(cuid())
+  country     String // country code
+  countryName String
+  date        String // "February 11, 2026"
+  threatLevel String // MODERATE, ELEVATED, HIGH, CRITICAL
+  content     String // JSON string of full brief data
+  createdAt   DateTime @default(now())
+
+  @@unique([country, date])
+  @@index([country])
+  @@map("client_briefs")
+}
