@@ -33,13 +33,14 @@ interface ClientDetailData {
 }
 
 const TIER_LABELS: Record<string, string> = {
+  "internal": "Internal (Free)",
   "1-country": "1 Country ($497/mo)",
   "2-country": "2 Countries ($597/mo)",
   "3-country": "3 Countries ($697/mo)",
   "all-countries": "All Countries ($997/mo)",
 };
 
-const TIERS = ["1-country", "2-country", "3-country", "all-countries"];
+const TIERS = ["internal", "1-country", "2-country", "3-country", "all-countries"];
 const STATUSES = ["active", "past_due", "cancelled"];
 
 function parseJsonArray(json: string | null): string[] {

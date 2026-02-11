@@ -53,6 +53,7 @@ interface RevenueData {
 const PIE_COLORS = ["#00d4aa", "#4da6ff", "#ffb347", "#ff4757", "#8a96ad"];
 
 const TIER_LABELS: Record<string, string> = {
+  "internal": "Internal",
   "1-country": "1 Country",
   "2-country": "2 Countries",
   "3-country": "3 Countries",

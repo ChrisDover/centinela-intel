@@ -70,7 +70,7 @@ export async function PATCH(request: NextRequest) {
   }
   if (
     planTier &&
-    ["1-country", "2-country", "3-country", "all-countries"].includes(planTier)
+    ["1-country", "2-country", "3-country", "all-countries", "internal"].includes(planTier)
   ) {
     data.planTier = planTier;
   }

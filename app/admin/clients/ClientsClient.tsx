@@ -21,6 +21,7 @@ interface ClientData {
 }
 
 const TIER_LABELS: Record<string, string> = {
+  "internal": "Internal",
   "1-country": "1 Country",
   "2-country": "2 Countries",
   "3-country": "3 Countries",
@@ -125,6 +126,7 @@ export default function ClientsClient() {
           className="rounded-lg border border-centinela-border bg-centinela-bg-card px-3 py-2 text-sm text-centinela-text-secondary outline-none"
         >
           <option value="">All Tiers</option>
+          <option value="internal">Internal (Free)</option>
           <option value="1-country">1 Country ($497)</option>
           <option value="2-country">2 Countries ($597)</option>
           <option value="3-country">3 Countries ($697)</option>
