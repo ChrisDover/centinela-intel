@@ -31,7 +31,33 @@ interface Stats {
   growthSeries: Array<{ date: string; count: number }>;
 }
 
+interface RevenueData {
+  activeClients: number;
+  totalClients: number;
+  mrr: number;
+  revenuePerClient: number;
+  churnedCount: number;
+  tierBreakdown: Array<{ tier: string; count: number; revenue: number }>;
+  growthSeries: Array<{ date: string; clients: number }>;
+  recentSignups: Array<{
+    id: string;
+    email: string;
+    name: string | null;
+    company: string | null;
+    planTier: string;
+    planStatus: string;
+    createdAt: string;
+  }>;
+}
+
 const PIE_COLORS = ["#00d4aa", "#4da6ff", "#ffb347", "#ff4757", "#8a96ad"];
+
+const TIER_LABELS: Record<string, string> = {
+  "1-country": "1 Country",
+  "2-country": "2 Countries",
+  "3-country": "3 Countries",
+  "all-countries": "All Countries",
+};
 
 function KpiCard({
   label,
@@ -59,12 +85,18 @@ function KpiCard({
 
 export default function DashboardClient() {
   const [data, setData] = useState<Stats | null>(null);
+  const [revenue, setRevenue] = useState<RevenueData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/admin/stats")
-      .then((r) => r.json())
-      .then(setData)
+    Promise.all([
+      fetch("/api/admin/stats").then((r) => r.json()),
+      fetch("/api/admin/revenue").then((r) => r.json()),
+    ])
+      .then(([statsData, revenueData]) => {
+        setData(statsData);
+        setRevenue(revenueData);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -82,6 +114,8 @@ export default function DashboardClient() {
     );
   }
 
+  const activeTiers = revenue?.tierBreakdown.filter((t) => t.count > 0) || [];
+
   return (
     <div className="space-y-8">
       <div>
@@ -93,7 +127,7 @@ export default function DashboardClient() {
         </p>
       </div>
 
-      {/* KPI Cards */}
+      {/* Subscriber KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
           label="Total Subscribers"
@@ -111,6 +145,32 @@ export default function DashboardClient() {
           sub="engagement score"
         />
       </div>
+
+      {/* Revenue KPI Cards */}
+      {revenue && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <KpiCard
+            label="Active Clients"
+            value={revenue.activeClients}
+            sub={`${revenue.totalClients} total`}
+          />
+          <KpiCard
+            label="MRR"
+            value={`$${revenue.mrr.toLocaleString()}`}
+            sub="monthly recurring revenue"
+          />
+          <KpiCard
+            label="Revenue / Client"
+            value={`$${revenue.revenuePerClient}`}
+            sub="avg per active client"
+          />
+          <KpiCard
+            label="Churned"
+            value={revenue.churnedCount}
+            sub="cancelled clients"
+          />
+        </div>
+      )}
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -220,9 +280,9 @@ export default function DashboardClient() {
         </div>
       </div>
 
-      {/* Recent Signups + Revenue Placeholder */}
+      {/* Recent Signups + Revenue Section */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Recent Signups Table */}
+        {/* Recent Subscriber Signups Table */}
         <div className="col-span-2 rounded-xl border border-centinela-border bg-centinela-bg-card p-5">
           <h3 className="mb-4 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
             Recent Signups
@@ -280,22 +340,146 @@ export default function DashboardClient() {
           </div>
         </div>
 
-        {/* Revenue Placeholder */}
-        <div className="rounded-xl border border-dashed border-centinela-border bg-centinela-bg-card/50 p-5">
+        {/* Tier Breakdown */}
+        {revenue && (
+          <div className="rounded-xl border border-centinela-border bg-centinela-bg-card p-5">
+            <h3 className="mb-4 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
+              Tier Breakdown
+            </h3>
+            {activeTiers.length > 0 ? (
+              <>
+                <ResponsiveContainer width="100%" height={160}>
+                  <PieChart>
+                    <Pie
+                      data={activeTiers}
+                      dataKey="count"
+                      nameKey="tier"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={40}
+                      outerRadius={65}
+                      strokeWidth={0}
+                    >
+                      {activeTiers.map((_, i) => (
+                        <Cell
+                          key={i}
+                          fill={PIE_COLORS[i % PIE_COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="mt-2 space-y-1">
+                  {activeTiers.map((t, i) => (
+                    <div
+                      key={t.tier}
+                      className="flex items-center justify-between text-xs"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="h-2 w-2 rounded-full"
+                          style={{
+                            background: PIE_COLORS[i % PIE_COLORS.length],
+                          }}
+                        />
+                        <span className="text-centinela-text-secondary">
+                          {TIER_LABELS[t.tier] || t.tier}
+                        </span>
+                      </div>
+                      <span className="font-mono text-centinela-text-muted">
+                        {t.count} (${t.revenue.toLocaleString()})
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="flex h-40 items-center justify-center text-sm text-centinela-text-muted">
+                No active clients yet
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Recent Client Signups */}
+      {revenue && revenue.recentSignups.length > 0 && (
+        <div className="rounded-xl border border-centinela-border bg-centinela-bg-card p-5">
           <h3 className="mb-4 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
-            Revenue
+            Recent Client Signups
           </h3>
-          <div className="flex h-48 flex-col items-center justify-center text-center">
-            <div className="mb-2 text-2xl text-centinela-text-muted">$</div>
-            <div className="text-sm font-medium text-centinela-text-muted">
-              Coming Soon
-            </div>
-            <div className="mt-1 text-xs text-centinela-text-muted">
-              Stripe integration planned
-            </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-centinela-border">
+                  <th className="pb-2 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
+                    Name
+                  </th>
+                  <th className="pb-2 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
+                    Email
+                  </th>
+                  <th className="pb-2 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
+                    Company
+                  </th>
+                  <th className="pb-2 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
+                    Tier
+                  </th>
+                  <th className="pb-2 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
+                    Status
+                  </th>
+                  <th className="pb-2 font-mono text-xs uppercase tracking-wider text-centinela-text-muted">
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {revenue.recentSignups.map((client) => (
+                  <tr
+                    key={client.id}
+                    className="border-b border-centinela-border/50"
+                  >
+                    <td className="py-2 text-centinela-text-secondary">
+                      <a
+                        href={`/admin/clients/${client.id}`}
+                        className="text-centinela-text-secondary hover:text-centinela-accent"
+                      >
+                        {client.name || "—"}
+                      </a>
+                    </td>
+                    <td className="py-2 text-centinela-text-secondary">
+                      {client.email}
+                    </td>
+                    <td className="py-2 text-centinela-text-muted">
+                      {client.company || "—"}
+                    </td>
+                    <td className="py-2">
+                      <span className="rounded bg-centinela-info/15 px-2 py-0.5 font-mono text-xs text-centinela-info">
+                        {TIER_LABELS[client.planTier] || client.planTier}
+                      </span>
+                    </td>
+                    <td className="py-2">
+                      <span
+                        className={`rounded px-2 py-0.5 font-mono text-xs ${
+                          client.planStatus === "active"
+                            ? "bg-centinela-accent/15 text-centinela-accent"
+                            : client.planStatus === "past_due"
+                              ? "bg-centinela-warning/15 text-centinela-warning"
+                              : "bg-centinela-danger/15 text-centinela-danger"
+                        }`}
+                      >
+                        {client.planStatus}
+                      </span>
+                    </td>
+                    <td className="py-2 font-mono text-xs text-centinela-text-muted">
+                      {new Date(client.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

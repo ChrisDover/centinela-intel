@@ -6,6 +6,7 @@ const protectedPaths = [
   "/admin/dashboard",
   "/admin/email",
   "/admin/subscribers",
+  "/admin/clients",
   "/admin/campaigns",
   "/admin/insights",
 ];
@@ -13,6 +14,8 @@ const protectedPaths = [
 const protectedApiPaths = [
   "/api/admin/stats",
   "/api/admin/subscribers",
+  "/api/admin/clients",
+  "/api/admin/revenue",
   "/api/admin/email-analytics",
   "/api/admin/campaigns",
   "/api/admin/ab-tests",
