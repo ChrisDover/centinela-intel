@@ -123,6 +123,7 @@ Guidelines:
 - For incidents: provide REAL city names and ACCURATE lat/lng coordinates for the actual city. These plot on a map — accuracy matters.
 - For regions: assess 3-5 key states/departments/provinces with their own threat levels
 - Categories for incidents: cartel, political, crime, infrastructure, protest, kidnapping, extortion
+- IMPORTANT: For every incident based on an OSINT article, include the sourceUrl field with the article URL. This is critical — clients click through to read the full source. Always include sourceUrl when the OSINT data provides a [Source: ...] URL.
 - If OSINT data is thin, use your knowledge of the country's current dynamics`;
 
 const COUNTRY_BRIEF_TOOL: Anthropic.Tool = {
