@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const email = (formData.get("email") as string)?.trim()?.toLowerCase();
 
   if (!email) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/", request.url), 303);
   }
 
   try {
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
         const emailData = welcomeEmail(email, existing.unsubscribeToken);
         await resend.emails.send(emailData);
       }
-      return NextResponse.redirect(new URL("/welcome", request.url));
+      return NextResponse.redirect(new URL("/welcome", request.url), 303);
     }
 
     const referer = request.headers.get("referer") || "";
@@ -56,5 +56,5 @@ export async function POST(request: NextRequest) {
     console.error("Subscribe error:", error);
   }
 
-  return NextResponse.redirect(new URL("/welcome", request.url));
+  return NextResponse.redirect(new URL("/welcome", request.url), 303);
 }
