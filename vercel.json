@@ -3,15 +3,11 @@
   "crons": [
     {
       "path": "/api/cron/generate-brief",
-      "schedule": "0 8 * * *"
+      "schedule": "0 12 * * *"
     },
     {
       "path": "/api/cron/generate-client-briefs",
-      "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/cron/send-brief",
-      "schedule": "0 10 * * *"
+      "schedule": "0 13 * * *"
     },
     {
       "path": "/api/cron/analyze-engagement",
