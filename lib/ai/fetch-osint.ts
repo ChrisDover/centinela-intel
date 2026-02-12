@@ -5,12 +5,16 @@
 const BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search";
 
 const REGION_QUERIES = [
-  "Mexico security cartel violence today",
-  "Venezuela political security news today",
-  "Colombia FARC ELN security today",
-  "Ecuador violence security today",
-  "Central America Guatemala Honduras security today",
-  "Latin America security threat today",
+  "Mexico cartel violence drone attack border security",
+  "Mexico Sinaloa CJNG fentanyl operation arrest",
+  "Venezuela oil energy politics Maduro Rodriguez",
+  "Venezuela US China investment sanctions",
+  "Colombia ELN FARC ceasefire military operation",
+  "Colombia narcotrafficking border armed groups",
+  "Ecuador violence Guayaquil organized crime",
+  "Ecuador Noboa security state of emergency",
+  "Central America Guatemala Honduras gang migration",
+  "Latin America security threat geopolitics",
 ];
 
 interface BraveSearchResult {
@@ -28,7 +32,7 @@ interface BraveSearchResponse {
 async function searchBrave(query: string, apiKey: string): Promise<BraveSearchResult[]> {
   const url = new URL(BRAVE_SEARCH_URL);
   url.searchParams.set("q", query);
-  url.searchParams.set("count", "5");
+  url.searchParams.set("count", "8");
   url.searchParams.set("freshness", "pd"); // past day
 
   const res = await fetch(url.toString(), {
