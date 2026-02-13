@@ -68,23 +68,36 @@ export async function POST(request: NextRequest) {
 
     const approveUrl = `${process.env.NEXT_PUBLIC_URL || "https://centinelaintel.com"}/admin/campaigns`;
 
-    await resend.emails.send({
-      from: "Centinela Intel <intel@centinelaintel.com>",
-      to: "chris@centinelaintel.com",
-      subject: `[APPROVE] ${subject}`,
-      html: `<div style="background:#fffbe6;border:2px solid #ffb347;border-radius:8px;padding:16px;margin-bottom:24px;font-family:sans-serif;">
-        <p style="margin:0 0 8px;font-weight:bold;color:#1a1a1a;">This brief is ready for your review.</p>
-        <p style="margin:0 0 12px;color:#666;">Reply "send" or approve from the admin dashboard to send to all subscribers + LinkedIn.</p>
-        <p style="margin:0;"><a href="${approveUrl}" style="color:#ff6348;font-weight:bold;">Open Admin Dashboard</a> &nbsp;|&nbsp; Campaign ID: ${campaign.id}</p>
-      </div>
-      ${previewHtml}`,
-    });
+    let emailStatus: "sent" | "failed" = "failed";
+    let emailError: string | null = null;
 
-    console.log(`[GenerateBrief] Preview sent to chris@centinelaintel.com`);
+    try {
+      const emailResult = await resend.emails.send({
+        from: "Centinela Intel <intel@centinelaintel.com>",
+        to: "chris@centinelaintel.com",
+        subject: `[APPROVE] ${subject}`,
+        html: `<div style="background:#fffbe6;border:2px solid #ffb347;border-radius:8px;padding:16px;margin-bottom:24px;font-family:sans-serif;">
+          <p style="margin:0 0 8px;font-weight:bold;color:#1a1a1a;">This brief is ready for your review.</p>
+          <p style="margin:0 0 12px;color:#666;">Reply "send" or approve from the admin dashboard to send to all subscribers + LinkedIn.</p>
+          <p style="margin:0;"><a href="${approveUrl}" style="color:#ff6348;font-weight:bold;">Open Admin Dashboard</a> &nbsp;|&nbsp; Campaign ID: ${campaign.id}</p>
+        </div>
+        ${previewHtml}`,
+      });
+
+      console.log(`[GenerateBrief] Preview email response:`, JSON.stringify(emailResult));
+      emailStatus = "sent";
+    } catch (emailErr) {
+      emailError = emailErr instanceof Error ? emailErr.message : String(emailErr);
+      console.error(`[GenerateBrief] Preview email failed:`, emailError);
+    }
 
     return NextResponse.json({
-      message: "Brief generated and preview sent for approval",
+      message: emailStatus === "sent"
+        ? "Brief generated and preview sent for approval"
+        : "Brief generated but preview email failed",
       campaignId: campaign.id,
+      emailStatus,
+      emailError,
       briefData,
     });
   } catch (error) {

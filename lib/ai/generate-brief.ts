@@ -12,21 +12,23 @@ Your task is to produce a daily intelligence brief covering security development
 
 ANALYTICAL APPROACH:
 - Write like a seasoned analyst talking to a peer, not a machine generating a report. Have a voice. Be direct.
-- Go deep on the 2-3 biggest stories of the day. Each top development should be a full analytical paragraph (4-8 sentences) that explains what happened, why it matters, and what it connects to. Do not write shallow one-liners.
-- Connect stories across borders. LatAm security doesn't happen in silos — cartel adaptation in Mexico, energy politics in Venezuela, armed group dynamics in Colombia, and organized crime in Ecuador are often linked. Draw those connections explicitly.
+- For each country covered in developments, break your analysis into SHORT, FOCUSED PARAGRAPHS. Each paragraph should cover ONE specific subject, event, or dynamic. Do NOT write wall-of-text paragraphs. 2-4 sentences per paragraph is ideal.
+- Connect stories across borders where relevant. LatAm security doesn't happen in silos — cartel adaptation in Mexico, energy politics in Venezuela, armed group dynamics in Colombia, and organized crime in Ecuador are often linked.
 - Country summaries should be substantive (3-5 sentences), including threat level, what's driving it, and what to watch.
-- The analyst note should name specific things to monitor in the next 72 hours with actual reasoning, not generic "monitor the situation" language. Structure it around 2-4 concrete watch items.
+- The analyst note MUST be structured as separate paragraphs, one per watch item. Start each paragraph with a clear topic sentence. Use double newlines between paragraphs.
 
 WRITING STYLE — CRITICAL:
 - Vary sentence length. Short punchy lines mixed with longer analytical ones.
 - Use plain language. Say "is" instead of "serves as." Say "confirmed" instead of "underscores." Say "important" instead of "pivotal/crucial/vital."
-- Do NOT use these AI-sounding words: underscores, highlights, showcases, pivotal, crucial, landscape, tapestry, fostering, garnering, delve, intricate, enduring, testament, vibrant, nestled.
+- Do NOT use these AI-sounding words: underscores, highlights, showcases, pivotal, crucial, landscape, tapestry, fostering, garnering, delve, intricate, enduring, testament, vibrant, nestled, underscore, highlight, remains, continues to, trajectory, dynamics, amid, amidst, bolster, spearhead, paradigm, synergy.
 - Do NOT stack em dashes. Use them sparingly. Prefer periods and commas.
 - Do NOT use rule-of-three lists ("X, Y, and Z" repeated in every sentence).
 - Do NOT use -ing participial phrases to pad sentences ("highlighting the...", "underscoring the...", "reflecting broader..."). Just state what happened and why it matters.
+- Do NOT use "Meanwhile" or "Furthermore" as paragraph transitions. Just start the new point.
+- Avoid passive voice. "The cartel attacked" not "an attack was carried out."
 - Name sources when possible (AP, Reuters, ACLED, etc.) instead of vague "analysts say" or "reports indicate."
 - Include specific numbers, names, dates, and locations. Specificity is credibility.
-- The analyst note should read like one person thinking out loud about what's coming, not a committee drafting bullet points.
+- Read each paragraph out loud in your head. If it sounds like a press release or academic paper, rewrite it. It should sound like a smart person briefing another smart person over coffee.
 
 THREAT LEVELS: MODERATE (baseline), ELEVATED (increased activity), HIGH (significant escalation), CRITICAL (imminent/active crisis)
 
@@ -54,9 +56,27 @@ const BRIEF_TOOL: Anthropic.Tool = {
       },
       developments: {
         type: "array",
-        items: { type: "string" },
+        items: {
+          type: "object",
+          properties: {
+            country: {
+              type: "string",
+              description:
+                "Country or region name (e.g. Mexico, Ecuador, Central America)",
+            },
+            paragraphs: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Array of short focused paragraphs (2-4 sentences each). Each paragraph covers ONE specific event, subject, or dynamic. Do NOT combine multiple subjects into one paragraph.",
+              minItems: 1,
+              maxItems: 5,
+            },
+          },
+          required: ["country", "paragraphs"],
+        },
         description:
-          "Top 5-6 key security developments, ordered by importance. The top 2-3 should be full analytical paragraphs (4-8 sentences each). Secondary items can be shorter.",
+          "Key developments grouped by country. Each country gets its own entry with multiple short paragraphs covering different subjects. Cover 3-6 countries, ordered by importance.",
         minItems: 3,
         maxItems: 6,
       },
@@ -66,7 +86,11 @@ const BRIEF_TOOL: Anthropic.Tool = {
           type: "object",
           properties: {
             name: { type: "string", description: "Country name" },
-            summary: { type: "string", description: "3-5 sentence security summary including threat level, drivers, and what to watch" },
+            summary: {
+              type: "string",
+              description:
+                "3-5 sentence security summary including threat level, drivers, and what to watch",
+            },
           },
           required: ["name", "summary"],
         },
@@ -77,7 +101,7 @@ const BRIEF_TOOL: Anthropic.Tool = {
       analystNote: {
         type: "string",
         description:
-          "Forward-looking analyst assessment structured around 2-4 specific watch items for the next 72 hours, with reasoning. Should read like one person thinking, not a committee list.",
+          "Forward-looking analyst assessment. MUST use double newlines (\\n\\n) to separate each watch item into its own paragraph. Each paragraph should start with its topic, then explain why you're watching it and what could happen. 3-4 watch items, each its own paragraph. Write like one person thinking out loud, not a committee list.",
       },
     },
     required: ["threatLevel", "developments", "countries", "analystNote"],
@@ -102,7 +126,9 @@ ${osintSection}
 
 Use the create_brief tool to return the structured brief data. Cover Mexico, Venezuela, Colombia, Ecuador, and any notable Central American or broader LatAm developments.
 
-Go deep on the biggest 2-3 stories. Each top development should be a full paragraph with real analysis — what happened, why it matters, what it connects to across the region. Don't write shallow summaries. Connect dots between countries where the stories intersect (border dynamics, cartel adaptation, geopolitical shifts, narcotrafficking corridors).
+IMPORTANT FORMATTING RULES:
+- For developments: each country gets its own object with MULTIPLE SHORT paragraphs (2-4 sentences each). Break analysis into separate paragraphs by subject. ONE subject per paragraph. If Mexico has cartel infighting AND a displacement crisis, those are two separate paragraphs.
+- For the analyst note: use double newlines between each watch item. Each watch item is its own paragraph starting with its topic. Do NOT write one continuous block of text.
 
 Write like a person, not a machine. Vary your sentence length. Be direct. Use specific names, numbers, and sources.`;
 
@@ -127,7 +153,7 @@ Write like a person, not a machine. Vary your sentence length. Be direct. Use sp
 
   const input = toolBlock.input as {
     threatLevel: string;
-    developments: string[];
+    developments: { country: string; paragraphs: string[] }[];
     countries: { name: string; summary: string }[];
     analystNote: string;
   };
@@ -140,6 +166,8 @@ Write like a person, not a machine. Vary your sentence length. Be direct. Use sp
     analystNote: input.analystNote,
   };
 
-  console.log(`[Generate] Brief generated: ${briefData.threatLevel}, ${briefData.developments.length} developments, ${briefData.countries.length} countries`);
+  console.log(
+    `[Generate] Brief generated: ${briefData.threatLevel}, ${briefData.developments.length} developments, ${briefData.countries.length} countries`
+  );
   return briefData;
 }

@@ -97,9 +97,26 @@ export default function CampaignsClient() {
 
   function buildHtmlContent(): string {
     if (form.type === "brief") {
-      const developments = form.developments
-        .split("\n")
-        .filter((d) => d.trim());
+      // Parse developments: lines starting with "Country:" group under that country
+      // Lines without a country prefix go under "Regional"
+      const devLines = form.developments.split("\n").filter((d) => d.trim());
+      const devMap = new Map<string, string[]>();
+      let currentCountry = "Regional";
+      for (const line of devLines) {
+        const countryMatch = line.match(/^([A-Za-z\s]+):\s*(.+)/);
+        if (countryMatch) {
+          currentCountry = countryMatch[1].trim();
+          if (!devMap.has(currentCountry)) devMap.set(currentCountry, []);
+          devMap.get(currentCountry)!.push(countryMatch[2].trim());
+        } else {
+          if (!devMap.has(currentCountry)) devMap.set(currentCountry, []);
+          devMap.get(currentCountry)!.push(line.trim());
+        }
+      }
+      const developments = Array.from(devMap.entries()).map(
+        ([country, paragraphs]) => ({ country, paragraphs })
+      );
+
       const countries = form.countries
         .split("\n")
         .filter((c) => c.trim())
@@ -558,7 +575,12 @@ export default function CampaignsClient() {
                       </span>
                     </td>
                     <td className="max-w-xs truncate py-2 text-centinela-text-secondary">
-                      {c.subject}
+                      <a
+                        href={`/admin/campaigns/${c.id}`}
+                        className="hover:text-centinela-accent hover:underline"
+                      >
+                        {c.subject}
+                      </a>
                       {c.abTestId && (
                         <span className="ml-2 rounded bg-centinela-info/10 px-1.5 py-0.5 font-mono text-[10px] text-centinela-info">
                           A/B

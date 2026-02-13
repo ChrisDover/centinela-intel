@@ -5,10 +5,15 @@
 
 import { postToLinkedIn } from "./client";
 
+interface BriefDevelopment {
+  country: string;
+  paragraphs: string[];
+}
+
 interface BriefData {
   date: string;
   threatLevel: string;
-  developments: string[];
+  developments: BriefDevelopment[] | string[];
   countries: { name: string; summary: string }[];
   analystNote: string;
 }
@@ -27,10 +32,25 @@ function formatBriefForLinkedIn(brief: BriefData): string {
         ? "\u{1F7E0}"
         : "\u{1F7E1}";
 
-  const developments = brief.developments
-    .slice(0, 5)
-    .map((d) => `-> ${d}`)
-    .join("\n\n");
+  let developments: string;
+  if (
+    Array.isArray(brief.developments) &&
+    brief.developments.length > 0 &&
+    typeof brief.developments[0] === "object" &&
+    "country" in brief.developments[0]
+  ) {
+    // New structured format
+    developments = (brief.developments as BriefDevelopment[])
+      .slice(0, 5)
+      .map((d) => `${d.country}:\n${d.paragraphs[0]}`)
+      .join("\n\n");
+  } else {
+    // Legacy flat format
+    developments = (brief.developments as string[])
+      .slice(0, 5)
+      .map((d) => `-> ${d}`)
+      .join("\n\n");
+  }
 
   const countries = brief.countries
     .slice(0, 4)
