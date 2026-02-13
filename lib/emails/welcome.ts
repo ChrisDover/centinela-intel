@@ -36,6 +36,8 @@ export function welcomeEmail(email: string, unsubscribeToken: string) {
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Your first brief arrives tomorrow morning. In the meantime, you can read the latest one here:<br><a href="${briefUrl}" style="color: #1a1a1a; text-decoration: underline;">${briefUrl}</a></p>
 
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">The daily brief is just the starting point. We also offer custom country-specific intelligence packages, travel risk assessments, real-time incident alerts, and dedicated analyst support for security teams operating in Latin America. If your organization needs more than headlines, <a href="https://centinelaintel.com/contact" style="color: #1a1a1a; text-decoration: underline;">let's talk</a>.</p>
+
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">— Centinela Intel</p>
 
 <p style="margin: 40px 0 0; padding-top: 20px; border-top: 1px solid #e5e5e5; font-size: 12px; line-height: 1.6; color: #999999;">Centinela Intel — A service of Enfocado Capital LLC<br><a href="${unsubscribeUrl}" style="color: #999999; text-decoration: underline;">Unsubscribe</a></p>
