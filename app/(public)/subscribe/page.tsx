@@ -159,7 +159,7 @@ export default function SubscribePage() {
             <p className="subscribe-fine-print">Your email is never shared, sold, or used to train AI models. Unsubscribe anytime.</p>
           </div>
 
-          <p className="subscribe-sample">See what you&apos;ll get: <a href="/briefs/2026-02-10">Read the latest brief — 10 Feb 2026</a></p>
+          <p className="subscribe-sample">See what you&apos;ll get: <a href="/briefs/latest">Read today&apos;s brief</a></p>
         </div>
       </div>
     </>

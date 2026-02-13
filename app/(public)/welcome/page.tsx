@@ -221,10 +221,10 @@ export default function WelcomePage() {
         <div className="welcome-section-label">// Your First Brief</div>
 
         <div className="welcome-brief-card">
-          <h3>Latin America Daily Security Brief — 10 February 2026</h3>
-          <div className="brief-meta">Week of 10 Feb 2026 // Open Source — For Distribution</div>
-          <p>Sinaloa mine worker kidnapping, Guayaquil car bombing, Ecuador-Colombia trade war, 37 cartel members transferred to U.S. custody, and more. Full regional threat assessment with country-by-country operational guidance.</p>
-          <a href="/briefs/2026-02-10">Read the brief now &#8594;</a>
+          <h3>Latin America Daily Security Brief</h3>
+          <div className="brief-meta">Open Source — For Distribution</div>
+          <p>Regional threat assessment, top security developments across Mexico, Central America, Colombia, and Ecuador. Country-by-country operational guidance and forward-looking analyst assessment.</p>
+          <a href="/briefs/latest">Read today&apos;s brief &#8594;</a>
         </div>
 
         <div className="welcome-expect">

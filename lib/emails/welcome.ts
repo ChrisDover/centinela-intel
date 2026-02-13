@@ -1,6 +1,6 @@
 export function welcomeEmail(email: string, unsubscribeToken: string) {
   const unsubscribeUrl = `https://centinelaintel.com/api/unsubscribe?token=${unsubscribeToken}`;
-  const briefUrl = "https://centinelaintel.com/briefs/2026-02-10";
+  const briefUrl = "https://centinelaintel.com/briefs/latest";
 
   return {
     from: "Centinela Intel <intel@centinelaintel.com>",
