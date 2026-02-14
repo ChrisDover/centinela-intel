@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
         },
       ],
       success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://centinelaintel.com"}/onboarding?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://centinelaintel.com"}/#pricing`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://centinelaintel.com"}/watch`,
     });
 
     return NextResponse.json({ url: session.url });

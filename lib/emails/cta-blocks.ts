@@ -28,8 +28,8 @@ export function thunderdomeCTA(opts: CTAOptions = {}): string {
 }
 
 export function premiumCTA(opts: CTAOptions = {}): string {
-  const url = `https://centinelaintel.com/#pricing?${utmParams("premium", opts)}`;
-  return `<p style="margin: 32px 0 0; font-size: 14px; line-height: 1.8; color: #1a1a1a;">Need deeper coverage? <a href="${url}" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">Upgrade to Centinela Professional</a> — daily briefs, travel risk assessments, and analyst access.</p>`;
+  const url = `https://centinelaintel.com/watch?${utmParams("premium", opts)}`;
+  return `<p style="margin: 32px 0 0; font-size: 14px; line-height: 1.8; color: #1a1a1a;">Need deeper coverage? <a href="${url}" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">Upgrade to Centinela Watch</a> — daily country-specific briefs, incident alerts, and analyst access.</p>`;
 }
 
 export function briefingCTA(opts: CTAOptions = {}): string {
