@@ -522,7 +522,7 @@ export default function BriefPage() {
           <p><strong>Centinela Intel</strong> — AI-Powered Security Risk Intelligence</p>
           <p>A service of Enfocado Capital LLC</p>
           <p style={{ marginTop: "1rem" }}>This brief is generated using AI-synthesized OSINT analysis, reviewed and annotated by senior analysts with operational experience across Latin America. Sources include government advisories, local media, ACLED conflict data, and proprietary monitoring.</p>
-          <p style={{ marginTop: "1.5rem", color: "var(--text-secondary)" }}>Want deeper coverage? <a href="/contact" style={{ color: "var(--accent)", textDecoration: "none" }}>Request a custom briefing</a> for your operations.</p>
+          <p style={{ marginTop: "1.5rem", color: "var(--text-secondary)" }}>Want deeper coverage? <a href="/watch" style={{ color: "var(--accent)", textDecoration: "none" }}>Upgrade to Centinela Watch</a> — daily country-specific briefs, incident alerts, and analyst access.</p>
           <p style={{ marginTop: "1.5rem" }}>centinelaintel.com &middot; intel@centinelaintel.com</p>
         </div>
 

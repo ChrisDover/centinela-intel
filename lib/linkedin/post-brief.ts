@@ -78,8 +78,9 @@ function formatBriefForLinkedIn(brief: BriefData): string {
     "",
     analystTrimmed,
     "",
-    "Read the full brief: centinelaintel.com",
-    "Subscribe free: centinelaintel.com/subscribe",
+    "Read the full brief: centinelaintel.com/briefs/latest?utm_source=linkedin&utm_medium=social&utm_content=brief",
+    "Subscribe free: centinelaintel.com/subscribe?utm_source=linkedin&utm_medium=social&utm_content=subscribe",
+    "Need deeper coverage? centinelaintel.com/watch?utm_source=linkedin&utm_medium=social&utm_content=watch",
     "",
     "#CentinelaIntel #LatinAmerica #SecurityIntelligence #ThreatAssessment #OSINT",
   ];

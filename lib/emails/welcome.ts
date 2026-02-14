@@ -36,7 +36,7 @@ export function welcomeEmail(email: string, unsubscribeToken: string) {
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Your first brief arrives tomorrow morning. In the meantime, you can read the latest one here:<br><a href="${briefUrl}" style="color: #1a1a1a; text-decoration: underline;">${briefUrl}</a></p>
 
-<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">The daily brief is just the starting point. We also offer custom country-specific intelligence packages, travel risk assessments, real-time incident alerts, and dedicated analyst support for security teams operating in Latin America. If your organization needs more than headlines, <a href="https://centinelaintel.com/contact" style="color: #1a1a1a; text-decoration: underline;">let's talk</a>.</p>
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">The daily brief is just the starting point. Centinela Watch delivers country-specific intelligence briefs, real-time incident alerts, a live dashboard, and direct analyst support — starting at $497/mo. <a href="https://centinelaintel.com/watch?utm_source=centinela&utm_medium=email&utm_content=welcome" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">See plans</a>.</p>
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">— Centinela Intel</p>
 

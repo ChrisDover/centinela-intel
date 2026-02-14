@@ -238,8 +238,8 @@ export default function WelcomePage() {
         </div>
 
         <div className="welcome-cta">
-          <p>Need more than our daily brief? Custom intelligence packages, travel risk assessments, and dedicated analyst support start at $497/mo.</p>
-          <a href="/contact">Request a briefing for your operations &#8594;</a>
+          <p>Need more than our daily brief? Daily country-specific intelligence, incident alerts, and analyst support start at $497/mo.</p>
+          <a href="/watch">Explore Centinela Watch &#8594;</a>
         </div>
       </div>
     </>

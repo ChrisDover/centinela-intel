@@ -29,7 +29,9 @@ export default function HomePage() {
           </form>
           <p className={styles.heroSubscribeFine}>
             Your email is never shared or sold.{' '}
-            <a href="/briefs/2026-02-10">Read today&#39;s brief &rarr;</a>
+            <a href="/briefs/latest">Read today&#39;s brief &rarr;</a>
+            {' '}&middot;{' '}
+            <a href="/watch">See paid plans</a>
           </p>
         </div>
         <div className={styles.heroProof}>
@@ -98,7 +100,7 @@ export default function HomePage() {
             <div className={styles.productFor}>
               For: Corporate security teams, risk managers, travel security, general counsels
             </div>
-            <a href="#pricing" className={styles.productCta}>See Plans</a>
+            <a href="/watch" className={styles.productCta}>See Plans</a>
           </div>
           <div className={styles.productCard}>
             <div className={styles.productLabel}>Centinela Vault</div>

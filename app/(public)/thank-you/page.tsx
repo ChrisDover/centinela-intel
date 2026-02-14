@@ -73,6 +73,7 @@ export default function ThankYouPage() {
           <div className="thankyou-links">
             <a href="/" className="btn-outline">Back to Home</a>
             <a href="/subscribe" className="btn-primary">Subscribe to Daily Brief</a>
+            <a href="/watch" className="btn-outline">Or start monitoring now</a>
           </div>
         </div>
       </div>
