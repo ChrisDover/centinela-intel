@@ -26,35 +26,33 @@ interface EmailToSend {
 
 const BATCH_SIZE = 100;
 const BATCH_DELAY_MS = 500;
-const MAX_SCHEDULE_AHEAD_HOURS = 72;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
- * Calculate the next scheduledAt for a subscriber given their optimal hour.
- * Schedules for the next occurrence of that hour (today or tomorrow).
- * Must be within 72 hours (Resend limit).
+ * Calculate the scheduledAt for a subscriber given their optimal hour.
+ * Always sends same-day: if the optimal hour is still ahead and within
+ * the delivery window, schedule for that hour. Otherwise send now + 1 min.
+ * Max window is 3 hours ahead to avoid delivering a morning brief at night.
  */
+const MAX_HOURS_AHEAD = 3;
+
 function getScheduledAt(optimalHour: number, baseDate: Date): Date {
   const scheduled = new Date(baseDate);
   scheduled.setUTCHours(optimalHour, 0, 0, 0);
 
-  // If the optimal hour has already passed today, schedule for tomorrow
-  if (scheduled <= baseDate) {
-    scheduled.setUTCDate(scheduled.getUTCDate() + 1);
+  const diffMs = scheduled.getTime() - baseDate.getTime();
+  const diffHours = diffMs / (1000 * 60 * 60);
+
+  // If optimal hour is still ahead and within the delivery window, use it
+  if (diffHours > 0 && diffHours <= MAX_HOURS_AHEAD) {
+    return scheduled;
   }
 
-  // Ensure within 72-hour window
-  const maxDate = new Date(baseDate);
-  maxDate.setHours(maxDate.getHours() + MAX_SCHEDULE_AHEAD_HOURS);
-  if (scheduled > maxDate) {
-    // Fall back to sending now + 1 minute
-    return new Date(baseDate.getTime() + 60_000);
-  }
-
-  return scheduled;
+  // Otherwise send now + 1 minute (hour already passed or too far ahead)
+  return new Date(baseDate.getTime() + 60_000);
 }
 
 /**
