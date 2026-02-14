@@ -119,6 +119,25 @@ export async function POST(request: NextRequest) {
           });
         }
 
+        // Update campaign counts directly from EmailSend
+        if (emailSend.campaignId) {
+          const updateField: Record<string, string> = {
+            "email.delivered": "deliveredCount",
+            "email.opened": "openedCount",
+            "email.clicked": "clickedCount",
+            "email.bounced": "bouncedCount",
+            "email.complained": "complainedCount",
+          };
+
+          const field = updateField[type];
+          if (field) {
+            await prisma.emailCampaign.update({
+              where: { id: emailSend.campaignId },
+              data: { [field]: { increment: 1 } },
+            });
+          }
+        }
+
         // Update ABTestAssignment on open/click
         if (
           emailSend.variantId &&
@@ -164,34 +183,6 @@ export async function POST(request: NextRequest) {
           } catch {
             // URL parsing failed — skip CTA tracking
           }
-        }
-      }
-
-      // Legacy campaign association via EmailEvent
-      const campaignEvent = await prisma.emailEvent.findFirst({
-        where: {
-          emailId: data.email_id,
-          type: "email.delivered",
-          campaignId: { not: null },
-        },
-        select: { campaignId: true },
-      });
-
-      if (campaignEvent?.campaignId) {
-        const updateField: Record<string, string> = {
-          "email.delivered": "deliveredCount",
-          "email.opened": "openedCount",
-          "email.clicked": "clickedCount",
-          "email.bounced": "bouncedCount",
-          "email.complained": "complainedCount",
-        };
-
-        const field = updateField[type];
-        if (field) {
-          await prisma.emailCampaign.update({
-            where: { id: campaignEvent.campaignId },
-            data: { [field]: { increment: 1 } },
-          });
         }
       }
     }
