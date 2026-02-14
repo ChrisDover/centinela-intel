@@ -3,6 +3,9 @@ import prisma from "@/lib/prisma";
 import resend from "@/lib/resend";
 import Anthropic from "@anthropic-ai/sdk";
 
+// Claude API + email send can take 30-60s
+export const maxDuration = 120;
+
 function getWeekRange(): { start: string; end: string; label: string } {
   const now = new Date();
   const end = now.toLocaleDateString("en-US", {

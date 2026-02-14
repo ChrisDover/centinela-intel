@@ -7,6 +7,9 @@ import {
 } from "@/lib/ai/generate-country-brief";
 import { clientBriefEmail } from "@/lib/emails/client-brief";
 
+// Claude API calls per client can take 30-60s each
+export const maxDuration = 120;
+
 export async function POST() {
   try {
     console.log("[Client Briefs] Starting daily client brief generation...");
