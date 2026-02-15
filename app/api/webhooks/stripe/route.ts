@@ -39,6 +39,19 @@ export async function POST(request: NextRequest) {
             : session.subscription?.id;
         const tier = (session.metadata?.tier as string) || "1-country";
 
+        // Update checkout attempt record
+        if (session.id) {
+          await prisma.checkoutAttempt.updateMany({
+            where: { stripeSessionId: session.id },
+            data: {
+              status: "completed",
+              email: email || null,
+              stripeCustomerId: customerId || null,
+              completedAt: new Date(),
+            },
+          });
+        }
+
         if (!email || !customerId) {
           console.error("[Stripe Webhook] Missing email or customerId");
           break;
@@ -64,6 +77,18 @@ export async function POST(request: NextRequest) {
         });
 
         console.log(`[Stripe Webhook] Client created/updated: ${email} (${tier})`);
+        break;
+      }
+
+      case "checkout.session.expired": {
+        const session = event.data.object;
+        if (session.id) {
+          await prisma.checkoutAttempt.updateMany({
+            where: { stripeSessionId: session.id },
+            data: { status: "cancelled" },
+          });
+          console.log(`[Stripe Webhook] Checkout session expired: ${session.id}`);
+        }
         break;
       }
 

@@ -22,6 +22,7 @@ const protectedApiPaths = [
   "/api/admin/cta-analytics",
   "/api/admin/logout",
   "/api/admin/linkedin",
+  "/api/admin/checkout-attempts",
 ];
 
 const clientProtectedPaths = [

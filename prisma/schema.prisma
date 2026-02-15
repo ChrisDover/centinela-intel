@@ -196,6 +196,24 @@ model Client {
   @@map("clients")
 }
 
+model CheckoutAttempt {
+  id              String   @id @default(cuid())
+  tier            String   // 1-country, 2-country, 3-country, all-countries
+  status          String   @default("initiated") // initiated, completed, failed, cancelled
+  email           String?  // populated on completion via webhook
+  stripeSessionId String?  @unique
+  stripeCustomerId String?
+  ip              String?
+  userAgent       String?
+  errorMessage    String?
+  createdAt       DateTime @default(now())
+  completedAt     DateTime?
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("checkout_attempts")
+}
+
 model ClientBrief {
   id          String   @id @default(cuid())
   country     String // country code
