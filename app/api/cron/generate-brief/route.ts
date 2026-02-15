@@ -7,16 +7,16 @@ import { briefTemplate } from "@/lib/emails/brief-template";
 // Claude API + OSINT fetch can take 30-60s
 export const maxDuration = 120;
 
-function getTodayDateString(): string {
-  return new Date().toLocaleDateString("en-US", {
+function getDateString(date: Date): string {
+  return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: "UTC",
+    timeZone: "America/New_York",
   });
 }
 
-// POST /api/cron/generate-brief — triggered by Vercel cron at 12:00 UTC (0500 Phoenix)
+// POST /api/cron/generate-brief — triggered by Vercel cron at 12:00 UTC (0700 ET / 0500 Phoenix)
 export async function POST(request: NextRequest) {
   // Verify cron secret
   const authHeader = request.headers.get("authorization");
@@ -24,9 +24,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const todayStr = getTodayDateString();
+  // Use ET date to determine which business day this brief is for.
+  // This prevents a delayed cron run (e.g. yesterday's cron firing today)
+  // from creating a brief dated "today" and blocking the real run.
+  const now = new Date();
+  const todayStr = getDateString(now);
 
-  // Idempotency: check if a draft brief already exists for today
+  // Guard: if the cron is running more than 6 hours late, skip it —
+  // the brief would have stale OSINT and would block today's real run.
+  // The cron is scheduled for 12:00 UTC (07:00 ET). If it's past 18:00 UTC (13:00 ET),
+  // it's too late — today's scheduled run will handle it.
+  const utcHour = now.getUTCHours();
+  const scheduledHour = 12; // 12:00 UTC
+  const maxDelayHours = 6;
+  if (utcHour >= scheduledHour + maxDelayHours) {
+    console.log(`[GenerateBrief] Skipping — running ${utcHour - scheduledHour}h late (after ${scheduledHour + maxDelayHours}:00 UTC cutoff). Today's scheduled run will generate the brief.`);
+    return NextResponse.json({
+      message: "Skipped — cron ran too late, next scheduled run will handle it",
+      utcHour,
+      cutoff: scheduledHour + maxDelayHours,
+    });
+  }
+
+  // Idempotency: check if a draft brief already exists for today (ET date)
   const existing = await prisma.emailCampaign.findFirst({
     where: {
       status: "draft",
@@ -37,7 +57,7 @@ export async function POST(request: NextRequest) {
 
   if (existing) {
     return NextResponse.json({
-      message: "Draft brief already exists for today",
+      message: `Draft brief already exists for ${todayStr}`,
       campaignId: existing.id,
     });
   }

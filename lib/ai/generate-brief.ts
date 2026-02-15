@@ -39,7 +39,7 @@ function getTodayFormatted(): string {
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: "UTC",
+    timeZone: "America/New_York",
   });
 }
 
