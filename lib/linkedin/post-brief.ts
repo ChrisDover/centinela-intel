@@ -61,6 +61,7 @@ function formatBriefForLinkedIn(brief: BriefData): string {
   const analystTrimmed = trimToSentences(brief.analystNote, 300);
 
   // Use ASCII-safe characters — Unicode arrows/em-dashes cause LinkedIn truncation
+  // CTA goes right after developments so it's visible before the "see more" fold
   const lines = [
     `${threatEmoji} CENTINELA BRIEF - ${brief.threatLevel}`,
     brief.date,
@@ -70,6 +71,8 @@ function formatBriefForLinkedIn(brief: BriefData): string {
     "",
     developments,
     "",
+    "Read the full report for free at https://centinelaintel.com",
+    "",
     "COUNTRY WATCH:",
     "",
     countries,
@@ -77,10 +80,6 @@ function formatBriefForLinkedIn(brief: BriefData): string {
     "ANALYST ASSESSMENT:",
     "",
     analystTrimmed,
-    "",
-    "Read the full brief: centinelaintel.com/briefs/latest?utm_source=linkedin&utm_medium=social&utm_content=brief",
-    "Subscribe free: centinelaintel.com/subscribe?utm_source=linkedin&utm_medium=social&utm_content=subscribe",
-    "Need deeper coverage? centinelaintel.com/watch?utm_source=linkedin&utm_medium=social&utm_content=watch",
     "",
     "#CentinelaIntel #LatinAmerica #SecurityIntelligence #ThreatAssessment #OSINT",
   ];
