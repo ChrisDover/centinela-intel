@@ -3,6 +3,9 @@ import prisma from "@/lib/prisma";
 import { sendCampaign } from "@/lib/campaigns/send-brief";
 import { postBriefToLinkedIn, type BriefData } from "@/lib/linkedin/post-brief";
 
+// Individual sends + Prisma updates + LinkedIn can take 30-60s for 40+ subscribers
+export const maxDuration = 120;
+
 // POST /api/admin/campaigns/[id]/send — trigger campaign send + LinkedIn post
 export async function POST(
   _request: NextRequest,

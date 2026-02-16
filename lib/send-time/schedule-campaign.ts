@@ -1,8 +1,7 @@
 /**
  * Campaign send pipeline.
  * Sends emails immediately via Resend individual sends (not batch/scheduled).
- * Resend's scheduledAt was silently dropping ~65% of emails.
- * 500ms delay between sends for rate limit compliance.
+ * Resend rate limit: 2 requests/second — uses 600ms delay + retry on 429.
  */
 
 import prisma from "@/lib/prisma";
@@ -24,10 +23,46 @@ interface EmailToSend {
   variantId?: string;
 }
 
-const SEND_DELAY_MS = 200;
+// 600ms between sends = ~1.6 req/s, safely under Resend's 2 req/s limit
+const SEND_DELAY_MS = 600;
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 2000;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Send a single email with retry on rate limit (429).
+ */
+async function sendWithRetry(
+  to: string,
+  subject: string,
+  html: string
+): Promise<{ id: string } | { error: string }> {
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    const response = await resend.emails.send({
+      from: "Centinela Intel <intel@centinelaintel.com>",
+      to,
+      subject,
+      html,
+    });
+
+    if (response.data?.id) {
+      return { id: response.data.id };
+    }
+
+    // Retry on rate limit
+    if (response.error?.name === "rate_limit_exceeded" && attempt < MAX_RETRIES - 1) {
+      console.log(`[Send] Rate limited on ${to}, retrying in ${RETRY_DELAY_MS}ms (attempt ${attempt + 1}/${MAX_RETRIES})`);
+      await sleep(RETRY_DELAY_MS);
+      continue;
+    }
+
+    return { error: response.error?.message || "No email ID returned" };
+  }
+
+  return { error: "Max retries exceeded" };
 }
 
 /**
@@ -44,25 +79,20 @@ export async function scheduleCampaignEmails(
     const email = emails[i];
 
     try {
-      const response = await resend.emails.send({
-        from: "Centinela Intel <intel@centinelaintel.com>",
-        to: email.to,
-        subject: email.subject,
-        html: email.html,
-      });
+      const sendResult = await sendWithRetry(email.to, email.subject, email.html);
 
-      if (response.data?.id) {
+      if ("id" in sendResult) {
         await prisma.emailSend.update({
           where: { id: email.emailSendId },
           data: {
-            resendEmailId: response.data.id,
+            resendEmailId: sendResult.id,
             status: "sent",
             sentAt: new Date(),
           },
         });
         result.scheduled++;
       } else {
-        throw new Error(response.error?.message || "No email ID returned");
+        throw new Error(sendResult.error);
       }
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Unknown error";

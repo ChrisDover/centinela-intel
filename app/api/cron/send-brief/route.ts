@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import { sendCampaign } from "@/lib/campaigns/send-brief";
 import { postBriefToLinkedIn, type BriefData } from "@/lib/linkedin/post-brief";
 
+export const maxDuration = 120;
+
 // POST /api/cron/send-brief — triggered by Vercel cron
 export async function POST(request: NextRequest) {
   // Verify cron secret
