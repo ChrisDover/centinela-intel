@@ -209,3 +209,16 @@ model ClientBrief {
   @@index([country])
   @@map("client_briefs")
 }
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  htmlContent String
+  publishedAt DateTime
+  source      String   @default("linkedin")
+  sourceUrl   String?
+  createdAt   DateTime @default(now())
+
+  @@map("blog_posts")
+}

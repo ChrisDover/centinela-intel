@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "Blog — Daily Latin America Intelligence Briefs | Centinela Intel",
+  title: "Blog — Security Intelligence & Analysis | Centinela Intel",
   description:
-    "Daily security intelligence covering all 22 Latin American countries. Free analysis from former operators with 25+ years of experience.",
+    "Security intelligence articles and daily Latin America briefs. Analysis from former operators with 25+ years of experience.",
 };
 
 export const dynamic = "force-dynamic";
@@ -29,28 +29,60 @@ function dateToSlug(dateStr: string): string {
   return d.toISOString().split("T")[0];
 }
 
-export default async function BlogPage() {
-  const campaigns = await prisma.emailCampaign.findMany({
-    where: {
-      type: "brief",
-      status: "sent",
-      htmlContent: { not: null },
-    },
-    orderBy: { sentAt: "desc" },
-    take: 60,
-    select: { id: true, subject: true, htmlContent: true, sentAt: true },
-  });
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+}
 
-  const briefs = campaigns
-    .map((c) => {
-      try {
-        const data: BriefData = JSON.parse(c.htmlContent || "{}");
-        return { id: c.id, data, sentAt: c.sentAt };
-      } catch {
-        return null;
-      }
-    })
-    .filter((b): b is NonNullable<typeof b> => b !== null);
+type BlogEntry =
+  | { type: "brief"; id: string; date: Date; data: BriefData }
+  | { type: "article"; id: string; date: Date; title: string; slug: string; excerpt: string };
+
+export default async function BlogPage() {
+  const [campaigns, articles] = await Promise.all([
+    prisma.emailCampaign.findMany({
+      where: {
+        type: "brief",
+        status: "sent",
+        htmlContent: { not: null },
+      },
+      orderBy: { sentAt: "desc" },
+      take: 60,
+      select: { id: true, subject: true, htmlContent: true, sentAt: true },
+    }),
+    prisma.blogPost.findMany({
+      orderBy: { publishedAt: "desc" },
+      select: { id: true, title: true, slug: true, htmlContent: true, publishedAt: true },
+    }),
+  ]);
+
+  const entries: BlogEntry[] = [];
+
+  // Add briefs
+  for (const c of campaigns) {
+    try {
+      const data: BriefData = JSON.parse(c.htmlContent || "{}");
+      entries.push({ type: "brief", id: c.id, date: c.sentAt, data });
+    } catch {
+      // skip
+    }
+  }
+
+  // Add articles
+  for (const a of articles) {
+    const plainText = stripHtml(a.htmlContent);
+    const excerpt = plainText.length > 200 ? plainText.substring(0, 200) + "..." : plainText;
+    entries.push({
+      type: "article",
+      id: a.id,
+      date: a.publishedAt,
+      title: a.title,
+      slug: a.slug,
+      excerpt,
+    });
+  }
+
+  // Sort by date, newest first
+  entries.sort((a, b) => b.date.getTime() - a.date.getTime());
 
   return (
     <>
@@ -139,6 +171,19 @@ export default async function BlogPage() {
           color: var(--info);
           border: 1px solid rgba(77, 166, 255, 0.3);
         }
+        .badge-article {
+          background: rgba(0, 212, 170, 0.12);
+          color: var(--accent);
+          border: 1px solid rgba(0, 212, 170, 0.3);
+        }
+        .blog-title {
+          font-family: 'Instrument Serif', serif;
+          font-size: 1.2rem;
+          font-weight: 400;
+          line-height: 1.3;
+          margin-bottom: 0.5rem;
+          color: var(--text-primary);
+        }
         .blog-bluf {
           color: var(--text-secondary);
           font-size: 0.9rem;
@@ -212,43 +257,63 @@ export default async function BlogPage() {
           <div className="section-label">// Intelligence Archive</div>
           <h1>The Centinela <em>Brief</em></h1>
           <p>
-            Daily security intelligence covering all 22 Latin American countries.
-            AI-accelerated OSINT, human-verified analysis. Every brief is free to read.
+            Security intelligence articles and daily Latin America briefs.
+            AI-accelerated OSINT, human-verified analysis.
           </p>
         </div>
 
         <div className="blog-list">
-          {briefs.map((brief) => {
-            const slug = dateToSlug(brief.data.date);
-            const countries = Array.isArray(brief.data.developments)
-              ? brief.data.developments
-                  .filter((d): d is { country: string; paragraphs: string[] } => typeof d === "object" && "country" in d)
-                  .map((d) => d.country)
-                  .join(" / ")
-              : "";
+          {entries.map((entry) => {
+            if (entry.type === "brief") {
+              const slug = dateToSlug(entry.data.date);
+              const countries = Array.isArray(entry.data.developments)
+                ? entry.data.developments
+                    .filter((d): d is { country: string; paragraphs: string[] } => typeof d === "object" && "country" in d)
+                    .map((d) => d.country)
+                    .join(" / ")
+                : "";
 
+              return (
+                <a key={entry.id} href={`/blog/${slug}`} className="blog-entry">
+                  <div className="blog-entry-top">
+                    <span className="blog-date">{entry.data.date}</span>
+                    <span className={`blog-badge ${threatBadgeClass(entry.data.threatLevel)}`}>
+                      {entry.data.threatLevel}
+                    </span>
+                  </div>
+                  {entry.data.bluf && (
+                    <p className="blog-bluf">
+                      {entry.data.bluf.length > 200
+                        ? entry.data.bluf.substring(0, 200) + "..."
+                        : entry.data.bluf}
+                    </p>
+                  )}
+                  {countries && <p className="blog-countries">{countries}</p>}
+                </a>
+              );
+            }
+
+            // Article entry
             return (
-              <a key={brief.id} href={`/blog/${slug}`} className="blog-entry">
+              <a key={entry.id} href={`/blog/article/${entry.slug}`} className="blog-entry">
                 <div className="blog-entry-top">
-                  <span className="blog-date">{brief.data.date}</span>
-                  <span className={`blog-badge ${threatBadgeClass(brief.data.threatLevel)}`}>
-                    {brief.data.threatLevel}
+                  <span className="blog-date">
+                    {entry.date.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </span>
+                  <span className="blog-badge badge-article">Article</span>
                 </div>
-                {brief.data.bluf && (
-                  <p className="blog-bluf">
-                    {brief.data.bluf.length > 200
-                      ? brief.data.bluf.substring(0, 200) + "..."
-                      : brief.data.bluf}
-                  </p>
-                )}
-                {countries && <p className="blog-countries">{countries}</p>}
+                <div className="blog-title">{entry.title}</div>
+                <p className="blog-bluf">{entry.excerpt}</p>
               </a>
             );
           })}
         </div>
 
-        {briefs.length === 0 && (
+        {entries.length === 0 && (
           <p style={{ color: "var(--text-muted)", textAlign: "center", padding: "3rem 0" }}>
             No briefs published yet. Check back tomorrow.
           </p>
