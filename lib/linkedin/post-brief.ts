@@ -33,80 +33,27 @@ function formatBriefForLinkedIn(brief: BriefData): string {
         ? "\u{1F7E0}"
         : "\u{1F7E1}";
 
-  let developments: string;
-  if (
-    Array.isArray(brief.developments) &&
-    brief.developments.length > 0 &&
-    typeof brief.developments[0] === "object" &&
-    "country" in brief.developments[0]
-  ) {
-    // New structured format
-    developments = (brief.developments as BriefDevelopment[])
-      .slice(0, 5)
-      .map((d) => `${d.country}:\n${d.paragraphs[0]}`)
-      .join("\n\n");
-  } else {
-    // Legacy flat format
-    developments = (brief.developments as string[])
-      .slice(0, 5)
-      .map((d) => `-> ${d}`)
-      .join("\n\n");
-  }
+  // Count countries covered
+  const devCountries = Array.isArray(brief.developments)
+    ? brief.developments.length
+    : 0;
 
-  const countries = brief.countries
-    .slice(0, 4)
-    .map((c) => `${c.name}: ${c.summary}`)
-    .join("\n\n");
-
-  // Trim analyst note to first 2-3 sentences (~300 chars)
-  const analystTrimmed = trimToSentences(brief.analystNote, 300);
-
-  // Use ASCII-safe characters — Unicode arrows/em-dashes cause LinkedIn truncation
-  // CTA goes right after developments so it's visible before the "see more" fold
   const lines = [
     `${threatEmoji} CENTINELA BRIEF - ${brief.threatLevel}`,
     brief.date,
-    "Latin America Security Intelligence",
     "",
-    ...(brief.bluf ? ["BLUF:", brief.bluf, ""] : []),
-    "KEY DEVELOPMENTS:",
+    brief.bluf || "Latin America security intelligence — daily coverage across 22 countries.",
     "",
-    developments,
+    `Today's brief covers ${devCountries} countries in depth with full analyst assessment.`,
     "",
-    "Read the full report for free at https://centinelaintel.com",
+    "Read the full brief for free at https://centinelaintel.com",
     "",
-    "COUNTRY WATCH:",
-    "",
-    countries,
-    "",
-    "ANALYST ASSESSMENT:",
-    "",
-    analystTrimmed,
+    "Sign up to get the Centinela Daily Brief delivered to your inbox every morning — no cost, no paywall.",
     "",
     "#CentinelaIntel #LatinAmerica #SecurityIntelligence #ThreatAssessment #OSINT",
   ];
 
-  const post = lines.join("\n");
-
-  // LinkedIn max is 3000 chars — truncate if needed
-  if (post.length > 3000) {
-    return post.slice(0, 2997) + "...";
-  }
-
-  return post;
-}
-
-function trimToSentences(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-
-  // Find the last sentence boundary before maxLength
-  const truncated = text.slice(0, maxLength);
-  const lastPeriod = truncated.lastIndexOf(".");
-  if (lastPeriod > maxLength * 0.5) {
-    return truncated.slice(0, lastPeriod + 1);
-  }
-
-  return truncated + "...";
+  return lines.join("\n");
 }
 
 export async function postBriefToLinkedIn(
