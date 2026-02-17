@@ -80,7 +80,7 @@ async function main() {
 
   console.log("Calling Opus 4.5...");
   const response = await anthropic.messages.create({
-    model: "claude-opus-4-5-20251101",
+    model: "claude-sonnet-4-6-20250514",
     max_tokens: 8192,
     system: SYSTEM_PROMPT,
     tools: [BRIEF_TOOL],

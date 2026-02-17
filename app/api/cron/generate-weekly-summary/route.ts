@@ -86,7 +86,7 @@ export async function POST() {
 
         // Generate weekly summary with Claude
         const response = await anthropic.messages.create({
-          model: "claude-sonnet-4-5-20250929",
+          model: "claude-sonnet-4-6-20250514",
           max_tokens: 1500,
           system:
             "You are a senior security intelligence analyst. Produce a concise weekly threat landscape summary from the daily briefs provided. Focus on: (1) overall threat trajectory this week, (2) 3-4 key themes/patterns, (3) what to watch next week. Professional intelligence style, no filler.",

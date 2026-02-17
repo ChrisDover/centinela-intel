@@ -155,7 +155,7 @@ Write like a person, not a machine. Vary your sentence length. Be direct. Use sp
 
   console.log("[Generate] Calling Claude...");
   const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-5-20250929",
+    model: "claude-sonnet-4-6-20250514",
     max_tokens: 8192,
     system: SYSTEM_PROMPT,
     tools: [BRIEF_TOOL],
