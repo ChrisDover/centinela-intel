@@ -49,6 +49,11 @@ const BRIEF_TOOL: Anthropic.Tool = {
   input_schema: {
     type: "object" as const,
     properties: {
+      bluf: {
+        type: "string",
+        description:
+          "BLUF (Bottom Line Up Front): 2-3 sentences that capture the single most important takeaway from today's intelligence picture. What does a busy executive need to know RIGHT NOW? Be direct, specific, and actionable. No filler.",
+      },
       threatLevel: {
         type: "string",
         enum: ["MODERATE", "ELEVATED", "HIGH", "CRITICAL"],
@@ -104,7 +109,7 @@ const BRIEF_TOOL: Anthropic.Tool = {
           "Forward-looking analyst assessment. MUST use double newlines (\\n\\n) to separate each watch item into its own paragraph. Each paragraph should start with its topic, then explain why you're watching it and what could happen. 3-4 watch items, each its own paragraph. Write like one person thinking out loud, not a committee list.",
       },
     },
-    required: ["threatLevel", "developments", "countries", "analystNote"],
+    required: ["bluf", "threatLevel", "developments", "countries", "analystNote"],
   },
 };
 
@@ -127,8 +132,11 @@ ${osintSection}
 Use the create_brief tool to return the structured brief data. Cover Mexico, Venezuela, Colombia, Ecuador, and any notable Central American or broader LatAm developments.
 
 IMPORTANT FORMATTING RULES:
+- BLUF: Start with the single most important thing happening today. 2-3 punchy sentences. If a busy person reads nothing else, they get the picture from this.
 - For developments: each country gets its own object with MULTIPLE SHORT paragraphs (2-4 sentences each). Break analysis into separate paragraphs by subject. ONE subject per paragraph. If Mexico has cartel infighting AND a displacement crisis, those are two separate paragraphs.
 - For the analyst note: use double newlines between each watch item. Each watch item is its own paragraph starting with its topic. Do NOT write one continuous block of text.
+
+IMPORTANT: Only report developments that are CURRENT (last 24-48 hours). If OSINT sources reference older events, note them as context but do NOT present them as new. If an event happened weeks ago, say so explicitly.
 
 Write like a person, not a machine. Vary your sentence length. Be direct. Use specific names, numbers, and sources.`;
 
@@ -152,6 +160,7 @@ Write like a person, not a machine. Vary your sentence length. Be direct. Use sp
   }
 
   const input = toolBlock.input as {
+    bluf: string;
     threatLevel: string;
     developments: { country: string; paragraphs: string[] }[];
     countries: { name: string; summary: string }[];
@@ -160,6 +169,7 @@ Write like a person, not a machine. Vary your sentence length. Be direct. Use sp
 
   const briefData: BriefData = {
     date: todayStr,
+    bluf: input.bluf,
     threatLevel: input.threatLevel,
     developments: input.developments,
     countries: input.countries,

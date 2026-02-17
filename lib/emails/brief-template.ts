@@ -13,6 +13,7 @@ interface BriefDevelopment {
 
 interface BriefData {
   date: string;
+  bluf?: string;
   threatLevel: string;
   developments: BriefDevelopment[] | string[];
   countries: { name: string; summary: string }[];
@@ -116,6 +117,10 @@ export function briefTemplate({
 <p style="margin: 0 0 4px; font-size: 12px; line-height: 1.6; color: #999999;">${brief.date} &mdash; Open Source / For Distribution</p>
 
 <p style="margin: 16px 0 24px; font-size: 13px; line-height: 1.6; color: ${threatColor}; font-family: monospace; letter-spacing: 1px; font-weight: bold;">THREAT LEVEL: ${brief.threatLevel}</p>
+
+${brief.bluf ? `<p style="margin: 0 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">BLUF</p>
+
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a; font-weight: 500;">${brief.bluf}</p>` : ""}
 
 <p style="margin: 0 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">KEY DEVELOPMENTS</p>
 

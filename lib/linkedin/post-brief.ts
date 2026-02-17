@@ -12,6 +12,7 @@ interface BriefDevelopment {
 
 interface BriefData {
   date: string;
+  bluf?: string;
   threatLevel: string;
   developments: BriefDevelopment[] | string[];
   countries: { name: string; summary: string }[];
@@ -67,6 +68,7 @@ function formatBriefForLinkedIn(brief: BriefData): string {
     brief.date,
     "Latin America Security Intelligence",
     "",
+    ...(brief.bluf ? ["BLUF:", brief.bluf, ""] : []),
     "KEY DEVELOPMENTS:",
     "",
     developments,
