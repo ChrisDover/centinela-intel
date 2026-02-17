@@ -198,6 +198,70 @@ async function fetchGoogleNewsRSS(): Promise<string> {
   return sections.join("\n\n");
 }
 
+// --- DuckDuckGo fallback ---
+
+const DDG_QUERIES = [
+  "Mexico cartel violence security 2026",
+  "Colombia ELN FARC military conflict",
+  "Venezuela politics energy crisis",
+  "Ecuador organized crime security",
+  "Brazil crime security politics",
+  "Central America Guatemala Honduras security",
+  "Cuba Haiti Dominican Republic crisis",
+  "Argentina Chile Peru security politics",
+  "Latin America security threat",
+];
+
+interface DDGResult {
+  title: string;
+  snippet: string;
+}
+
+async function searchDDG(query: string): Promise<DDGResult[]> {
+  try {
+    const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      },
+      signal: AbortSignal.timeout(10000),
+    });
+
+    if (!res.ok) return [];
+
+    const html = await res.text();
+    const results: DDGResult[] = [];
+    const resultRegex = /<a[^>]*class="result__a"[^>]*>([\s\S]*?)<\/a>[\s\S]*?<a[^>]*class="result__snippet"[^>]*>([\s\S]*?)<\/a>/g;
+    let match;
+
+    while ((match = resultRegex.exec(html)) !== null && results.length < 5) {
+      const title = match[1].replace(/<[^>]+>/g, "").trim();
+      const snippet = match[2].replace(/<[^>]+>/g, "").trim();
+      if (title && snippet) results.push({ title, snippet });
+    }
+
+    return results;
+  } catch {
+    return [];
+  }
+}
+
+async function fetchDDGResults(): Promise<string> {
+  const allResults = await Promise.allSettled(
+    DDG_QUERIES.map((query) => searchDDG(query))
+  );
+
+  const sections: string[] = [];
+  for (let i = 0; i < DDG_QUERIES.length; i++) {
+    const result = allResults[i];
+    if (result.status !== "fulfilled" || result.value.length === 0) continue;
+    const lines = result.value.map((r) => `- ${r.title}: ${r.snippet}`);
+    sections.push(`## ${DDG_QUERIES[i]}\n${lines.join("\n")}`);
+  }
+
+  return sections.join("\n\n");
+}
+
 // --- Main export ---
 
 export async function fetchOSINT(): Promise<string> {
@@ -209,10 +273,12 @@ export async function fetchOSINT(): Promise<string> {
   ]);
 
   const parts: string[] = [];
+  let braveWorked = false;
 
   if (braveResults.status === "fulfilled" && braveResults.value) {
     parts.push("# BRAVE SEARCH — LAST 24 HOURS\n\n" + braveResults.value);
     console.log("[OSINT] Brave Search: collected");
+    braveWorked = true;
   } else {
     console.warn("[OSINT] Brave Search: failed or empty");
   }
@@ -222,6 +288,20 @@ export async function fetchOSINT(): Promise<string> {
     console.log("[OSINT] Google News RSS: collected");
   } else {
     console.warn("[OSINT] Google News RSS: failed or empty");
+  }
+
+  // If Brave failed, fall back to DuckDuckGo
+  if (!braveWorked) {
+    console.log("[OSINT] Brave unavailable, falling back to DuckDuckGo...");
+    try {
+      const ddgData = await fetchDDGResults();
+      if (ddgData) {
+        parts.push("# DUCKDUCKGO WEB RESULTS (FALLBACK)\n\n" + ddgData);
+        console.log("[OSINT] DuckDuckGo fallback: collected");
+      }
+    } catch {
+      console.warn("[OSINT] DuckDuckGo fallback: failed");
+    }
   }
 
   if (parts.length === 0) {

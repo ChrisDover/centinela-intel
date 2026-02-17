@@ -126,6 +126,8 @@ ${brief.bluf ? `<p style="margin: 0 0 8px; font-size: 13px; line-height: 1.6; co
 
 ${developmentsList}
 
+<p style="margin: 28px 0 12px; font-size: 14px; line-height: 1.8; color: #1a1a1a;">This brief is published daily and free to read. If it's useful to your work, share it with a colleague or <a href="https://centinelaintel.com?utm_source=centinela&utm_medium=email&utm_content=mid_cta${campaignId ? `&utm_campaign=${campaignId}` : ""}" style="color: #1a1a1a; text-decoration: underline; font-weight: 500;">sign up at centinelaintel.com</a>.</p>
+
 <p style="margin: 24px 0 16px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">COUNTRY WATCH</p>
 
 ${countriesList}

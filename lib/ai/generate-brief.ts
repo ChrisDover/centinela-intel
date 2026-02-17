@@ -104,9 +104,9 @@ const BRIEF_TOOL: Anthropic.Tool = {
           },
           required: ["name", "summary"],
         },
-        description: "Country-by-country security assessments. Cover 8-15 countries — all major ones plus any with notable activity.",
-        minItems: 6,
-        maxItems: 15,
+        description: "Country-by-country security assessments. You MUST include ALL 22 Latin American countries: Mexico, Guatemala, Belize, Honduras, El Salvador, Nicaragua, Costa Rica, Panama, Colombia, Venezuela, Ecuador, Peru, Bolivia, Brazil, Paraguay, Uruguay, Argentina, Chile, Cuba, Haiti, Dominican Republic, Guyana. Every country gets a summary even if brief (e.g. 'MODERATE. No significant security developments in the last 24 hours. Baseline conditions.').",
+        minItems: 22,
+        maxItems: 22,
       },
       analystNote: {
         type: "string",
@@ -140,7 +140,9 @@ export async function generateDailyBrief(): Promise<BriefData> {
 
 ${osintSection}
 
-Use the create_brief tool to return the structured brief data. Cover ALL 22 Latin American countries where there are significant developments. Always include Mexico, Colombia, Venezuela, Ecuador, and Brazil. Add Central American countries (Guatemala, Honduras, El Salvador, Nicaragua, Costa Rica, Panama), Southern Cone (Argentina, Chile, Peru, Bolivia, Paraguay, Uruguay), and Caribbean (Cuba, Haiti, Dominican Republic) based on what's happening. Aim for 8-12 countries in developments and 10-15 in the country watch section.
+Use the create_brief tool to return the structured brief data. Aim for 8-12 countries in the KEY DEVELOPMENTS section, covering wherever the most significant events are happening.
+
+For the COUNTRY WATCH section, you MUST include ALL 22 countries: Mexico, Guatemala, Belize, Honduras, El Salvador, Nicaragua, Costa Rica, Panama, Colombia, Venezuela, Ecuador, Peru, Bolivia, Brazil, Paraguay, Uruguay, Argentina, Chile, Cuba, Haiti, Dominican Republic, Guyana. Every single one. For countries with no major developments, a 1-2 sentence baseline status is fine (e.g. "MODERATE. No significant security incidents in the last 24 hours.").
 
 IMPORTANT FORMATTING RULES:
 - BLUF: Start with the single most important thing happening today. 2-3 punchy sentences. If a busy person reads nothing else, they get the picture from this.
