@@ -58,7 +58,7 @@ function normalizeDevelopments(
   // Legacy flat string format — try to extract country names from content
   return (devs as string[]).map((d) => {
     const countryMatch = d.match(
-      /^(Mexico|Ecuador|Venezuela|Colombia|Brazil|Guatemala|Honduras|El Salvador|Peru|Chile|Argentina|Central America)[''s:,\s]/i
+      /^(Mexico|Ecuador|Venezuela|Colombia|Brazil|Guatemala|Honduras|El Salvador|Nicaragua|Costa Rica|Panama|Peru|Chile|Argentina|Bolivia|Paraguay|Uruguay|Cuba|Haiti|Dominican Republic|Belize|Guyana|Suriname|Central America|Caribbean)[''s:,\s]/i
     );
     const country = countryMatch ? countryMatch[1] : "Regional";
     return { country, paragraphs: [d] };

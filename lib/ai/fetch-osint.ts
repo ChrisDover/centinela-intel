@@ -6,17 +6,29 @@
 // --- Google News RSS ---
 
 const GOOGLE_NEWS_FEEDS = [
+  // Core focus countries — English
   { label: "Mexico security", url: "https://news.google.com/rss/search?q=Mexico+cartel+violence+security&hl=en&gl=US&ceid=US:en&when:2d" },
   { label: "Mexico border", url: "https://news.google.com/rss/search?q=Mexico+border+fentanyl+Sinaloa+CJNG&hl=en&gl=US&ceid=US:en&when:2d" },
-  { label: "Venezuela politics", url: "https://news.google.com/rss/search?q=Venezuela+oil+energy+politics&hl=en&gl=US&ceid=US:en&when:2d" },
+  { label: "Venezuela politics", url: "https://news.google.com/rss/search?q=Venezuela+oil+energy+politics+crisis&hl=en&gl=US&ceid=US:en&when:2d" },
   { label: "Colombia conflict", url: "https://news.google.com/rss/search?q=Colombia+ELN+FARC+military+ceasefire&hl=en&gl=US&ceid=US:en&when:2d" },
   { label: "Ecuador security", url: "https://news.google.com/rss/search?q=Ecuador+violence+organized+crime+Guayaquil&hl=en&gl=US&ceid=US:en&when:2d" },
-  { label: "Central America", url: "https://news.google.com/rss/search?q=Guatemala+Honduras+gang+migration+security&hl=en&gl=US&ceid=US:en&when:2d" },
+  // South America — English
+  { label: "Brazil security", url: "https://news.google.com/rss/search?q=Brazil+security+crime+politics+military&hl=en&gl=US&ceid=US:en&when:2d" },
+  { label: "Argentina economy", url: "https://news.google.com/rss/search?q=Argentina+economy+security+Milei+politics&hl=en&gl=US&ceid=US:en&when:2d" },
+  { label: "Chile Peru Bolivia", url: "https://news.google.com/rss/search?q=Chile+OR+Peru+OR+Bolivia+security+politics+protest&hl=en&gl=US&ceid=US:en&when:2d" },
+  { label: "Paraguay Uruguay", url: "https://news.google.com/rss/search?q=Paraguay+OR+Uruguay+security+crime+politics&hl=en&gl=US&ceid=US:en&when:2d" },
+  // Central America & Caribbean — English
+  { label: "Central America", url: "https://news.google.com/rss/search?q=Guatemala+Honduras+El+Salvador+gang+migration+security&hl=en&gl=US&ceid=US:en&when:2d" },
+  { label: "Costa Rica Panama Nicaragua", url: "https://news.google.com/rss/search?q=Costa+Rica+OR+Panama+OR+Nicaragua+security+crime+politics&hl=en&gl=US&ceid=US:en&when:2d" },
+  { label: "Caribbean LatAm", url: "https://news.google.com/rss/search?q=Cuba+OR+Haiti+OR+Dominican+Republic+security+crisis+politics&hl=en&gl=US&ceid=US:en&when:2d" },
   { label: "Latin America security", url: "https://news.google.com/rss/search?q=Latin+America+security+threat+geopolitics&hl=en&gl=US&ceid=US:en&when:2d" },
   // Spanish-language sources for deeper coverage
   { label: "Mexico seguridad (ES)", url: "https://news.google.com/rss/search?q=M%C3%A9xico+cartel+violencia+seguridad&hl=es&gl=MX&ceid=MX:es&when:2d" },
   { label: "Venezuela (ES)", url: "https://news.google.com/rss/search?q=Venezuela+petroleo+politica+crisis&hl=es&gl=VE&ceid=VE:es&when:2d" },
   { label: "Colombia (ES)", url: "https://news.google.com/rss/search?q=Colombia+ELN+conflicto+armado&hl=es&gl=CO&ceid=CO:es&when:2d" },
+  { label: "Brazil (PT)", url: "https://news.google.com/rss/search?q=Brasil+seguran%C3%A7a+crime+pol%C3%ADtica&hl=pt-BR&gl=BR&ceid=BR:pt-419&when:2d" },
+  { label: "Centroamérica (ES)", url: "https://news.google.com/rss/search?q=Centroam%C3%A9rica+Guatemala+Honduras+seguridad+migraci%C3%B3n&hl=es&gl=GT&ceid=GT:es&when:2d" },
+  { label: "Cono Sur (ES)", url: "https://news.google.com/rss/search?q=Argentina+Chile+Per%C3%BA+seguridad+pol%C3%ADtica+econom%C3%ADa&hl=es&gl=AR&ceid=AR:es&when:2d" },
 ];
 
 interface RSSItem {
@@ -90,10 +102,15 @@ async function fetchGoogleNewsRSS(): Promise<string> {
 
 const DDG_QUERIES = [
   "Mexico cartel violence border security 2026",
-  "Venezuela oil energy politics",
-  "Colombia ELN military operation",
+  "Venezuela oil energy politics crisis",
+  "Colombia ELN FARC military operation",
   "Ecuador organized crime security",
-  "Latin America security threat",
+  "Brazil crime security politics",
+  "Argentina economy security Milei",
+  "Central America Guatemala Honduras El Salvador security",
+  "Cuba Haiti Dominican Republic crisis",
+  "Peru Chile Bolivia security politics",
+  "Latin America security threat geopolitics",
 ];
 
 interface DDGResult {

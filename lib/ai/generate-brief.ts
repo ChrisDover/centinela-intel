@@ -8,7 +8,7 @@ import type { BriefData } from "@/lib/linkedin/post-brief";
 
 const SYSTEM_PROMPT = `You are a senior security intelligence analyst at Centinela Intel, a Latin America-focused security intelligence firm. You have 25+ years of experience including 8+ years of in-country operations across Latin America. You monitor Spanish-language and English-language OSINT sources daily.
 
-Your task is to produce a daily intelligence brief covering security developments across Latin America, with focus areas: Mexico, Venezuela, Colombia, Ecuador, and notable events in Central America and the broader region.
+Your task is to produce a daily intelligence brief covering security developments across ALL of Latin America. The 22 countries in your coverage area: Mexico, Guatemala, Belize, Honduras, El Salvador, Nicaragua, Costa Rica, Panama, Colombia, Venezuela, Ecuador, Peru, Bolivia, Brazil, Paraguay, Uruguay, Argentina, Chile, Cuba, Haiti, Dominican Republic, and Guyana/Suriname. Prioritize by significance — lead with wherever the most important developments are happening, not the same country order every day.
 
 ANALYTICAL APPROACH:
 - Write like a seasoned analyst talking to a peer, not a machine generating a report. Have a voice. Be direct.
@@ -81,9 +81,9 @@ const BRIEF_TOOL: Anthropic.Tool = {
           required: ["country", "paragraphs"],
         },
         description:
-          "Key developments grouped by country. Each country gets its own entry with multiple short paragraphs covering different subjects. Cover 3-6 countries, ordered by importance.",
-        minItems: 3,
-        maxItems: 6,
+          "Key developments grouped by country. Each country gets its own entry with multiple short paragraphs covering different subjects. Cover 6-12 countries across the full region, ordered by importance. Always cover the major countries (Mexico, Colombia, Venezuela, Ecuador, Brazil) plus any others with significant developments.",
+        minItems: 5,
+        maxItems: 12,
       },
       countries: {
         type: "array",
@@ -99,9 +99,9 @@ const BRIEF_TOOL: Anthropic.Tool = {
           },
           required: ["name", "summary"],
         },
-        description: "Country-by-country security assessments",
-        minItems: 3,
-        maxItems: 6,
+        description: "Country-by-country security assessments. Cover 8-15 countries — all major ones plus any with notable activity.",
+        minItems: 6,
+        maxItems: 15,
       },
       analystNote: {
         type: "string",
@@ -129,7 +129,7 @@ export async function generateDailyBrief(): Promise<BriefData> {
 
 ${osintSection}
 
-Use the create_brief tool to return the structured brief data. Cover Mexico, Venezuela, Colombia, Ecuador, and any notable Central American or broader LatAm developments.
+Use the create_brief tool to return the structured brief data. Cover ALL 22 Latin American countries where there are significant developments. Always include Mexico, Colombia, Venezuela, Ecuador, and Brazil. Add Central American countries (Guatemala, Honduras, El Salvador, Nicaragua, Costa Rica, Panama), Southern Cone (Argentina, Chile, Peru, Bolivia, Paraguay, Uruguay), and Caribbean (Cuba, Haiti, Dominican Republic) based on what's happening. Aim for 8-12 countries in developments and 10-15 in the country watch section.
 
 IMPORTANT FORMATTING RULES:
 - BLUF: Start with the single most important thing happening today. 2-3 punchy sentences. If a busy person reads nothing else, they get the picture from this.
@@ -143,7 +143,7 @@ Write like a person, not a machine. Vary your sentence length. Be direct. Use sp
   console.log("[Generate] Calling Claude...");
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-5-20250929",
-    max_tokens: 4096,
+    max_tokens: 8192,
     system: SYSTEM_PROMPT,
     tools: [BRIEF_TOOL],
     tool_choice: { type: "tool", name: "create_brief" },
