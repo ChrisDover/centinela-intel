@@ -18,6 +18,7 @@ export default function PublicLayout({
           <a href="/#platform">Platform</a>
           <a href="/watch">Pricing</a>
           <a href="/#about">About</a>
+          <a href="/blog">Blog</a>
           <a href="/briefs/latest">Daily Brief</a>
           <a href="/client/login">Client Login</a>
           <a href="/contact" className="btn-primary">

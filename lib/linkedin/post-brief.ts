@@ -46,9 +46,9 @@ function formatBriefForLinkedIn(brief: BriefData): string {
     "",
     `Today's brief covers ${devCountries} countries in depth with full analyst assessment.`,
     "",
-    "Read the full brief for free at https://centinelaintel.com",
+    "Read the full brief for free at https://centinelaintel.com/blog",
     "",
-    "Sign up to get the Centinela Daily Brief delivered to your inbox every morning — no cost, no paywall.",
+    "Get it delivered to your inbox every morning — free: https://centinelaintel.com/linkedin",
     "",
     "#CentinelaIntel #LatinAmerica #SecurityIntelligence #ThreatAssessment #OSINT",
   ];

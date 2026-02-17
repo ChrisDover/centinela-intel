@@ -31,11 +31,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.redirect(new URL("/welcome", request.url), 303);
     }
 
+    // Check for explicit source field first (e.g. from /linkedin landing page)
+    const formSource = formData.get("source") as string | null;
     const referer = request.headers.get("referer") || "";
-    let source = "direct";
-    if (referer.includes("/subscribe")) source = "subscribe-page";
-    else if (referer.includes("/briefs/")) source = "brief";
-    else if (referer.includes("centinelaintel.com")) source = "homepage";
+    let source = formSource || "direct";
+    if (!formSource) {
+      if (referer.includes("/linkedin")) source = "linkedin";
+      else if (referer.includes("/blog")) source = "blog";
+      else if (referer.includes("/subscribe")) source = "subscribe-page";
+      else if (referer.includes("/briefs/")) source = "brief";
+      else if (referer.includes("centinelaintel.com")) source = "homepage";
+    }
 
     const subscriber = await prisma.subscriber.create({
       data: { email, source },
