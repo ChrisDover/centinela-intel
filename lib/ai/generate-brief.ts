@@ -32,7 +32,12 @@ WRITING STYLE — CRITICAL:
 
 THREAT LEVELS: MODERATE (baseline), ELEVATED (increased activity), HIGH (significant escalation), CRITICAL (imminent/active crisis)
 
-If OSINT data is thin for a day, use your knowledge of ongoing regional dynamics to fill gaps — flag when doing so.`;
+If OSINT data is thin for a day, use your knowledge of ongoing regional dynamics to fill gaps — flag when doing so.
+
+STALE STORIES — SKIP THESE (weeks old, recycled by outlets):
+- The 10 Mexican miners abducted/killed (January 2026 — NOT new)
+- The 37 Mexican drug gang members extradited to the US (old news)
+If these appear in OSINT feeds, do NOT include them as current developments.`;
 
 function getTodayFormatted(): string {
   return new Date().toLocaleDateString("en-US", {
@@ -119,10 +124,16 @@ export async function generateDailyBrief(): Promise<BriefData> {
 
   // Gather OSINT
   console.log("[Generate] Fetching OSINT data...");
-  const osintData = await fetchOSINT();
+  let osintData = await fetchOSINT();
+
+  // Trim OSINT to avoid socket/timeout issues with very large payloads
+  if (osintData.length > 20000) {
+    console.log(`[Generate] Trimming OSINT from ${osintData.length} to 20000 chars`);
+    osintData = osintData.slice(0, 20000) + "\n\n[OSINT data truncated for size]";
+  }
 
   const osintSection = osintData
-    ? `Here is today's OSINT data from regional security monitoring:\n\n${osintData}`
+    ? `Here is today's OSINT data from Brave Search and Google News (last 24 hours). Pay attention to [age] tags — they show how old each article is. ONLY use articles from the last 24-48 hours as primary sources.\n\n${osintData}`
     : "No OSINT feed available today. Use your knowledge of current regional dynamics to produce the brief.";
 
   const userPrompt = `Today is ${todayStr}. Produce the daily Centinela Brief.
