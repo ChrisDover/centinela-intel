@@ -529,8 +529,7 @@ export default function WatchPage() {
           <p className="watch-cred-text">
             Centinela Intel is built by a <strong>Marine veteran and security
             operations professional</strong> with over two decades of experience
-            in global security — including 8+ years leading operations across
-            Latin America. AI-accelerated collection, human-verified analysis.
+            in global security. AI-accelerated collection, human-verified analysis.
             Operator judgment, not algorithm guessing.
           </p>
         </section>

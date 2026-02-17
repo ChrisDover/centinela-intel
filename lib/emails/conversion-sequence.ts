@@ -72,7 +72,7 @@ export function day14Email({ unsubscribeUrl }: SequenceEmailOptions) {
 
 <p style="margin: 0 0 20px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Not a sales call. An actual intelligence briefing. I'll pull together the current threat picture for your operating environment, walk you through what we're seeing, and give you an honest assessment of the risks. If Centinela Watch makes sense after that, great. If not, you still walk away with actionable intelligence.</p>
 
-<p style="margin: 0 0 20px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">25+ years in global security. 8+ years on the ground in Latin America. This is what I do.</p>
+<p style="margin: 0 0 20px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">25+ years in global security. This is what I do.</p>
 
 <p style="margin: 0 0 20px; font-size: 15px; line-height: 1.8; color: #1a1a1a;"><a href="https://centinelaintel.com/contact?utm_source=centinela&utm_medium=email&utm_content=day14_briefing" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">Request your briefing here</a>. I'll respond within 24 hours.</p>
 

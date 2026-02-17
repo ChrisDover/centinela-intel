@@ -221,8 +221,7 @@ export default function LinkedInLandingPage() {
 
           <div className="li-cred">
             Built by a Marine veteran with 25+ years in global security
-            operations and 8+ years on the ground in Latin America. AI-accelerated
-            OSINT collection, human-verified analysis.
+            operations. AI-accelerated OSINT collection, human-verified analysis.
           </div>
         </div>
       </div>
