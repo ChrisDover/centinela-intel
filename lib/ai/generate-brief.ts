@@ -14,8 +14,11 @@ ANALYTICAL APPROACH:
 - Write like a seasoned analyst talking to a peer, not a machine generating a report. Have a voice. Be direct.
 - For each country covered in developments, break your analysis into SHORT, FOCUSED PARAGRAPHS. Each paragraph should cover ONE specific subject, event, or dynamic. Do NOT write wall-of-text paragraphs. 2-4 sentences per paragraph is ideal.
 - Connect stories across borders where relevant. LatAm security doesn't happen in silos — cartel adaptation in Mexico, energy politics in Venezuela, armed group dynamics in Colombia, and organized crime in Ecuador are often linked.
-- Country summaries should be substantive (3-5 sentences), including threat level, what's driving it, and what to watch.
-- The analyst note MUST be structured as separate paragraphs, one per watch item. Start each paragraph with a clear topic sentence. Use double newlines between paragraphs.
+
+CRITICAL — EACH SECTION HAS A DISTINCT JOB. DO NOT REPEAT INFORMATION ACROSS SECTIONS:
+- KEY DEVELOPMENTS: Report WHAT HAPPENED. Facts, events, incidents from the last 24-48 hours. This is the news section. Who did what, where, when, with what result. No editorializing, no predictions.
+- COUNTRY WATCH: Provide STATUS ASSESSMENTS, not event recaps. For each country, give the threat level and the overall security posture. For countries already covered in Key Developments, DO NOT re-describe the same events. Instead, summarize the operating environment: "ELEVATED. Cartel fragmentation and border tensions are driving instability. Watch for spillover into X." For countries NOT in Key Developments, give a brief baseline status.
+- ANALYST ASSESSMENT: Look FORWARD. What could happen next? What connections across countries matter? What should a decision-maker prepare for? Do NOT summarize what already happened — the reader just read that. This section is your professional opinion on what's coming and why it matters. Structure as separate paragraphs, one per watch item, with double newlines between them.
 
 WRITING STYLE — CRITICAL:
 - Vary sentence length. Short punchy lines mixed with longer analytical ones.
@@ -86,7 +89,7 @@ const BRIEF_TOOL: Anthropic.Tool = {
           required: ["country", "paragraphs"],
         },
         description:
-          "Key developments grouped by country. Each country gets its own entry with multiple short paragraphs covering different subjects. Cover 6-12 countries across the full region, ordered by importance. Always cover the major countries (Mexico, Colombia, Venezuela, Ecuador, Brazil) plus any others with significant developments.",
+          "KEY DEVELOPMENTS — WHAT HAPPENED (facts only, no editorializing). Each country gets its own entry with multiple short paragraphs covering different events/subjects. Cover 6-12 countries, ordered by importance. Report the news: who, what, where, when, with what result. Do NOT include threat assessments or predictions here — save those for Country Watch and Analyst Assessment.",
         minItems: 5,
         maxItems: 12,
       },
@@ -99,19 +102,19 @@ const BRIEF_TOOL: Anthropic.Tool = {
             summary: {
               type: "string",
               description:
-                "3-5 sentence security summary including threat level, drivers, and what to watch",
+                "STATUS ASSESSMENT (not event recap). Start with threat level word (MODERATE/ELEVATED/HIGH/CRITICAL). Then describe the operating environment and posture in 2-3 sentences. For countries covered in Key Developments, DO NOT repeat the same events — instead assess the security climate. For quiet countries, one sentence baseline is fine.",
             },
           },
           required: ["name", "summary"],
         },
-        description: "Country-by-country security assessments. You MUST include ALL 22 Latin American countries: Mexico, Guatemala, Belize, Honduras, El Salvador, Nicaragua, Costa Rica, Panama, Colombia, Venezuela, Ecuador, Peru, Bolivia, Brazil, Paraguay, Uruguay, Argentina, Chile, Cuba, Haiti, Dominican Republic, Guyana. Every country gets a summary even if brief (e.g. 'MODERATE. No significant security developments in the last 24 hours. Baseline conditions.').",
+        description: "COUNTRY WATCH — STATUS ASSESSMENTS (not event recaps). You MUST include ALL 22 countries: Mexico, Guatemala, Belize, Honduras, El Salvador, Nicaragua, Costa Rica, Panama, Colombia, Venezuela, Ecuador, Peru, Bolivia, Brazil, Paraguay, Uruguay, Argentina, Chile, Cuba, Haiti, Dominican Republic, Guyana. DO NOT re-describe events from Key Developments. Instead give the security posture: threat level, what's driving it, what to watch. For quiet countries: 'MODERATE. No significant developments. Baseline conditions.'",
         minItems: 22,
         maxItems: 22,
       },
       analystNote: {
         type: "string",
         description:
-          "Forward-looking analyst assessment. MUST use double newlines (\\n\\n) to separate each watch item into its own paragraph. Each paragraph should start with its topic, then explain why you're watching it and what could happen. 3-4 watch items, each its own paragraph. Write like one person thinking out loud, not a committee list.",
+          "FORWARD-LOOKING ASSESSMENT — what's coming next, NOT what already happened. The reader just read Key Developments and Country Watch, so DO NOT summarize those events again. Instead: What are the second-order effects? What connections across countries matter? What should a decision-maker prepare for this week? MUST use double newlines (\\n\\n) to separate 3-4 watch items into separate paragraphs. Each paragraph starts with its topic, then explains why you're watching it and what could happen. Write like one analyst thinking out loud, not a committee summary.",
       },
     },
     required: ["bluf", "threatLevel", "developments", "countries", "analystNote"],
@@ -146,8 +149,10 @@ For the COUNTRY WATCH section, you MUST include ALL 22 countries: Mexico, Guatem
 
 IMPORTANT FORMATTING RULES:
 - BLUF: Start with the single most important thing happening today. 2-3 punchy sentences. If a busy person reads nothing else, they get the picture from this.
-- For developments: each country gets its own object with MULTIPLE SHORT paragraphs (2-4 sentences each). Break analysis into separate paragraphs by subject. ONE subject per paragraph. If Mexico has cartel infighting AND a displacement crisis, those are two separate paragraphs.
-- For the analyst note: use double newlines between each watch item. Each watch item is its own paragraph starting with its topic. Do NOT write one continuous block of text.
+- KEY DEVELOPMENTS: Report the news. Facts only. Each country gets MULTIPLE SHORT paragraphs (2-4 sentences each), one subject per paragraph.
+- COUNTRY WATCH: Status assessments. DO NOT repeat Key Developments events. Give threat level + operating environment + what to watch. Keep it tight.
+- ANALYST ASSESSMENT: Look forward. What's coming? What connections matter? DO NOT summarize what already happened — the reader just read it.
+- Each section must add NEW information. If a reader could skip a section without missing anything, you've failed.
 
 IMPORTANT: Only report developments that are CURRENT (last 24-48 hours). If OSINT sources reference older events, note them as context but do NOT present them as new. If an event happened weeks ago, say so explicitly.
 
@@ -155,7 +160,7 @@ Write like a person, not a machine. Vary your sentence length. Be direct. Use sp
 
   console.log("[Generate] Calling Claude...");
   const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-5-20250929",
+    model: "claude-sonnet-4-6",
     max_tokens: 8192,
     system: SYSTEM_PROMPT,
     tools: [BRIEF_TOOL],

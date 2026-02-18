@@ -172,7 +172,7 @@ ${EDITORIAL_DIRECTION}
 Use the create_brief tool to return the structured brief data. Make this brief stand out with real analytical depth — not just bullet-point news summaries, but intelligence-grade analysis that connects dots across the region: Mexico's drone escalation, Venezuela's energy realignment, Colombia's security deterioration, and Ecuador's corruption-crime nexus. Every development should feel actionable and connected to the bigger picture.`;
 
   const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-5-20250929",
+    model: "claude-sonnet-4-6",
     max_tokens: 4096,
     system: SYSTEM_PROMPT,
     tools: [BRIEF_TOOL],
