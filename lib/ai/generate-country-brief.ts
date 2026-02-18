@@ -294,7 +294,7 @@ Use the create_country_brief tool to return the structured brief data. Include g
 
   console.log(`[Country Brief] Calling Claude for ${countryName}...`);
   const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-6-20250514",
+    model: "claude-sonnet-4-5-20250929",
     max_tokens: 4096,
     system: COUNTRY_SYSTEM_PROMPT,
     tools: [COUNTRY_BRIEF_TOOL],
