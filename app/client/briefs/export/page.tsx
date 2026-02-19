@@ -74,7 +74,7 @@ export default async function ExportBriefPage({
         />
       </head>
       <body>
-        <PrintButton />
+        <PrintButton countryName={brief.countryName} date={brief.date} />
 
         <h1>CENTINELA INTEL — COUNTRY MONITOR</h1>
         <div className="date">

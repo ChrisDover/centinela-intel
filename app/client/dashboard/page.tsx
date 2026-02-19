@@ -172,7 +172,7 @@ export default async function ClientDashboard({
               <div
                 style={{
                   fontFamily: "monospace",
-                  fontSize: 11,
+                  fontSize: 12,
                   color: "var(--text-muted)",
                   letterSpacing: 1,
                   marginBottom: 2,
@@ -206,96 +206,218 @@ export default async function ClientDashboard({
         </div>
       )}
 
-      {/* Stats row */}
+      {/* What Changed + Stats row */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 12,
+          gridTemplateColumns: briefData?.whatChanged?.length > 0 ? "1fr auto" : "1fr",
+          gap: 16,
+          marginBottom: 24,
+        }}
+      >
+        {briefData?.whatChanged?.length > 0 && (
+          <div
+            style={{
+              padding: 20,
+              background: "rgba(0, 212, 170, 0.06)",
+              border: "1px solid rgba(0, 212, 170, 0.25)",
+              borderRadius: 8,
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "monospace",
+                fontSize: 12,
+                color: "var(--accent)",
+                letterSpacing: 1,
+                textTransform: "uppercase",
+                marginBottom: 10,
+              }}
+            >
+              What Changed (Last 24h)
+            </p>
+            {briefData.whatChanged.map((w: string, i: number) => (
+              <p key={i} style={{ fontSize: 15, lineHeight: 1.8, color: "var(--text-primary)", paddingLeft: 12, marginBottom: 6 }}>
+                &bull; {w}
+              </p>
+            ))}
+          </div>
+        )}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, minWidth: briefData?.whatChanged?.length > 0 ? 200 : undefined }}>
+          <div
+            style={{
+              padding: 16,
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              flex: 1,
+            }}
+          >
+            <div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 4 }}>
+              Active Incidents
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 600, color: "var(--text-primary)" }}>{incidents.length}</div>
+          </div>
+          <div
+            style={{
+              padding: 16,
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              flex: 1,
+            }}
+          >
+            <div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 4 }}>
+              Critical / High
+            </div>
+            <div
+              style={{
+                fontSize: 22,
+                fontWeight: 600,
+                color: criticalCount > 0 ? "var(--danger)" : highCount > 0 ? "#ff6348" : "var(--text-primary)",
+              }}
+            >
+              {criticalCount + highCount}
+            </div>
+          </div>
+          <div
+            style={{
+              padding: 16,
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              flex: 1,
+            }}
+          >
+            <div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 4 }}>
+              Status
+            </div>
+            <div
+              style={{
+                fontSize: 22,
+                fontWeight: 600,
+                color: client.planStatus === "active" ? "var(--accent)" : "var(--danger)",
+              }}
+            >
+              {client.planStatus === "active" ? "Active" : client.planStatus}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Full-width Intelligence Brief */}
+      <div
+        style={{
+          background: "var(--bg-card)",
+          border: "1px solid var(--border)",
+          borderRadius: 8,
+          padding: 28,
           marginBottom: 24,
         }}
       >
         <div
           style={{
-            padding: 16,
-            background: "var(--bg-card)",
-            border: "1px solid var(--border)",
-            borderRadius: 8,
+            fontFamily: "monospace",
+            fontSize: 12,
+            color: "var(--text-muted)",
+            letterSpacing: 0.5,
+            marginBottom: 16,
           }}
         >
-          <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 4 }}>
-            Active Incidents
-          </div>
-          <div style={{ fontSize: 20, fontWeight: 600 }}>{incidents.length}</div>
+          LATEST INTELLIGENCE BRIEF
         </div>
-        <div
-          style={{
-            padding: 16,
-            background: "var(--bg-card)",
-            border: "1px solid var(--border)",
-            borderRadius: 8,
-          }}
-        >
-          <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 4 }}>
-            Critical / High
-          </div>
-          <div
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-              color: criticalCount > 0 ? "var(--danger)" : highCount > 0 ? "#ff6348" : "var(--text-primary)",
-            }}
-          >
-            {criticalCount + highCount}
-          </div>
-        </div>
-        <div
-          style={{
-            padding: 16,
-            background: "var(--bg-card)",
-            border: "1px solid var(--border)",
-            borderRadius: 8,
-          }}
-        >
-          <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 4 }}>
-            Status
-          </div>
-          <div
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-              color: client.planStatus === "active" ? "var(--accent)" : "var(--danger)",
-            }}
-          >
-            {client.planStatus === "active" ? "Active" : client.planStatus}
-          </div>
-        </div>
+
+        {briefData ? (
+          <>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 20 }}>
+              {latestBrief!.date} — {latestBrief!.countryName}
+            </p>
+
+            <div style={{ marginBottom: 24 }}>
+              <p
+                style={{
+                  fontFamily: "monospace",
+                  fontSize: 12,
+                  color: "var(--text-muted)",
+                  letterSpacing: 1,
+                  textTransform: "uppercase",
+                  marginBottom: 8,
+                }}
+              >
+                Key Developments
+              </p>
+              {briefData.developments?.map((d: string, i: number) => (
+                <p key={i} style={{ fontSize: 15, lineHeight: 1.8, color: "var(--text-primary)", paddingLeft: 12, marginBottom: 6 }}>
+                  &bull; {d}
+                </p>
+              ))}
+            </div>
+
+            {briefData.keyRisks?.length > 0 && (
+              <div style={{ marginBottom: 24, paddingTop: 20, borderTop: "1px solid var(--border)" }}>
+                <p
+                  style={{
+                    fontFamily: "monospace",
+                    fontSize: 12,
+                    color: "var(--text-muted)",
+                    letterSpacing: 1,
+                    textTransform: "uppercase",
+                    marginBottom: 8,
+                  }}
+                >
+                  Key Risks
+                </p>
+                {briefData.keyRisks.map((r: string, i: number) => (
+                  <p key={i} style={{ fontSize: 15, lineHeight: 1.8, color: "var(--text-primary)", paddingLeft: 12, marginBottom: 6 }}>
+                    &bull; {r}
+                  </p>
+                ))}
+              </div>
+            )}
+
+            {briefData.travelAdvisory && (
+              <div style={{ marginBottom: 24, paddingTop: 20, borderTop: "1px solid var(--border)" }}>
+                <p
+                  style={{
+                    fontFamily: "monospace",
+                    fontSize: 12,
+                    color: "var(--text-muted)",
+                    letterSpacing: 1,
+                    textTransform: "uppercase",
+                    marginBottom: 8,
+                  }}
+                >
+                  Travel Advisory
+                </p>
+                <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--text-primary)" }}>{briefData.travelAdvisory}</p>
+              </div>
+            )}
+
+            <div style={{ paddingTop: 20, borderTop: "1px solid var(--border)" }}>
+              <p
+                style={{
+                  fontFamily: "monospace",
+                  fontSize: 12,
+                  color: "var(--text-muted)",
+                  letterSpacing: 1,
+                  textTransform: "uppercase",
+                  marginBottom: 8,
+                }}
+              >
+                Analyst Assessment
+              </p>
+              <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--text-primary)" }}>{briefData.analystNote}</p>
+            </div>
+          </>
+        ) : (
+          <p style={{ color: "var(--text-secondary)", fontSize: 15 }}>
+            No briefs generated yet. Your first brief will arrive tomorrow morning.
+          </p>
+        )}
       </div>
 
-      {/* Focus Areas */}
-      <div style={{ marginBottom: 24 }}>
-        <FocusAreas initial={client.focusAreas ? JSON.parse(client.focusAreas) : []} />
-      </div>
-
-      {/* Threat Map */}
-      {incidents.length > 0 && activeCountry && (
-        <div style={{ marginBottom: 24 }}>
-          <div
-            style={{
-              fontFamily: "monospace",
-              fontSize: 12,
-              color: "var(--text-muted)",
-              letterSpacing: 0.5,
-              marginBottom: 8,
-            }}
-          >
-            THREAT MAP — {activeCountryName.toUpperCase()}
-          </div>
-          <ThreatMapWrapper incidents={incidents} countryCode={activeCountry} />
-        </div>
-      )}
-
-      {/* Two column: Trend + Incidents */}
+      {/* Two column: Threat Map + Incident Feed */}
       <div
         style={{
           display: "grid",
@@ -304,14 +426,31 @@ export default async function ClientDashboard({
           marginBottom: 24,
         }}
       >
-        <ThreatTrend briefs={recentBriefs} />
+        {incidents.length > 0 && activeCountry ? (
+          <div>
+            <div
+              style={{
+                fontFamily: "monospace",
+                fontSize: 12,
+                color: "var(--text-muted)",
+                letterSpacing: 0.5,
+                marginBottom: 8,
+              }}
+            >
+              THREAT MAP — {activeCountryName.toUpperCase()}
+            </div>
+            <ThreatMapWrapper incidents={incidents} countryCode={activeCountry} />
+          </div>
+        ) : (
+          <div />
+        )}
 
         <div
           style={{
             background: "var(--bg-card)",
             border: "1px solid var(--border)",
             borderRadius: 8,
-            maxHeight: 340,
+            maxHeight: 400,
             overflow: "auto",
           }}
         >
@@ -334,11 +473,11 @@ export default async function ClientDashboard({
         </div>
       </div>
 
-      {/* Two column: Regions + Brief */}
+      {/* Two column: Regional Assessment + Threat Trend */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "340px 1fr",
+          gridTemplateColumns: "1fr 1fr",
           gap: 24,
           marginBottom: 24,
         }}
@@ -358,136 +497,12 @@ export default async function ClientDashboard({
           <RegionBreakdown regions={regions} />
         </div>
 
-        <div
-          style={{
-            background: "var(--bg-card)",
-            border: "1px solid var(--border)",
-            borderRadius: 8,
-            padding: 24,
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "monospace",
-              fontSize: 12,
-              color: "var(--text-muted)",
-              letterSpacing: 0.5,
-              marginBottom: 16,
-            }}
-          >
-            LATEST INTELLIGENCE BRIEF
-          </div>
+        <ThreatTrend briefs={recentBriefs} />
+      </div>
 
-          {briefData ? (
-            <>
-              <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 16 }}>
-                {latestBrief!.date} — {latestBrief!.countryName}
-              </p>
-
-              {briefData.whatChanged?.length > 0 && (
-                <div style={{ marginBottom: 20, padding: 16, background: "rgba(0, 212, 170, 0.06)", border: "1px solid rgba(0, 212, 170, 0.2)", borderRadius: 6 }}>
-                  <p
-                    style={{
-                      fontFamily: "monospace",
-                      fontSize: 11,
-                      color: "var(--accent)",
-                      letterSpacing: 1,
-                      textTransform: "uppercase",
-                      marginBottom: 8,
-                    }}
-                  >
-                    What Changed (Last 24h)
-                  </p>
-                  {briefData.whatChanged.map((w: string, i: number) => (
-                    <p key={i} style={{ fontSize: 14, lineHeight: 1.7, paddingLeft: 12, marginBottom: 6 }}>
-                      &bull; {w}
-                    </p>
-                  ))}
-                </div>
-              )}
-
-              <div style={{ marginBottom: 20 }}>
-                <p
-                  style={{
-                    fontFamily: "monospace",
-                    fontSize: 11,
-                    color: "var(--text-muted)",
-                    letterSpacing: 1,
-                    textTransform: "uppercase",
-                    marginBottom: 8,
-                  }}
-                >
-                  Key Developments
-                </p>
-                {briefData.developments?.map((d: string, i: number) => (
-                  <p key={i} style={{ fontSize: 14, lineHeight: 1.7, paddingLeft: 12, marginBottom: 6 }}>
-                    &bull; {d}
-                  </p>
-                ))}
-              </div>
-
-              {briefData.keyRisks?.length > 0 && (
-                <div style={{ marginBottom: 20 }}>
-                  <p
-                    style={{
-                      fontFamily: "monospace",
-                      fontSize: 11,
-                      color: "var(--text-muted)",
-                      letterSpacing: 1,
-                      textTransform: "uppercase",
-                      marginBottom: 8,
-                    }}
-                  >
-                    Key Risks
-                  </p>
-                  {briefData.keyRisks.map((r: string, i: number) => (
-                    <p key={i} style={{ fontSize: 14, lineHeight: 1.7, paddingLeft: 12, marginBottom: 6 }}>
-                      &bull; {r}
-                    </p>
-                  ))}
-                </div>
-              )}
-
-              {briefData.travelAdvisory && (
-                <div style={{ marginBottom: 20 }}>
-                  <p
-                    style={{
-                      fontFamily: "monospace",
-                      fontSize: 11,
-                      color: "var(--text-muted)",
-                      letterSpacing: 1,
-                      textTransform: "uppercase",
-                      marginBottom: 8,
-                    }}
-                  >
-                    Travel Advisory
-                  </p>
-                  <p style={{ fontSize: 14, lineHeight: 1.8 }}>{briefData.travelAdvisory}</p>
-                </div>
-              )}
-
-              <div>
-                <p
-                  style={{
-                    fontFamily: "monospace",
-                    fontSize: 11,
-                    color: "var(--text-muted)",
-                    letterSpacing: 1,
-                    textTransform: "uppercase",
-                    marginBottom: 8,
-                  }}
-                >
-                  Analyst Assessment
-                </p>
-                <p style={{ fontSize: 14, lineHeight: 1.8 }}>{briefData.analystNote}</p>
-              </div>
-            </>
-          ) : (
-            <p style={{ color: "var(--text-secondary)", fontSize: 14 }}>
-              No briefs generated yet. Your first brief will arrive tomorrow morning.
-            </p>
-          )}
-        </div>
+      {/* Focus Areas (settings/config — bottom) */}
+      <div style={{ marginBottom: 24 }}>
+        <FocusAreas initial={client.focusAreas ? JSON.parse(client.focusAreas) : []} />
       </div>
 
     </div>

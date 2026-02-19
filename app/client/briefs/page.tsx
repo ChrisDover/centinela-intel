@@ -251,7 +251,7 @@ export default async function ClientBriefsPage({
                   <p
                     style={{
                       fontFamily: "monospace",
-                      fontSize: 11,
+                      fontSize: 12,
                       color: "var(--accent)",
                       letterSpacing: 1,
                       textTransform: "uppercase",
@@ -265,8 +265,9 @@ export default async function ClientBriefsPage({
                       <p
                         key={i}
                         style={{
-                          fontSize: 14,
-                          lineHeight: 1.7,
+                          fontSize: 15,
+                          lineHeight: 1.8,
+                          color: "var(--text-primary)",
                           paddingLeft: 12,
                           marginBottom: 6,
                         }}
@@ -282,7 +283,7 @@ export default async function ClientBriefsPage({
                 <p
                   style={{
                     fontFamily: "monospace",
-                    fontSize: 11,
+                    fontSize: 12,
                     color: "var(--text-muted)",
                     letterSpacing: 1,
                     textTransform: "uppercase",
@@ -296,8 +297,9 @@ export default async function ClientBriefsPage({
                     <p
                       key={i}
                       style={{
-                        fontSize: 14,
-                        lineHeight: 1.7,
+                        fontSize: 15,
+                        lineHeight: 1.8,
+                        color: "var(--text-primary)",
                         paddingLeft: 12,
                         marginBottom: 6,
                       }}
@@ -313,7 +315,7 @@ export default async function ClientBriefsPage({
                   <p
                     style={{
                       fontFamily: "monospace",
-                      fontSize: 11,
+                      fontSize: 12,
                       color: "var(--text-muted)",
                       letterSpacing: 1,
                       textTransform: "uppercase",
@@ -327,8 +329,9 @@ export default async function ClientBriefsPage({
                       <p
                         key={i}
                         style={{
-                          fontSize: 14,
-                          lineHeight: 1.7,
+                          fontSize: 15,
+                          lineHeight: 1.8,
+                          color: "var(--text-primary)",
                           paddingLeft: 12,
                           marginBottom: 6,
                         }}
@@ -345,7 +348,7 @@ export default async function ClientBriefsPage({
                   <p
                     style={{
                       fontFamily: "monospace",
-                      fontSize: 11,
+                      fontSize: 12,
                       color: "var(--text-muted)",
                       letterSpacing: 1,
                       textTransform: "uppercase",
@@ -354,7 +357,7 @@ export default async function ClientBriefsPage({
                   >
                     Travel Advisory
                   </p>
-                  <p style={{ fontSize: 14, lineHeight: 1.8 }}>
+                  <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--text-primary)" }}>
                     {selectedData.travelAdvisory}
                   </p>
                 </div>
@@ -365,7 +368,7 @@ export default async function ClientBriefsPage({
                   <p
                     style={{
                       fontFamily: "monospace",
-                      fontSize: 11,
+                      fontSize: 12,
                       color: "var(--text-muted)",
                       letterSpacing: 1,
                       textTransform: "uppercase",
@@ -374,7 +377,7 @@ export default async function ClientBriefsPage({
                   >
                     Analyst Assessment
                   </p>
-                  <p style={{ fontSize: 14, lineHeight: 1.8 }}>
+                  <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--text-primary)" }}>
                     {selectedData.analystNote}
                   </p>
                 </div>
