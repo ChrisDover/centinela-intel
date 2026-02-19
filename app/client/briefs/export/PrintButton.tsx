@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export default function PrintButton({
   countryName,
@@ -9,6 +9,8 @@ export default function PrintButton({
   countryName: string;
   date: string;
 }) {
+  const triggered = useRef(false);
+
   const handleDownload = useCallback(async () => {
     const html2pdf = (await import("html2pdf.js")).default;
     const element = document.body;
@@ -27,6 +29,15 @@ export default function PrintButton({
       .from(element)
       .save();
   }, [countryName, date]);
+
+  // Auto-trigger PDF download on page load
+  useEffect(() => {
+    if (triggered.current) return;
+    triggered.current = true;
+    // Small delay to let the page render fully before capturing
+    const timer = setTimeout(handleDownload, 500);
+    return () => clearTimeout(timer);
+  }, [handleDownload]);
 
   return (
     <button className="no-print print-btn" onClick={handleDownload}>
