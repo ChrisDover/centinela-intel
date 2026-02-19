@@ -158,7 +158,7 @@ export default async function ClientDashboard({
               countryName={activeCountryName}
             />
           )}
-          {latestBrief && <ExportButton briefId={latestBrief.id} />}
+          {latestBrief && <ExportButton briefId={latestBrief.id} countryName={latestBrief.countryName} date={latestBrief.date} />}
           {latestBrief && (
             <div
               style={{
