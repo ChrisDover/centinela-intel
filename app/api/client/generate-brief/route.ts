@@ -3,6 +3,8 @@ import { getClientFromRequest } from "@/lib/client-auth";
 import prisma from "@/lib/prisma";
 import { generateCountryBrief } from "@/lib/ai/generate-country-brief";
 
+export const maxDuration = 120;
+
 export async function POST(request: NextRequest) {
   const client = await getClientFromRequest(request);
   if (!client) {
