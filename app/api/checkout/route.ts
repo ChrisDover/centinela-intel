@@ -25,6 +25,12 @@ export async function POST(request: NextRequest) {
       mode: "subscription",
       payment_method_types: ["card"],
       metadata: { tier },
+      payment_intent_data: {
+        statement_descriptor_suffix: "CENTINELA",
+      },
+      subscription_data: {
+        metadata: { tier },
+      },
       line_items: [
         {
           price: priceId,
