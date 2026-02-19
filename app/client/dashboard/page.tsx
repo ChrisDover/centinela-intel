@@ -384,6 +384,28 @@ export default async function ClientDashboard({
                 {latestBrief!.date} — {latestBrief!.countryName}
               </p>
 
+              {briefData.whatChanged?.length > 0 && (
+                <div style={{ marginBottom: 20, padding: 16, background: "rgba(0, 212, 170, 0.06)", border: "1px solid rgba(0, 212, 170, 0.2)", borderRadius: 6 }}>
+                  <p
+                    style={{
+                      fontFamily: "monospace",
+                      fontSize: 11,
+                      color: "var(--accent)",
+                      letterSpacing: 1,
+                      textTransform: "uppercase",
+                      marginBottom: 8,
+                    }}
+                  >
+                    What Changed (Last 24h)
+                  </p>
+                  {briefData.whatChanged.map((w: string, i: number) => (
+                    <p key={i} style={{ fontSize: 14, lineHeight: 1.7, paddingLeft: 12, marginBottom: 6 }}>
+                      &bull; {w}
+                    </p>
+                  ))}
+                </div>
+              )}
+
               <div style={{ marginBottom: 20 }}>
                 <p
                   style={{
@@ -423,6 +445,24 @@ export default async function ClientDashboard({
                       &bull; {r}
                     </p>
                   ))}
+                </div>
+              )}
+
+              {briefData.travelAdvisory && (
+                <div style={{ marginBottom: 20 }}>
+                  <p
+                    style={{
+                      fontFamily: "monospace",
+                      fontSize: 11,
+                      color: "var(--text-muted)",
+                      letterSpacing: 1,
+                      textTransform: "uppercase",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Travel Advisory
+                  </p>
+                  <p style={{ fontSize: 14, lineHeight: 1.8 }}>{briefData.travelAdvisory}</p>
                 </div>
               )}
 

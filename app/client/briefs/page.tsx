@@ -246,6 +246,38 @@ export default async function ClientBriefsPage({
                 THREAT LEVEL: {selectedBrief!.threatLevel}
               </p>
 
+              {selectedData.whatChanged?.length > 0 && (
+                <div style={{ marginBottom: 24, padding: 16, background: "rgba(0, 212, 170, 0.06)", border: "1px solid rgba(0, 212, 170, 0.2)", borderRadius: 6 }}>
+                  <p
+                    style={{
+                      fontFamily: "monospace",
+                      fontSize: 11,
+                      color: "var(--accent)",
+                      letterSpacing: 1,
+                      textTransform: "uppercase",
+                      marginBottom: 8,
+                    }}
+                  >
+                    What Changed (Last 24h)
+                  </p>
+                  {selectedData.whatChanged.map(
+                    (w: string, i: number) => (
+                      <p
+                        key={i}
+                        style={{
+                          fontSize: 14,
+                          lineHeight: 1.7,
+                          paddingLeft: 12,
+                          marginBottom: 6,
+                        }}
+                      >
+                        &bull; {w}
+                      </p>
+                    )
+                  )}
+                </div>
+              )}
+
               <div style={{ marginBottom: 24 }}>
                 <p
                   style={{
@@ -305,6 +337,26 @@ export default async function ClientBriefsPage({
                       </p>
                     )
                   )}
+                </div>
+              )}
+
+              {selectedData.travelAdvisory && (
+                <div style={{ marginBottom: 24 }}>
+                  <p
+                    style={{
+                      fontFamily: "monospace",
+                      fontSize: 11,
+                      color: "var(--text-muted)",
+                      letterSpacing: 1,
+                      textTransform: "uppercase",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Travel Advisory
+                  </p>
+                  <p style={{ fontSize: 14, lineHeight: 1.8 }}>
+                    {selectedData.travelAdvisory}
+                  </p>
                 </div>
               )}
 

@@ -15,6 +15,7 @@ const protectedApiPaths = [
   "/api/admin/stats",
   "/api/admin/subscribers",
   "/api/admin/clients",
+  "/api/admin/manage-clients",
   "/api/admin/revenue",
   "/api/admin/email-analytics",
   "/api/admin/campaigns",

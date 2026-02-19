@@ -84,6 +84,17 @@ export default async function ExportBriefPage({
           THREAT LEVEL: {brief.threatLevel}
         </div>
 
+        {data.whatChanged?.length > 0 && (
+          <>
+            <h2 style={{ color: "#00a884" }}>What Changed (Last 24h)</h2>
+            {data.whatChanged.map((w: string, i: number) => (
+              <div key={i} className="dev">
+                &bull; {w}
+              </div>
+            ))}
+          </>
+        )}
+
         <h2>Key Developments</h2>
         {data.developments?.map((d: string, i: number) => (
           <div key={i} className="dev">
@@ -127,6 +138,13 @@ export default async function ExportBriefPage({
                 </div>
               )
             )}
+          </>
+        )}
+
+        {data.travelAdvisory && (
+          <>
+            <h2>Travel Advisory</h2>
+            <div className="analyst">{data.travelAdvisory}</div>
           </>
         )}
 

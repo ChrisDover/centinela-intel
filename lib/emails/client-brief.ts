@@ -15,6 +15,19 @@ export function clientBriefEmail(brief: CountryBriefData): string {
         ? "#ff6348"
         : "#1a1a1a";
 
+  const whatChangedSection =
+    brief.whatChanged?.length > 0
+      ? `<div style="margin: 0 0 24px; padding: 16px; background-color: #f0fdf9; border-left: 3px solid #00d4aa;">
+<p style="margin: 0 0 10px; font-size: 13px; line-height: 1.6; color: #00a884; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">WHAT CHANGED (LAST 24H)</p>
+${brief.whatChanged
+  .map(
+    (w) =>
+      `<p style="margin: 0 0 8px; font-size: 15px; line-height: 1.8; color: #1a1a1a; padding-left: 16px;">&bull; ${w}</p>`
+  )
+  .join("\n")}
+</div>`
+      : "";
+
   const developmentsList = brief.developments
     .map(
       (d) =>
@@ -29,6 +42,12 @@ export function clientBriefEmail(brief: CountryBriefData): string {
     )
     .join("\n");
 
+  const travelAdvisorySection = brief.travelAdvisory
+    ? `<p style="margin: 24px 0 16px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">TRAVEL ADVISORY</p>
+
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">${brief.travelAdvisory}</p>`
+    : "";
+
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -37,7 +56,7 @@ export function clientBriefEmail(brief: CountryBriefData): string {
   <title>Centinela Intel — ${brief.countryName} Brief</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1a1a1a;">
-  <div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">${brief.threatLevel} — ${brief.countryName}: ${brief.developments[0] || "Daily intelligence brief"}</div>
+  <div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">${brief.threatLevel} — ${brief.countryName}: ${brief.whatChanged?.[0] || brief.developments[0] || "Daily intelligence brief"}</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff;">
     <tr>
       <td align="center" style="padding: 40px 20px;">
@@ -50,6 +69,8 @@ export function clientBriefEmail(brief: CountryBriefData): string {
 
 <p style="margin: 16px 0 24px; font-size: 13px; line-height: 1.6; color: ${threatColor}; font-family: monospace; letter-spacing: 1px; font-weight: bold;">THREAT LEVEL: ${brief.threatLevel}</p>
 
+${whatChangedSection}
+
 <p style="margin: 0 0 16px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">KEY DEVELOPMENTS</p>
 
 ${developmentsList}
@@ -57,6 +78,8 @@ ${developmentsList}
 <p style="margin: 24px 0 16px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">KEY RISKS</p>
 
 ${keyRisksList}
+
+${travelAdvisorySection}
 
 <p style="margin: 24px 0 16px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">ANALYST ASSESSMENT</p>
 
