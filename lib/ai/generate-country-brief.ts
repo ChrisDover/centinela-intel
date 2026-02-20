@@ -55,7 +55,7 @@ async function searchBrave(
 ): Promise<BraveSearchResult[]> {
   const url = new URL(BRAVE_SEARCH_URL);
   url.searchParams.set("q", query);
-  url.searchParams.set("count", "8");
+  url.searchParams.set("count", "15");
   url.searchParams.set("freshness", "pd");
 
   const res = await fetch(url.toString(), {
@@ -75,6 +75,172 @@ async function searchBrave(
   return data.web?.results ?? [];
 }
 
+// Extra queries for high-priority countries that need deeper coverage
+const COUNTRY_BOOST_QUERIES: Record<string, string[]> = {
+  Mexico: [
+    "Mexico Sinaloa cartel CJNG violence military operations today",
+    "Mexico Jalisco Michoacán cartel clashes shootout today",
+    "Mexico Chiapas Guerrero Oaxaca violence displacement today",
+    "Mexico Ciudad Juárez Tijuana Reynosa border violence today",
+    "Mexico fentanyl precursor seizure drug lab today",
+    "México Sinaloa Jalisco enfrentamiento hoy",
+    "México Chiapas Guerrero violencia desplazados hoy",
+    "México Guanajuato Zacatecas homicidios hoy",
+  ],
+  Colombia: [
+    "Colombia ELN Clan del Golfo military operations today",
+    "Colombia Cauca Nariño armed groups coca today",
+    "Colombia Catatumbo Norte de Santander conflict today",
+    "Colombia Medellín Buenaventura Cali urban violence today",
+    "Colombia peace process ceasefire breakdown today",
+    "Colombia secuestro minería ilegal hoy",
+    "Colombia Cauca Nariño masacre desplazamiento hoy",
+    "Colombia Catatumbo conflicto armado hoy",
+  ],
+  Ecuador: [
+    "Ecuador Guayaquil Esmeraldas Manabí narco violence today",
+    "Ecuador prison gang violence state of emergency today",
+    "Ecuador narco bombing assassination today",
+    "Ecuador seguridad Guayaquil Esmeraldas hoy",
+  ],
+  Venezuela: [
+    "Venezuela Maduro opposition political crisis today",
+    "Venezuela Tren de Aragua gang Colombia border today",
+    "Venezuela oil sanctions PDVSA energy today",
+    "Venezuela crisis migración frontera hoy",
+  ],
+  Brazil: [
+    "Brazil Rio São Paulo PCC Comando Vermelho violence today",
+    "Brazil Amazon illegal mining indigenous conflict today",
+    "Brazil security operations favela policia today",
+    "Brasil segurança PCC crime organizado hoy",
+  ],
+  Honduras: [
+    "Honduras Tegucigalpa San Pedro Sula violence gang today",
+    "Honduras Mara Salvatrucha MS-13 Barrio 18 today",
+    "Honduras drug trafficking Caribbean coast today",
+    "Honduras violencia seguridad narcotráfico hoy",
+  ],
+  Guatemala: [
+    "Guatemala violence drug trafficking organized crime today",
+    "Guatemala narco corruption security today",
+    "Guatemala violencia narcotráfico seguridad hoy",
+  ],
+  Argentina: [
+    "Argentina Rosario narco violence drug trafficking today",
+    "Argentina economic crisis protest security today",
+    "Argentina seguridad Rosario narcotráfico hoy",
+  ],
+  Peru: [
+    "Peru Shining Path VRAEM coca drug trafficking today",
+    "Peru protest political crisis security today",
+    "Perú seguridad VRAEM narcotráfico hoy",
+  ],
+  Chile: [
+    "Chile Araucanía mapuche conflict security today",
+    "Chile organized crime immigration security today",
+    "Chile seguridad crimen organizado hoy",
+  ],
+};
+
+/**
+ * Fetch and extract readable text from an article URL.
+ * Returns a trimmed summary (first ~1500 chars) to keep context manageable.
+ */
+async function fetchArticleContent(url: string): Promise<string> {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml",
+      },
+      signal: AbortSignal.timeout(8000),
+      redirect: "follow",
+    });
+
+    if (!res.ok) return "";
+
+    const html = await res.text();
+
+    // Strip scripts, styles, nav, header, footer, ads
+    let text = html
+      .replace(/<script[\s\S]*?<\/script>/gi, "")
+      .replace(/<style[\s\S]*?<\/style>/gi, "")
+      .replace(/<nav[\s\S]*?<\/nav>/gi, "")
+      .replace(/<header[\s\S]*?<\/header>/gi, "")
+      .replace(/<footer[\s\S]*?<\/footer>/gi, "")
+      .replace(/<aside[\s\S]*?<\/aside>/gi, "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    // Take first ~1500 chars of meaningful content
+    if (text.length > 1500) {
+      text = text.slice(0, 1500) + "...";
+    }
+
+    return text;
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Deduplicate search results by URL domain+path and fetch full content
+ * for the top N unique articles.
+ */
+async function enrichWithArticleContent(
+  allResults: BraveSearchResult[][],
+  maxArticles = 12
+): Promise<string> {
+  // Flatten and deduplicate by URL
+  const seen = new Set<string>();
+  const unique: BraveSearchResult[] = [];
+
+  for (const results of allResults) {
+    for (const r of results) {
+      if (!r.url || seen.has(r.url)) continue;
+      seen.add(r.url);
+      unique.push(r);
+    }
+  }
+
+  // Take top N articles (search results are already relevance-ranked)
+  const topArticles = unique.slice(0, maxArticles);
+
+  console.log(
+    `[Country OSINT] Fetching full content for ${topArticles.length} articles...`
+  );
+
+  const fetched = await Promise.allSettled(
+    topArticles.map(async (article) => {
+      const content = await fetchArticleContent(article.url);
+      return { ...article, content };
+    })
+  );
+
+  const sections: string[] = [];
+  for (const result of fetched) {
+    if (result.status !== "fulfilled") continue;
+    const { title, url, content } = result.value;
+    if (!content || content.length < 100) continue;
+    sections.push(`### ${title}\nSource: ${url}\n${content}`);
+  }
+
+  if (sections.length === 0) return "";
+
+  return (
+    "# FULL ARTICLE CONTENT (Top Sources)\n\n" + sections.join("\n\n---\n\n")
+  );
+}
+
 async function fetchCountryOSINT(countryName: string, focusAreas: string[] = []): Promise<string> {
   const apiKey = process.env.BRAVE_SEARCH_API_KEY;
   if (!apiKey) {
@@ -82,6 +248,7 @@ async function fetchCountryOSINT(countryName: string, focusAreas: string[] = [])
     return "";
   }
 
+  // Base queries for every country
   const queries = [
     `${countryName} security threat violence today`,
     `${countryName} cartel organized crime today`,
@@ -94,16 +261,23 @@ async function fetchCountryOSINT(countryName: string, focusAreas: string[] = [])
     `${countryName} secuestro extorsión hoy`,
   ];
 
+  // Add country-specific boost queries for high-priority countries
+  const boostQueries = COUNTRY_BOOST_QUERIES[countryName] || [];
+  queries.push(...boostQueries);
+
   // Add focus-area queries (up to 3)
   for (const area of focusAreas.slice(0, 3)) {
     queries.push(`${countryName} ${area} security violence today`);
   }
+
+  console.log(`[Country OSINT] Running ${queries.length} queries for ${countryName}`);
 
   try {
     const allResults = await Promise.all(
       queries.map((q) => searchBrave(q, apiKey))
     );
 
+    // Build search snippets section
     const sections: string[] = [];
     for (let i = 0; i < queries.length; i++) {
       const results = allResults[i];
@@ -114,7 +288,15 @@ async function fetchCountryOSINT(countryName: string, focusAreas: string[] = [])
       sections.push(`## ${queries[i]}\n${items}`);
     }
 
-    return sections.join("\n\n");
+    const snippets = sections.join("\n\n");
+
+    // Fetch full article content for top results
+    const articleContent = await enrichWithArticleContent(allResults);
+
+    const totalResults = allResults.reduce((sum, r) => sum + r.length, 0);
+    console.log(`[Country OSINT] ${countryName}: ${totalResults} search results across ${queries.length} queries`);
+
+    return [snippets, articleContent].filter(Boolean).join("\n\n---\n\n");
   } catch (error) {
     console.error("[Country OSINT] Fetch failed:", error);
     return "";
@@ -307,8 +489,15 @@ export async function generateCountryBrief(
   console.log(`[Country Brief] Fetching OSINT for ${countryName}...`);
   const osintData = await fetchCountryOSINT(countryName, focusAreas);
 
-  const osintSection = osintData
-    ? `Here is today's OSINT data for ${countryName}:\n\n${osintData}`
+  // Cap OSINT data to avoid blowing out context window (~60k chars ≈ ~15k tokens)
+  let trimmedOsint = osintData;
+  if (trimmedOsint.length > 60000) {
+    trimmedOsint = trimmedOsint.slice(0, 60000) + "\n\n[OSINT data trimmed for context length]";
+    console.log(`[Country Brief] OSINT trimmed from ${osintData.length} to 60000 chars`);
+  }
+
+  const osintSection = trimmedOsint
+    ? `Here is today's OSINT data for ${countryName}:\n\n${trimmedOsint}`
     : `No OSINT feed available for ${countryName} today. Use your knowledge of current dynamics.`;
 
   const focusSection =
@@ -333,7 +522,7 @@ REMINDERS:
   console.log(`[Country Brief] Calling Claude for ${countryName}...`);
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 4096,
+    max_tokens: 8192,
     system: COUNTRY_SYSTEM_PROMPT,
     tools: [COUNTRY_BRIEF_TOOL],
     tool_choice: { type: "tool", name: "create_country_brief" },
