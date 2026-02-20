@@ -41,7 +41,7 @@ async function searchBrave(query: string): Promise<BraveResult[]> {
   try {
     const params = new URLSearchParams({
       q: query,
-      count: "8",
+      count: "15",
       freshness: "pd",  // past day — strict 24h filter
       text_decorations: "false",
     });
@@ -262,6 +262,81 @@ async function fetchDDGResults(): Promise<string> {
   return sections.join("\n\n");
 }
 
+// --- Article content fetching ---
+
+async function fetchArticleContent(url: string): Promise<string> {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml",
+      },
+      signal: AbortSignal.timeout(8000),
+      redirect: "follow",
+    });
+
+    if (!res.ok) return "";
+
+    const html = await res.text();
+
+    let text = html
+      .replace(/<script[\s\S]*?<\/script>/gi, "")
+      .replace(/<style[\s\S]*?<\/style>/gi, "")
+      .replace(/<nav[\s\S]*?<\/nav>/gi, "")
+      .replace(/<header[\s\S]*?<\/header>/gi, "")
+      .replace(/<footer[\s\S]*?<\/footer>/gi, "")
+      .replace(/<aside[\s\S]*?<\/aside>/gi, "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&nbsp;/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (text.length > 1500) {
+      text = text.slice(0, 1500) + "...";
+    }
+
+    return text;
+  } catch {
+    return "";
+  }
+}
+
+async function enrichTopArticles(braveText: string, maxArticles = 15): Promise<string> {
+  // Extract URLs from the Brave results text
+  const urlRegex = /https?:\/\/[^\s\]]+/g;
+  const allUrls = [...new Set(braveText.match(urlRegex) || [])];
+  const topUrls = allUrls.slice(0, maxArticles);
+
+  if (topUrls.length === 0) return "";
+
+  console.log(`[OSINT] Fetching full content for ${topUrls.length} articles...`);
+
+  const results = await Promise.allSettled(
+    topUrls.map(async (url) => {
+      const content = await fetchArticleContent(url);
+      return { url, content };
+    })
+  );
+
+  const sections: string[] = [];
+  for (const result of results) {
+    if (result.status !== "fulfilled") continue;
+    const { url, content } = result.value;
+    if (!content || content.length < 100) continue;
+    sections.push(`### Source: ${url}\n${content}`);
+  }
+
+  if (sections.length === 0) return "";
+
+  return "# FULL ARTICLE CONTENT (Top Sources)\n\n" + sections.join("\n\n---\n\n");
+}
+
 // --- Main export ---
 
 export async function fetchOSINT(): Promise<string> {
@@ -307,6 +382,19 @@ export async function fetchOSINT(): Promise<string> {
   if (parts.length === 0) {
     console.warn("[OSINT] No OSINT data collected from any source");
     return "";
+  }
+
+  // Fetch full article content from top Brave results
+  if (braveWorked && braveResults.status === "fulfilled" && braveResults.value) {
+    try {
+      const articleContent = await enrichTopArticles(braveResults.value);
+      if (articleContent) {
+        parts.push(articleContent);
+        console.log("[OSINT] Article content enrichment: collected");
+      }
+    } catch {
+      console.warn("[OSINT] Article content enrichment: failed");
+    }
   }
 
   return parts.join("\n\n---\n\n");

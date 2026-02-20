@@ -129,10 +129,10 @@ export async function generateDailyBrief(): Promise<BriefData> {
   console.log("[Generate] Fetching OSINT data...");
   let osintData = await fetchOSINT();
 
-  // Trim OSINT to avoid socket/timeout issues with very large payloads
-  if (osintData.length > 20000) {
-    console.log(`[Generate] Trimming OSINT from ${osintData.length} to 20000 chars`);
-    osintData = osintData.slice(0, 20000) + "\n\n[OSINT data truncated for size]";
+  // Trim OSINT to avoid context overflow (~60k chars ≈ ~15k tokens)
+  if (osintData.length > 60000) {
+    console.log(`[Generate] Trimming OSINT from ${osintData.length} to 60000 chars`);
+    osintData = osintData.slice(0, 60000) + "\n\n[OSINT data truncated for size]";
   }
 
   const osintSection = osintData
