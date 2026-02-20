@@ -272,7 +272,7 @@ async function fetchArticleContent(url: string): Promise<string> {
           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         Accept: "text/html,application/xhtml+xml",
       },
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(5000),
       redirect: "follow",
     });
 
@@ -307,7 +307,7 @@ async function fetchArticleContent(url: string): Promise<string> {
   }
 }
 
-async function enrichTopArticles(braveText: string, maxArticles = 15): Promise<string> {
+async function enrichTopArticles(braveText: string, maxArticles = 12): Promise<string> {
   // Extract URLs from the Brave results text
   const urlRegex = /https?:\/\/[^\s\]]+/g;
   const allUrls = [...new Set(braveText.match(urlRegex) || [])];

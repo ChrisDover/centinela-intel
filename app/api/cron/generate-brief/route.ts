@@ -4,8 +4,8 @@ import { generateDailyBrief } from "@/lib/ai/generate-brief";
 import resend from "@/lib/resend";
 import { briefTemplate } from "@/lib/emails/brief-template";
 
-// Claude API + OSINT fetch can take 30-60s
-export const maxDuration = 120;
+// Claude API + OSINT fetch + article scraping can take 60-120s
+export const maxDuration = 300;
 
 function getDateString(date: Date): string {
   return date.toLocaleDateString("en-US", {
