@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import getStripe from "@/lib/stripe";
 import prisma from "@/lib/prisma";
 
+// Only process checkouts for Centinela Intel price IDs (ignore TrendLock, Pollinate, etc.)
+const CENTINELA_PRICE_IDS = new Set([
+  process.env.STRIPE_PRICE_1_COUNTRY,
+  process.env.STRIPE_PRICE_2_COUNTRY,
+  process.env.STRIPE_PRICE_3_COUNTRY,
+  process.env.STRIPE_PRICE_ALL_COUNTRIES,
+]);
+
 export async function POST(request: NextRequest) {
   const body = await request.text();
   const sig = request.headers.get("stripe-signature");
@@ -28,6 +36,18 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
+
+        // Verify this is a Centinela checkout, not TrendLock or another product
+        const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+        const isCentinela = lineItems.data.some(
+          (item) => item.price && CENTINELA_PRICE_IDS.has(item.price.id)
+        );
+
+        if (!isCentinela) {
+          console.log(`[Stripe Webhook] Ignoring non-Centinela checkout: ${session.id}`);
+          break;
+        }
+
         const email = session.customer_details?.email;
         const customerId =
           typeof session.customer === "string"
