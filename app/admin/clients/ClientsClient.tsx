@@ -22,10 +22,13 @@ interface ClientData {
 
 const TIER_LABELS: Record<string, string> = {
   "internal": "Internal",
-  "1-country": "1 Country",
-  "2-country": "2 Countries",
-  "3-country": "3 Countries",
-  "all-countries": "All Countries",
+  "1-country": "1 Country (Legacy)",
+  "2-country": "2 Countries (Legacy)",
+  "3-country": "3 Countries (Legacy)",
+  "all-countries": "All Countries (Legacy)",
+  "monitor-1-country": "Monitor 1 Country",
+  "monitor-corridor": "Monitor 5 Countries",
+  "watch-pro-starter": "Watch Pro",
 };
 
 function parseCountries(json: string | null): string {
@@ -127,10 +130,13 @@ export default function ClientsClient() {
         >
           <option value="">All Tiers</option>
           <option value="internal">Internal (Free)</option>
-          <option value="1-country">1 Country ($497)</option>
-          <option value="2-country">2 Countries ($597)</option>
-          <option value="3-country">3 Countries ($697)</option>
-          <option value="all-countries">All Countries ($997)</option>
+          <option value="1-country">1 Country (Legacy)</option>
+          <option value="2-country">2 Countries (Legacy)</option>
+          <option value="3-country">3 Countries (Legacy)</option>
+          <option value="all-countries">All Countries (Legacy)</option>
+          <option value="monitor-1-country">Monitor 1 Country ($29)</option>
+          <option value="monitor-corridor">Monitor 5 Countries ($79)</option>
+          <option value="watch-pro-starter">Watch Pro ($199)</option>
         </select>
         {data && (
           <span className="ml-auto font-mono text-xs text-centinela-text-muted">

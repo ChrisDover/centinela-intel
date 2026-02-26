@@ -34,13 +34,16 @@ interface ClientDetailData {
 
 const TIER_LABELS: Record<string, string> = {
   "internal": "Internal (Free)",
-  "1-country": "1 Country ($497/mo)",
-  "2-country": "2 Countries ($597/mo)",
-  "3-country": "3 Countries ($697/mo)",
-  "all-countries": "All Countries ($997/mo)",
+  "1-country": "1 Country (Legacy)",
+  "2-country": "2 Countries (Legacy)",
+  "3-country": "3 Countries (Legacy)",
+  "all-countries": "All Countries (Legacy)",
+  "monitor-1-country": "Monitor 1 Country ($29/mo)",
+  "monitor-corridor": "Monitor 5 Countries ($79/mo)",
+  "watch-pro-starter": "Watch Pro ($199/mo)",
 };
 
-const TIERS = ["internal", "1-country", "2-country", "3-country", "all-countries"];
+const TIERS = ["internal", "1-country", "2-country", "3-country", "all-countries", "monitor-1-country", "monitor-corridor", "watch-pro-starter"];
 const STATUSES = ["active", "past_due", "cancelled"];
 
 function parseJsonArray(json: string | null): string[] {

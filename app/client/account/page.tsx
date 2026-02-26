@@ -67,14 +67,15 @@ export default async function ClientAccountPage() {
               Plan
             </div>
             <div style={{ fontSize: 15, fontWeight: 500 }}>
-              Country Monitor —{" "}
-              {client.planTier === "all-countries"
-                ? "$997/mo"
-                : client.planTier === "3-country"
-                  ? "$697/mo"
-                  : client.planTier === "2-country"
-                    ? "$597/mo"
-                    : "$497/mo"}
+              {({
+                "1-country": "Monitor (1 Country)",
+                "2-country": "Monitor (2 Countries)",
+                "3-country": "Monitor (3 Countries)",
+                "all-countries": "Monitor (All Countries)",
+                "monitor-1-country": "Monitor 1 Country — $29/mo",
+                "monitor-corridor": "Monitor 5 Countries — $79/mo",
+                "watch-pro-starter": "Watch Pro — $199/mo",
+              } as Record<string, string>)[client.planTier] || client.planTier}
             </div>
           </div>
           <div>

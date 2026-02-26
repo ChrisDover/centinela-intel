@@ -36,7 +36,11 @@ export function welcomeEmail(email: string, unsubscribeToken: string) {
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">Your first brief arrives tomorrow morning. In the meantime, you can read the latest one here:<br><a href="${briefUrl}" style="color: #1a1a1a; text-decoration: underline;">${briefUrl}</a></p>
 
-<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">The daily brief is just the starting point. Centinela Watch delivers country-specific intelligence briefs, real-time incident alerts, a live dashboard, and direct analyst support — starting at $497/mo. <a href="https://centinelaintel.com/watch?utm_source=centinela&utm_medium=email&utm_content=welcome" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">See plans</a>.</p>
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">The daily brief gives you the regional picture. If you operate in specific countries, there's more.</p>
+
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;"><strong>Centinela Monitor</strong> delivers daily country-specific intelligence for the places that matter to your operations. Full threat assessments, incident tracking, travel risk updates, and analyst support for the countries where you have people, facilities, or supply chain. $29/mo per country. That's the cost of a single lunch in most of these cities — for intelligence that used to require a six-figure retainer with a global risk consultancy. <a href="https://centinelaintel.com/pricing?utm_source=centinela&utm_medium=email&utm_content=welcome" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">See Monitor plans</a>.</p>
+
+<p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">For teams that need real-time visibility, <strong>Watch Pro</strong> is a live intelligence terminal — threat map, incident feed with flash alerts, and API access to integrate with your GSOC or travel management platform. Dataminr charges $240K/yr for something in this category. We built it for $199/mo because we believe security intelligence shouldn't require an enterprise budget. <a href="https://centinelaintel.com/watch?utm_source=centinela&utm_medium=email&utm_content=welcome" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">See Watch Pro</a>.</p>
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">— Centinela Intel</p>
 
