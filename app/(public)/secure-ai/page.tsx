@@ -117,18 +117,19 @@ export default function SecureAIPage() {
           overflow: hidden;
         }
         .sai-compare-competitor {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.06);
+          background: rgba(255, 71, 87, 0.06);
+          border: 1px solid rgba(255, 71, 87, 0.25);
         }
         .sai-compare-competitor .sai-compare-price {
           text-decoration: line-through;
-          text-decoration-color: rgba(255, 71, 87, 0.5);
-          color: rgba(255, 255, 255, 0.4);
+          text-decoration-color: #ff4757;
+          text-decoration-thickness: 3px;
+          color: #ffffff;
         }
         .sai-compare-centinela {
-          background: linear-gradient(180deg, rgba(34, 211, 238, 0.1), rgba(20, 26, 40, 0.6));
-          border: 1px solid var(--accent);
-          box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+          background: linear-gradient(180deg, rgba(0, 212, 170, 0.1), rgba(20, 26, 40, 0.6));
+          border: 2px solid rgba(0, 212, 170, 0.35);
+          box-shadow: 0 0 30px rgba(0, 212, 170, 0.1);
         }
         .sai-compare-centinela::before {
           content: '';
@@ -138,8 +139,8 @@ export default function SecureAIPage() {
           background: var(--accent);
         }
         .sai-compare-name {
-          font-size: 0.8rem; font-weight: 600;
-          color: rgba(255,255,255,0.6);
+          font-size: 1rem; font-weight: 600;
+          color: #ffffff;
           margin-bottom: 0.75rem;
           text-transform: uppercase;
           letter-spacing: 0.05em;
@@ -149,28 +150,28 @@ export default function SecureAIPage() {
         }
         .sai-compare-price {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 1.6rem; font-weight: 600;
+          font-size: 2.4rem; font-weight: 700;
           margin-bottom: 0.5rem;
           color: #fff;
         }
         .sai-compare-price span {
-          font-size: 0.7rem; font-weight: 400;
-          color: rgba(255,255,255,0.4);
+          font-size: 0.8rem; font-weight: 400;
+          color: rgba(255,255,255,0.5);
         }
         .sai-compare-centinela .sai-compare-price {
           text-decoration: none;
         }
         .sai-compare-note {
-          font-size: 0.75rem; color: rgba(255,255,255,0.35);
+          font-size: 0.9rem; color: rgba(255,255,255,0.65);
           line-height: 1.5;
         }
         .sai-compare-savings {
           margin-top: 1rem;
           font-family: 'JetBrains Mono', monospace;
-          font-size: 0.65rem; font-weight: 700;
+          font-size: 0.75rem; font-weight: 700;
           color: var(--safe);
-          background: rgba(0, 212, 170, 0.1);
-          padding: 4px 12px; border-radius: 100px;
+          background: rgba(0, 212, 170, 0.15);
+          padding: 6px 16px; border-radius: 100px;
           display: inline-block;
         }
 

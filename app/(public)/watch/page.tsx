@@ -603,27 +603,28 @@ export default function WatchProPage() {
         .wp-compare-strip {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
-          gap: 1rem;
+          gap: 1.5rem;
         }
         .wp-compare-card {
-          border-radius: 16px;
-          padding: 2rem 1.5rem;
+          border-radius: 20px;
+          padding: 2.5rem 2rem;
           text-align: center;
           position: relative;
           overflow: hidden;
         }
         .wp-compare-competitor {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.06);
+          background: rgba(255, 71, 87, 0.06);
+          border: 1px solid rgba(255, 71, 87, 0.25);
         }
         .wp-compare-competitor .wp-compare-price {
           text-decoration: line-through;
-          text-decoration-color: rgba(255, 71, 87, 0.5);
-          color: rgba(255, 255, 255, 0.4);
+          text-decoration-color: #ff4757;
+          text-decoration-thickness: 3px;
+          color: #ffffff;
         }
         .wp-compare-centinela {
           background: linear-gradient(180deg, rgba(34, 211, 238, 0.1), rgba(20, 26, 40, 0.6));
-          border: 1px solid var(--accent);
+          border: 2px solid rgba(0, 212, 170, 0.35);
           box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
         }
         .wp-compare-centinela::before {
@@ -634,40 +635,40 @@ export default function WatchProPage() {
           background: var(--accent);
         }
         .wp-compare-name {
-          font-size: 0.85rem; font-weight: 600;
-          color: rgba(255,255,255,0.6);
-          margin-bottom: 0.75rem;
+          font-size: 1rem; font-weight: 600;
+          color: #ffffff;
+          margin-bottom: 1rem;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.08em;
         }
         .wp-compare-centinela .wp-compare-name {
           color: var(--accent);
         }
         .wp-compare-price {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 1.8rem; font-weight: 600;
-          margin-bottom: 0.5rem;
+          font-size: 2.4rem; font-weight: 700;
+          margin-bottom: 0.75rem;
           color: #fff;
         }
         .wp-compare-price span {
-          font-size: 0.75rem; font-weight: 400;
-          color: rgba(255,255,255,0.4);
+          font-size: 0.9rem; font-weight: 400;
+          color: rgba(255,255,255,0.5);
         }
         .wp-compare-centinela .wp-compare-price {
-          color: #fff;
+          color: var(--accent);
           text-decoration: none;
         }
         .wp-compare-note {
-          font-size: 0.75rem; color: rgba(255,255,255,0.35);
-          line-height: 1.5;
+          font-size: 0.9rem; color: rgba(255,255,255,0.65);
+          line-height: 1.6;
         }
         .wp-compare-savings {
-          margin-top: 1rem;
+          margin-top: 1.25rem;
           font-family: 'JetBrains Mono', monospace;
-          font-size: 0.7rem; font-weight: 700;
+          font-size: 0.8rem; font-weight: 700;
           color: var(--safe);
-          background: rgba(0, 212, 170, 0.1);
-          padding: 4px 12px; border-radius: 100px;
+          background: rgba(0, 212, 170, 0.12);
+          padding: 6px 16px; border-radius: 100px;
           display: inline-block;
         }
 
