@@ -88,7 +88,7 @@ const ALL_TIERS = [
     name: "Private Infrastructure",
     price: "$2.5–5K",
     priceUnit: "/mo",
-    desc: "Private Llama 70B on dedicated V100 GPUs. SOC2 certified.",
+    desc: "Private LLMs on our own GPU cluster. SOC2 certified.",
     features: [
       "Private LLM deployment",
       "Dedicated GPU cluster",

@@ -62,7 +62,7 @@ export function ThreatBanner() {
           </div>
           <div className={styles.priceDropHeroBottom}>
             LatAm-specialized. 25-year operator built. Spanish-language OSINT depth.
-            1,600 owned GPUs. Private AI available. Cancel anytime.
+            Owned GPU infrastructure. Private AI available. Cancel anytime.
           </div>
         </div>
       </div>

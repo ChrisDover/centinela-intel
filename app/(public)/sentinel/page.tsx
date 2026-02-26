@@ -220,8 +220,7 @@ export default function SentinelPage() {
           <div className="sentinel-includes">
             <h3>Sentinel includes the full Centinela intelligence stack</h3>
             <ul className="sentinel-includes-list">
-              <li>Private Llama 70B deployment</li>
-              <li>Dedicated V100 GPU cluster</li>
+              <li>Private LLM deployment on owned GPU cluster</li>
               <li>Air-gapped processing option</li>
               <li>SOC2 certified infrastructure</li>
               <li>24/7 autonomous OSINT monitoring</li>

@@ -41,7 +41,7 @@ const COMPETITORS: Record<string, Record<string, { text: string; type: 'yes' | '
   Centinela: {
     'LatAm Focus (20+ years)': { text: 'YES', type: 'yes' },
     'Spanish-Language OSINT Depth': { text: 'YES', type: 'yes' },
-    'Owned GPU Infrastructure': { text: '1,600 GPUs', type: 'yes' },
+    'Owned GPU Infrastructure': { text: 'YES', type: 'yes' },
     'Private AI for Client Data': { text: 'YES', type: 'yes' },
     'Physical + Digital Convergence': { text: 'YES', type: 'yes' },
     'Self-Serve from $29/mo': { text: 'YES', type: 'yes' },

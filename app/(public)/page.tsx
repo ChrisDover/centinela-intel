@@ -12,7 +12,7 @@ import { CTASection } from './sections/CTASection';
 
 export const metadata: Metadata = {
   title: "Centinela AI — The $200K Intelligence Platform, Starting Free",
-  description: "Dataminr charges $240K/yr. Crisis24 quotes six figures. Centinela delivers the same LatAm security intelligence from $29/mo — or start with a free daily brief. 1,600 owned GPUs. 22 countries. Operator-built.",
+  description: "Dataminr charges $240K/yr. Crisis24 quotes six figures. Centinela delivers the same LatAm security intelligence from $29/mo — or start with a free daily brief. Owned GPU infrastructure. 22 countries. Operator-built.",
 };
 
 export default function HomePage() {

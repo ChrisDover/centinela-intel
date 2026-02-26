@@ -7,8 +7,8 @@ export function SecureAIPreview() {
       <h2 className="section-title">Private AI That Costs $500K Elsewhere. From $2.5K/mo.</h2>
       <p className="section-desc">
         Every query to OpenAI or Anthropic trains their models — including your threat
-        assessments and executive travel routes. Our private Llama 70B on dedicated V100
-        GPUs means your data never leaves your environment.
+        assessments and executive travel routes. Our local LLMs on our own GPU cluster
+        means your data never leaves your environment.
       </p>
 
       <div className={styles.vaultTerminal}>
@@ -21,11 +21,11 @@ export function SecureAIPreview() {
         <div className={styles.vaultTerminalBody}>
           <div className={styles.infraLine}>
             <div className={`status ${styles.statusGreen}`}></div>
-            <span>MODEL .......................... Llama 70B (Private)</span>
+            <span>MODEL .......................... Local LLM (Private)</span>
           </div>
           <div className={styles.infraLine}>
             <div className={`status ${styles.statusGreen}`}></div>
-            <span>GPU CLUSTER .................... 1,600+ V100 GPUs (OWNED)</span>
+            <span>GPU CLUSTER .................... Owned Infrastructure</span>
           </div>
           <div className={styles.infraLine}>
             <div className={`status ${styles.statusGreen}`}></div>
@@ -62,7 +62,7 @@ export function SecureAIPreview() {
           See How We Do It
         </a>
         <a href="/contact" className="btn-primary">
-          Talk to Us — $2.5K/mo
+          Talk to Us
         </a>
       </div>
     </section>

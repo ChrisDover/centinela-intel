@@ -129,8 +129,7 @@ export const TIERS: ProductTier[] = [
     featured: false,
     selfServe: false,
     features: [
-      "Private Llama 70B deployment",
-      "Dedicated V100 GPU cluster",
+      "Private LLM deployment on owned GPU cluster",
       "Air-gapped processing option",
       "SOC2-aligned infrastructure",
       "No third-party API exposure",
@@ -255,7 +254,7 @@ export const MOATS: Moat[] = [
     number: 4,
     title: "Private AI Infrastructure",
     description:
-      "1,600+ V100 GPUs running Llama 70B. Your queries, your data, your models — never touching third-party APIs. Full data sovereignty for regulated industries.",
+      "Local LLMs on our own GPU cluster. Your queries, your data, your models — never touching third-party APIs. Full data sovereignty for regulated industries.",
   },
   {
     number: 5,
@@ -268,8 +267,8 @@ export const MOATS: Moat[] = [
 // --------------- Proof Points ---------------
 
 export const PROOF_POINTS = {
-  gpus: "1,600+",
-  gpuType: "V100",
+  gpus: "Owned",
+  gpuType: "GPU Cluster",
   margins: "85%+",
   experience: "25+",
   continents: 3,

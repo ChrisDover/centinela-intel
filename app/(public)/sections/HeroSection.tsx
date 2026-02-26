@@ -12,7 +12,7 @@ export function HeroSection() {
       <p className={styles.heroSub}>
         Dataminr charges $20,000/mo. Crisis24 quotes six figures. Centinela gives you
         AI-generated, human-verified security intelligence for Latin America — starting
-        with a free daily brief. Built by a 25-year operator, powered by 1,600 owned GPUs.
+        with a free daily brief. Built by a 25-year operator, powered by our own GPU cluster.
       </p>
 
       <div className={styles.heroSubscribeCard}>
@@ -36,8 +36,8 @@ export function HeroSection() {
 
       <div className={styles.heroProof}>
         <div className={styles.proofItem}>
-          <div className="number">1,600</div>
-          <div className="label">Owned V100 GPUs</div>
+          <div className="number">Owned</div>
+          <div className="label">GPU Infrastructure</div>
         </div>
         <div className={styles.proofItem}>
           <div className="number">22</div>

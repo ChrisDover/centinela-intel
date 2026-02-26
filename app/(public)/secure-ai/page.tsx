@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Secure AI — Private Intelligence Infrastructure at 1/10th the Cost | Centinela AI",
   description:
-    "Enterprise AI vendors charge $500K+/yr for private LLM deployments. Centinela Secure AI delivers private Llama 70B on dedicated V100 GPUs from $2.5K/mo. SOC2 certified. Zero third-party API exposure.",
+    "Enterprise AI vendors charge $500K+/yr for private LLM deployments. Centinela Secure AI runs local LLMs on our own GPU cluster. SOC2 certified. Air-gap ready. Zero third-party API exposure.",
 };
 
 const USE_CASES = [
@@ -26,8 +26,8 @@ const USE_CASES = [
 ];
 
 const INFRA_LINES = [
-  { status: "green", text: "MODEL .......................... Llama 70B (Private)" },
-  { status: "green", text: "GPU CLUSTER .................... 1,600+ V100 GPUs" },
+  { status: "green", text: "MODEL .......................... Local LLM (Private)" },
+  { status: "green", text: "GPU CLUSTER .................... Owned Infrastructure" },
   { status: "green", text: "OSINT Collection Engine ........ ACTIVE" },
   { status: "green", text: "NLP Analysis Pipeline ........... ACTIVE" },
   { status: "blue", text: "Compliance ..................... SOC2 Certified" },
@@ -415,16 +415,16 @@ export default function SecureAIPage() {
           </h1>
           <p className="sai-hero-sub">
             Enterprise vendors charge half a million a year for private LLM deployments.
-            We run Llama 70B on our own V100 GPU cluster — SOC2 certified, air-gap ready,
+            We run local LLMs on our own GPU cluster — SOC2 certified, air-gap ready,
             zero third-party API exposure. Your data never leaves your environment.
           </p>
           <div className="sai-hero-credibility">
-            1,600+ owned GPUs. Not rented cloud instances — owned infrastructure
-            with 85%+ margins, meaning we can price this at a fraction of what IBM, Palantir, or Booz Allen charge.
+            Owned GPU infrastructure. Not rented cloud instances — our own hardware,
+            meaning we can price this at a fraction of what IBM, Palantir, or Booz Allen charge.
           </div>
           <div className="sai-hero-cta-row">
             <a href="/contact" className="btn-primary" style={{ padding: '0.85rem 2.5rem', display: 'inline-block', textDecoration: 'none' }}>
-              Talk to Us — $2.5K/mo
+              Talk to Us
             </a>
             <a href="/watch" className="btn-outline" style={{ padding: '0.85rem 2.5rem', display: 'inline-block', textDecoration: 'none' }}>
               Start With Watch Pro — $199/mo
@@ -542,12 +542,12 @@ export default function SecureAIPage() {
         <section className="sai-section">
           <div className="sai-features">
             <div className="sai-feature">
-              <div className="sai-feature-value">1,600+</div>
-              <div className="sai-feature-label">Owned V100 GPUs</div>
+              <div className="sai-feature-value">Owned</div>
+              <div className="sai-feature-label">GPU Infrastructure</div>
             </div>
             <div className="sai-feature">
-              <div className="sai-feature-value">70B</div>
-              <div className="sai-feature-label">Parameter Llama Model</div>
+              <div className="sai-feature-value">Private</div>
+              <div className="sai-feature-label">Local LLM Deployment</div>
             </div>
             <div className="sai-feature">
               <div className="sai-feature-value">0</div>
@@ -579,7 +579,7 @@ export default function SecureAIPage() {
           <h2>Stop Paying Enterprise Prices for Rented Infrastructure</h2>
           <p>
             Palantir and IBM charge $500K+ because they rent cloud GPUs and mark them up 10x.
-            We own our hardware. That&apos;s why Secure AI starts at $2.5K/mo instead of $50K.
+            We own our hardware. That&apos;s why we can offer Secure AI at a fraction of the cost.
           </p>
           <div className="sai-hero-cta-row">
             <a href="/contact" className="btn-primary" style={{ padding: "0.85rem 2.5rem", display: "inline-block", textDecoration: "none" }}>

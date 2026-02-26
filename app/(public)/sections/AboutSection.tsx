@@ -39,7 +39,7 @@ export function AboutSection() {
             that read some Reuters articles — it&apos;s informed by decades of ground truth.
           </p>
           <p>
-            Now backed by 1,600 owned V100 GPUs and private AI infrastructure, we
+            Now backed by owned GPU infrastructure and private AI, we
             deliver the intelligence we always wanted — at machine speed, with
             operator judgment, at 1/10th the price of the incumbents.
           </p>

@@ -11,7 +11,7 @@ const MOATS = [
     number: 2,
     title: 'Owned Infrastructure, Not Rented',
     description:
-      '1,600 V100 GPUs we own outright — not rented AWS instances marked up 10x. That\'s why Secure AI starts at $2.5K/mo instead of the $500K IBM and Palantir charge.',
+      'A GPU cluster we own outright — not rented AWS instances marked up 10x. That\'s why Secure AI starts at a fraction of the $500K IBM and Palantir charge.',
   },
   {
     number: 3,
