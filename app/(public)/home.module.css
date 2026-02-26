@@ -190,43 +190,174 @@
   margin-top: 0.35rem;
 }
 
-/* ============ THREAT CONTEXT BANNER ============ */
-.threatBanner {
+/* ============ PRICE COMPARISON / THREAT BANNER ============ */
+.priceDrop {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 4rem 2rem 2rem;
 }
 
-.threatInner {
-  background: linear-gradient(135deg, rgba(245, 166, 35, 0.08), rgba(34, 211, 238, 0.05));
-  border: 1px solid rgba(245, 166, 35, 0.2);
-  border-radius: 16px;
-  padding: 3rem;
+/* ── Competitor cards row ── */
+.priceDropGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.threatStat {
+.priceDropCard {
+  background: rgba(255, 71, 87, 0.04);
+  border: 1px solid rgba(255, 71, 87, 0.18);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
   text-align: center;
-  padding: 1rem;
 }
 
-.threatStat .value {
+.priceDropLogo {
   font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
-  font-size: 2.8rem;
-  font-weight: 500;
-  color: var(--accent-orange);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 71, 87, 0.6);
+  margin-bottom: 1rem;
 }
 
-.threatStat .desc {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  margin-top: 0.75rem;
-  line-height: 1.6;
+.priceDropAmount {
+  margin-bottom: 1.25rem;
 }
+
+.strikethrough {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 3rem;
+  font-weight: 600;
+  color: rgba(255, 71, 87, 0.35);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 71, 87, 0.6);
+  text-decoration-thickness: 3px;
+}
+
+.strikethrough .unit {
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.priceDropDetail {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+/* ── Centinela hero card ── */
+.priceDropHero {
+  margin-bottom: 2rem;
+}
+
+.priceDropHeroInner {
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.06), rgba(34, 211, 238, 0.04));
+  border: 2px solid rgba(0, 212, 170, 0.3);
+  border-radius: 20px;
+  padding: 3rem 2.5rem 2.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.priceDropHeroLabel {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.priceDropHeroAmounts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.priceDropHeroTier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.priceDropHeroBig {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.priceDropHeroBig .unit {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.priceDropHeroDesc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.priceDropHeroDivider {
+  width: 1px;
+  height: 60px;
+  background: rgba(0, 212, 170, 0.2);
+}
+
+.priceDropHeroBottom {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 212, 170, 0.12);
+}
+
+/* ── Savings callout ── */
+.priceDropSavings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1.5rem 2rem;
+  background: rgba(0, 212, 170, 0.06);
+  border: 1px solid rgba(0, 212, 170, 0.15);
+  border-radius: 12px;
+}
+
+.savingsNumber {
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.savingsText {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 440px;
+}
+
+/* Legacy (keep for backward compat) */
+.threatBanner { display: none; }
+.threatInner { display: none; }
+.threatStat { display: none; }
 
 /* ============ PRODUCT LADDER ============ */
 .productLadder {
@@ -1354,6 +1485,12 @@
   .shieldGrid,
   .diffGrid { grid-template-columns: 1fr; }
   .threatInner { grid-template-columns: 1fr; }
+  .priceDropGrid { grid-template-columns: 1fr; }
+  .priceDropHeroAmounts { flex-direction: column; gap: 1.5rem; }
+  .priceDropHeroDivider { width: 60px; height: 1px; }
+  .priceDropSavings { flex-direction: column; text-align: center; }
+  .strikethrough { font-size: 2.2rem; }
+  .priceDropHeroBig { font-size: 2.4rem; }
   .dashGrid { grid-template-columns: 1fr 1fr; }
   .dashBody { grid-template-columns: 1fr; }
   .vaultTiers { grid-template-columns: 1fr; }
