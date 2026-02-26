@@ -29,10 +29,14 @@ const LATAM_COUNTRIES = [
 ];
 
 const TIER_LIMITS: Record<string, number> = {
+  // Legacy tiers
   "1-country": 1,
   "2-country": 2,
   "3-country": 3,
   "all-countries": 999,
+  // Current tiers
+  "monitor-1-country": 1,
+  "monitor-corridor": 5,
 };
 
 export default function OnboardingPage() {
@@ -168,7 +172,7 @@ function OnboardingContent() {
             marginBottom: 16,
           }}
         >
-          CENTINELA INTEL — COUNTRY MONITOR
+          CENTINELA INTEL — MONITOR
         </p>
         <h1
           style={{
@@ -234,7 +238,7 @@ function OnboardingContent() {
           marginBottom: 8,
         }}
       >
-        CENTINELA INTEL — COUNTRY MONITOR
+        CENTINELA INTEL — MONITOR
       </p>
       <h1
         style={{

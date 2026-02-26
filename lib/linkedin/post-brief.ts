@@ -14,8 +14,13 @@ interface BriefData {
   date: string;
   bluf?: string;
   threatLevel: string;
+  whatChanged?: string[];
   developments: BriefDevelopment[] | string[];
+  travelStatus?: { location: string; status: string; note: string }[];
+  supplyChain?: string;
   countries: { name: string; summary: string }[];
+  personnelAdvisory?: string;
+  businessRisk?: string;
   analystNote: string;
 }
 

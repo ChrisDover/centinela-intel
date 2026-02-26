@@ -3,9 +3,9 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Latest Brief — The Centinela Brief | Centinela Intel",
+  title: "Latest Brief — The Centinela Brief | Centinela AI",
   description:
-    "Today's Latin America security intelligence brief from Centinela Intel.",
+    "Today's Latin America security intelligence brief from Centinela AI.",
 };
 
 export const dynamic = "force-dynamic";
@@ -474,7 +474,7 @@ export default async function LatestBriefPage() {
         {/* FOOTER */}
         <div className="brief-footer">
           <p>
-            Centinela Intel &mdash; A service of Enfocado Capital LLC
+            Centinela AI &mdash; A service of Enfocado Capital LLC
           </p>
           <p>
             AI-accelerated OSINT collection. Human-verified analysis.

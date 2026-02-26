@@ -24,9 +24,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Centinela Intel — AI-Powered Security Risk Intelligence",
+  title: "Centinela AI — AI-First Intelligence Infrastructure",
   description:
-    "Threat intelligence and risk analysis for organizations operating in Latin America. AI-accelerated monitoring, human-verified assessments.",
+    "The only platform combining AI-powered analysis and owned SOC2-compliant GPU infrastructure. Red team meets blue team at machine scale — at 1/10th the cost of legacy providers.",
 };
 
 export default function RootLayout({

@@ -77,7 +77,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const dateStr = slugToDateSearch(slug);
   return {
-    title: `Centinela Brief — ${dateStr} | Centinela Intel`,
+    title: `Centinela Brief — ${dateStr} | Centinela AI`,
     description: `Latin America security intelligence brief for ${dateStr}. Threat assessment, key developments, and analyst assessment covering 22 countries.`,
     openGraph: {
       title: `Centinela Brief — ${dateStr}`,
@@ -552,7 +552,7 @@ export default async function BlogPostPage({
 
         {/* FOOTER */}
         <div className="brief-footer">
-          <p>Centinela Intel &mdash; A service of Enfocado Capital LLC</p>
+          <p>Centinela AI &mdash; A service of Enfocado Capital LLC</p>
           <p>AI-accelerated OSINT collection. Human-verified analysis.</p>
         </div>
       </div>

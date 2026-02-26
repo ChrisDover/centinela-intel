@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Subscribe — The Centinela Brief | Centinela Intel",
+  title: "Subscribe — The Centinela Brief | Centinela AI",
 };
 
 export default function SubscribePage() {
@@ -125,7 +125,7 @@ export default function SubscribePage() {
         }
 
         .subscribe-sample a:hover {
-          color: #00e8bb;
+          color: #33e0f5;
         }
 
         @media (max-width: 600px) {
@@ -141,12 +141,12 @@ export default function SubscribePage() {
       <div className="subscribe-page">
         <div className="subscribe-container">
           <div className="section-label" style={{ textAlign: "center" }}>// Daily Intelligence</div>
-          <h1>The Centinela <em>Brief</em></h1>
-          <p className="subscribe-intro">A free daily Latin America security intelligence brief delivered every morning at 0600. AI-accelerated OSINT collection, human-verified analysis. Signal, not noise.</p>
+          <h1>The Daily <em>Intel Brief</em></h1>
+          <p className="subscribe-intro">AI-generated, human-in-the-loop security intelligence for Latin America — delivered to your inbox every morning. 22 countries. Zero noise.</p>
 
           <ul className="subscribe-benefits">
-            <li>Daily LatAm threat assessment with regional risk levels and trend analysis</li>
-            <li>Top security developments across Mexico, Central America, Colombia, and Ecuador</li>
+            <li>Daily LatAm threat assessment — AI-generated, human-verified</li>
+            <li>22 countries monitored: Mexico, Central America, Colombia, Ecuador, Brazil, and more</li>
             <li>Country-by-country operational guidance and travel risk updates</li>
             <li>Analyst assessment with forward-looking indicators to watch</li>
           </ul>
@@ -159,7 +159,7 @@ export default function SubscribePage() {
             <p className="subscribe-fine-print">Your email is never shared, sold, or used to train AI models. Unsubscribe anytime.</p>
           </div>
 
-          <p className="subscribe-sample">See what you&apos;ll get: <a href="/briefs/latest">Read today&apos;s brief</a></p>
+          <p className="subscribe-sample">See what you&apos;ll get: <a href="/briefs/latest">Read today&apos;s brief &rarr;</a></p>
         </div>
       </div>
     </>

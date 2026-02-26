@@ -351,7 +351,7 @@ export async function fetchOSINT(): Promise<string> {
   let braveWorked = false;
 
   if (braveResults.status === "fulfilled" && braveResults.value) {
-    parts.push("# BRAVE SEARCH — LAST 24 HOURS\n\n" + braveResults.value);
+    parts.push("# OPEN SOURCE INTELLIGENCE — LAST 24 HOURS\n\n" + braveResults.value);
     console.log("[OSINT] Brave Search: collected");
     braveWorked = true;
   } else {
@@ -359,7 +359,7 @@ export async function fetchOSINT(): Promise<string> {
   }
 
   if (googleNews.status === "fulfilled" && googleNews.value) {
-    parts.push("# GOOGLE NEWS RSS — LAST 24 HOURS\n\n" + googleNews.value);
+    parts.push("# NEWS WIRE — LAST 24 HOURS\n\n" + googleNews.value);
     console.log("[OSINT] Google News RSS: collected");
   } else {
     console.warn("[OSINT] Google News RSS: failed or empty");
@@ -371,7 +371,7 @@ export async function fetchOSINT(): Promise<string> {
     try {
       const ddgData = await fetchDDGResults();
       if (ddgData) {
-        parts.push("# DUCKDUCKGO WEB RESULTS (FALLBACK)\n\n" + ddgData);
+        parts.push("# WEB RESULTS (SUPPLEMENTARY)\n\n" + ddgData);
         console.log("[OSINT] DuckDuckGo fallback: collected");
       }
     } catch {

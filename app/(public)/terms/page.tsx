@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — Centinela Intel",
+  title: "Terms of Service — Centinela AI",
 };
 
 export default function TermsPage() {
@@ -60,18 +60,18 @@ export default function TermsPage() {
         <h1>Terms of Service</h1>
         <p className="policy-updated">Last updated: February 2026</p>
 
-        <p>These terms govern your use of the Centinela Intel website and services, operated by Enfocado Capital LLC.</p>
+        <p>These terms govern your use of the Centinela AI website and services, operated by Enfocado Capital LLC.</p>
 
         <h2>Services</h2>
-        <p>Centinela Intel provides security risk intelligence products including threat assessments, daily briefs, incident alerts, and strategic analysis. Our intelligence products are based on open-source information (OSINT) supplemented by proprietary analysis and are intended for informational purposes to support security decision-making.</p>
+        <p>Centinela AI provides security risk intelligence products including threat assessments, daily briefs, incident alerts, and strategic analysis. Our intelligence products are based on open-source information (OSINT) supplemented by proprietary analysis and are intended for informational purposes to support security decision-making.</p>
 
         <h2>Use of Intelligence Products</h2>
         <p>Intelligence products delivered to clients are for the exclusive use of the subscribing organization and its authorized personnel. Redistribution, resale, or public disclosure of client-specific intelligence products is prohibited without written consent.</p>
         <p>The Centinela Brief (our free daily newsletter) is classified as open-source and may be shared freely with attribution.</p>
 
         <h2>Disclaimer</h2>
-        <p>Our intelligence products represent our best assessment based on available information at the time of publication. Threat environments are inherently dynamic and unpredictable. Centinela Intel does not guarantee the accuracy, completeness, or timeliness of any intelligence product. Our assessments should be considered one input among many in your security decision-making process.</p>
-        <p>Centinela Intel is not a substitute for professional security consulting, legal advice, or emergency services. In any emergency situation, contact local authorities immediately.</p>
+        <p>Our intelligence products represent our best assessment based on available information at the time of publication. Threat environments are inherently dynamic and unpredictable. Centinela AI does not guarantee the accuracy, completeness, or timeliness of any intelligence product. Our assessments should be considered one input among many in your security decision-making process.</p>
+        <p>Centinela AI is not a substitute for professional security consulting, legal advice, or emergency services. In any emergency situation, contact local authorities immediately.</p>
 
         <h2>Limitation of Liability</h2>
         <p>To the maximum extent permitted by law, Enfocado Capital LLC and its personnel shall not be liable for any direct, indirect, incidental, or consequential damages arising from the use of or reliance on our intelligence products or services.</p>

@@ -16,7 +16,9 @@ STALE STORIES — SKIP THESE (weeks old, recycled by outlets):
 - The 10 Mexican miners abducted/killed (January 2026)
 - The 37 Mexican drug gang members extradited to the US
 
-THREAT LEVELS: MODERATE, ELEVATED, HIGH, CRITICAL`;
+THREAT LEVELS: MODERATE, ELEVATED, HIGH, CRITICAL
+
+NEVER reference your data collection tools or methods (search engines, RSS feeds, web results, etc.) in the brief. Cite the original reporting source (Reuters, AP, El Financiero, etc.), never the aggregator or search tool used to find it.`;
 
 const BRIEF_TOOL: Anthropic.Tool = {
   name: "create_brief",
@@ -52,12 +54,46 @@ const BRIEF_TOOL: Anthropic.Tool = {
         minItems: 22,
         maxItems: 22,
       },
+      whatChanged: {
+        type: "array",
+        items: { type: "string" },
+        description: "WHAT CHANGED — 2-4 bullet points. What is materially different from 24 hours ago? Net new developments only.",
+        minItems: 2,
+        maxItems: 5,
+      },
+      travelStatus: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            location: { type: "string", description: "Airport code or route name" },
+            status: { type: "string", enum: ["OPEN", "DISRUPTED", "CLOSED"] },
+            note: { type: "string", description: "One-line operational note" },
+          },
+          required: ["location", "status", "note"],
+        },
+        description: "TRAVEL STATUS — Major airports (MEX, GDL, PVR, CUN, MTY, TIJ) and key ground corridors.",
+        minItems: 4,
+        maxItems: 12,
+      },
+      supplyChain: {
+        type: "string",
+        description: "SUPPLY CHAIN & FREIGHT — Key border crossings, ports, freight corridors. Double newlines between paragraphs.",
+      },
+      personnelAdvisory: {
+        type: "string",
+        description: "PERSONNEL & EXPAT ADVISORY — Embassy advisories, areas to avoid, duty-of-care guidance. Double newlines between paragraphs.",
+      },
+      businessRisk: {
+        type: "string",
+        description: "BUSINESS RISK SIGNALS — Extortion trends, commercial disruption, regulatory impacts. 2-3 sentences.",
+      },
       analystNote: {
         type: "string",
         description: "Forward-looking assessment. Double newlines between paragraphs. 3-5 watch items.",
       },
     },
-    required: ["bluf", "threatLevel", "developments", "countries", "analystNote"],
+    required: ["bluf", "threatLevel", "whatChanged", "developments", "travelStatus", "supplyChain", "countries", "personnelAdvisory", "businessRisk", "analystNote"],
   },
 };
 
@@ -81,7 +117,7 @@ async function main() {
   console.log("Calling Opus 4.5...");
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 8192,
+    max_tokens: 12000,
     system: SYSTEM_PROMPT,
     tools: [BRIEF_TOOL],
     tool_choice: { type: "tool", name: "create_brief" },
@@ -110,8 +146,13 @@ async function main() {
     date: todayStr,
     bluf: input.bluf || "",
     threatLevel: input.threatLevel,
+    whatChanged: (input.whatChanged as string[]) || [],
     developments: devs,
+    travelStatus: (input.travelStatus as { location: string; status: string; note: string }[]) || [],
+    supplyChain: (input.supplyChain as string) || "",
     countries: ctrs,
+    personnelAdvisory: (input.personnelAdvisory as string) || "",
+    businessRisk: (input.businessRisk as string) || "",
     analystNote: input.analystNote || "",
   };
 

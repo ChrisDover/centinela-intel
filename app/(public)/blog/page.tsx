@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import prisma from "@/lib/prisma";
 
 export const metadata: Metadata = {
-  title: "Blog — Security Intelligence & Analysis | Centinela Intel",
+  title: "Blog — Security Intelligence & Analysis | Centinela AI",
   description:
     "Security intelligence articles and daily Latin America briefs. Analysis from former operators with 25+ years of experience.",
 };

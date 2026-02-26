@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Get the Daily Brief — Centinela Intel",
+  title: "Get the Daily Brief — Centinela AI",
   description:
     "Free daily Latin America security intelligence delivered every morning. 22 countries. AI-accelerated OSINT. Human-verified analysis.",
 };

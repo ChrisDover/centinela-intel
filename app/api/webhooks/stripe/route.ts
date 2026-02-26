@@ -4,11 +4,23 @@ import prisma from "@/lib/prisma";
 
 // Only process checkouts for Centinela Intel price IDs (ignore TrendLock, Pollinate, etc.)
 const CENTINELA_PRICE_IDS = new Set([
+  // Legacy tiers
   process.env.STRIPE_PRICE_1_COUNTRY,
   process.env.STRIPE_PRICE_2_COUNTRY,
   process.env.STRIPE_PRICE_3_COUNTRY,
   process.env.STRIPE_PRICE_ALL_COUNTRIES,
+  // Current tiers
+  process.env.STRIPE_PRICE_MONITOR_1,
+  process.env.STRIPE_PRICE_MONITOR_CORRIDOR,
+  process.env.STRIPE_PRICE_WATCH_PRO_STARTER,
 ]);
+
+// Map new tier slugs to plan names for the database
+function getPlanFromTier(tier: string): string {
+  if (tier.startsWith("monitor-")) return "monitor";
+  if (tier.startsWith("watch-pro-")) return "watch-pro";
+  return "country-monitor"; // legacy default
+}
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -77,7 +89,7 @@ export async function POST(request: NextRequest) {
             name: session.customer_details?.name || null,
             stripeCustomerId: customerId,
             stripeSubscriptionId: subscriptionId || null,
-            plan: "country-monitor",
+            plan: getPlanFromTier(tier),
             planTier: tier,
             planStatus: "active",
           },

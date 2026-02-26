@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "You're In — The Centinela Brief | Centinela Intel",
+  title: "You're In — The Centinela Brief | Centinela AI",
 };
 
 export default function WelcomePage() {
@@ -214,7 +214,7 @@ export default function WelcomePage() {
         <div className="welcome-confirm">
           <div className="welcome-confirm-icon">&#10003;</div>
           <div className="welcome-confirm-text">
-            <p><strong>Check your email.</strong> You&apos;ll receive a welcome message from Centinela Intel. Check spam if you don&apos;t see it within a few minutes.</p>
+            <p><strong>Check your email.</strong> You&apos;ll receive a welcome message from Centinela AI. Check spam if you don&apos;t see it within a few minutes.</p>
           </div>
         </div>
 
@@ -238,8 +238,8 @@ export default function WelcomePage() {
         </div>
 
         <div className="welcome-cta">
-          <p>Need more than our daily brief? Daily country-specific intelligence, incident alerts, and analyst support start at $497/mo.</p>
-          <a href="/watch">Explore Centinela Watch &#8594;</a>
+          <p>Need daily country-specific intelligence? Monitor starts at $29/mo with daily briefs, incident alerts, and analyst support.</p>
+          <a href="/pricing">Explore Monitor Plans &#8594;</a>
         </div>
       </div>
     </>

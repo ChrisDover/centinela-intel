@@ -15,8 +15,13 @@ interface BriefData {
   date: string;
   bluf?: string;
   threatLevel: string;
+  whatChanged?: string[];
   developments: BriefDevelopment[] | string[];
+  travelStatus?: { location: string; status: string; note: string }[];
+  supplyChain?: string;
   countries: { name: string; summary: string }[];
+  personnelAdvisory?: string;
+  businessRisk?: string;
   analystNote: string;
 }
 
@@ -112,6 +117,34 @@ export function briefTemplate({
     )
     .join("\n");
 
+  // Render WHAT CHANGED section
+  const whatChangedHtml = brief.whatChanged && brief.whatChanged.length > 0
+    ? `<p style="margin: 0 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">WHAT CHANGED</p>
+${brief.whatChanged.map(item => `<p style="margin: 0 0 6px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">&bull; ${item}</p>`).join("\n")}` : "";
+
+  // Render TRAVEL STATUS table
+  const travelStatusHtml = brief.travelStatus && brief.travelStatus.length > 0
+    ? `<p style="margin: 24px 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">TRAVEL STATUS</p>
+${brief.travelStatus.map(t => {
+  const statusColor = t.status === "CLOSED" ? "#ff4757" : t.status === "DISRUPTED" ? "#ffb347" : "#00d4aa";
+  return `<p style="margin: 0 0 6px; font-size: 15px; line-height: 1.8; color: #1a1a1a;"><strong>${t.location}</strong> &mdash; <span style="color: ${statusColor}; font-family: monospace; font-weight: bold;">${t.status}</span> &mdash; ${t.note}</p>`;
+}).join("\n")}` : "";
+
+  // Render SUPPLY CHAIN section
+  const supplyChainHtml = brief.supplyChain
+    ? `<p style="margin: 24px 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">SUPPLY CHAIN &amp; FREIGHT</p>
+${brief.supplyChain.split(/\n\n+/).filter(p => p.trim()).map(p => `<p style="margin: 0 0 12px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">${p.trim()}</p>`).join("\n")}` : "";
+
+  // Render PERSONNEL ADVISORY section
+  const personnelHtml = brief.personnelAdvisory
+    ? `<p style="margin: 24px 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">PERSONNEL &amp; EXPAT ADVISORY</p>
+${brief.personnelAdvisory.split(/\n\n+/).filter(p => p.trim()).map(p => `<p style="margin: 0 0 12px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">${p.trim()}</p>`).join("\n")}` : "";
+
+  // Render BUSINESS RISK section
+  const businessRiskHtml = brief.businessRisk
+    ? `<p style="margin: 24px 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">BUSINESS RISK SIGNALS</p>
+<p style="margin: 0 0 12px; font-size: 15px; line-height: 1.8; color: #1a1a1a;">${brief.businessRisk}</p>` : "";
+
   const content = `<p style="margin: 0 0 8px; font-size: 12px; line-height: 1.6; color: #999999; font-family: monospace; letter-spacing: 0.5px;">THE CENTINELA BRIEF</p>
 
 <p style="margin: 0 0 4px; font-size: 12px; line-height: 1.6; color: #999999;">${brief.date} &mdash; Open Source / For Distribution</p>
@@ -122,15 +155,25 @@ ${brief.bluf ? `<p style="margin: 0 0 8px; font-size: 13px; line-height: 1.6; co
 
 <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.8; color: #1a1a1a; font-weight: 500;">${brief.bluf}</p>` : ""}
 
-<p style="margin: 0 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">KEY DEVELOPMENTS</p>
+${whatChangedHtml}
+
+<p style="margin: 24px 0 8px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">KEY DEVELOPMENTS</p>
 
 ${developmentsList}
+
+${travelStatusHtml}
+
+${supplyChainHtml}
 
 ${renderCTA(ctaType, { campaignId, position: "mid" })}
 
 <p style="margin: 24px 0 16px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">COUNTRY WATCH</p>
 
 ${countriesList}
+
+${personnelHtml}
+
+${businessRiskHtml}
 
 <p style="margin: 24px 0 16px; font-size: 13px; line-height: 1.6; color: #666666; font-family: monospace; text-transform: uppercase; letter-spacing: 0.5px;">ANALYST ASSESSMENT</p>
 

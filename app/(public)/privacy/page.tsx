@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Centinela Intel",
+  title: "Privacy Policy — Centinela AI",
 };
 
 export default function PrivacyPage() {
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
         <h1>Privacy Policy</h1>
         <p className="policy-updated">Last updated: February 2026</p>
 
-        <p>Centinela Intel, a service of Enfocado Capital LLC (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), is committed to protecting your privacy. This policy explains how we collect, use, and safeguard your information.</p>
+        <p>Centinela AI, a service of Enfocado Capital LLC (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;), is committed to protecting your privacy. This policy explains how we collect, use, and safeguard your information.</p>
 
         <h2>Information We Collect</h2>
         <p>We collect information you provide directly to us, including:</p>

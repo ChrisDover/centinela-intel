@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Request Received — Centinela Intel",
+  title: "Request Received — Centinela AI",
 };
 
 export default function ThankYouPage() {

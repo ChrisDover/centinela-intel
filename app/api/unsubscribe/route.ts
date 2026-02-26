@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unsubscribed — Centinela Intel</title>
+  <title>Unsubscribed — Centinela AI</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
         : `<h1>Something went wrong.</h1>
          <p>We couldn't process your unsubscribe request. Please try again or contact <a href="mailto:intel@centinelaintel.com">intel@centinelaintel.com</a>.</p>`
     }
-    <p><a href="/">← Back to Centinela Intel</a></p>
+    <p><a href="/">← Back to Centinela AI</a></p>
   </div>
 </body>
 </html>`;

@@ -124,7 +124,7 @@ export default function DashboardClient() {
           Dashboard
         </h1>
         <p className="mt-1 text-sm text-centinela-text-muted">
-          Centinela Intel overview
+          Centinela AI overview
         </p>
       </div>
 

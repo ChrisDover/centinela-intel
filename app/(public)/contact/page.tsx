@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Request a Briefing — Centinela Intel",
+  title: "Request a Briefing — Centinela AI",
 };
 
 export default function ContactPage() {
@@ -18,16 +18,16 @@ export default function ContactPage() {
 
         .contact-page h1 {
           font-family: 'Instrument Serif', serif;
-          font-size: clamp(2rem, 5vw, 2.8rem);
+          font-size: clamp(2.4rem, 5vw, 3.2rem);
           font-weight: 400;
           margin-bottom: 1rem;
-          line-height: 1.2;
+          line-height: 1.15;
         }
 
         .contact-intro {
           color: var(--text-secondary);
-          font-size: 1.05rem;
-          line-height: 1.7;
+          font-size: 1.15rem;
+          line-height: 1.75;
           margin-bottom: 3rem;
         }
 
@@ -142,7 +142,7 @@ export default function ContactPage() {
           {/* Web3Forms access key */}
           <input type="hidden" name="access_key" value="7224f7af-e80d-40d7-b05c-4a2c324ed6a0" />
           <input type="hidden" name="redirect" value="https://centinelaintel.com/thank-you" />
-          <input type="hidden" name="subject" value="New Briefing Request — Centinela Intel" />
+          <input type="hidden" name="subject" value="New Briefing Request — Centinela AI" />
 
           {/* Honeypot spam prevention */}
           <input type="checkbox" name="botcheck" style={{ display: "none" }} />
@@ -169,19 +169,31 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="regions">Region(s) of Interest</label>
-            <select id="regions" name="regions" defaultValue="">
-              <option value="" disabled>Select a region</option>
-              <option value="Mexico">Mexico</option>
-              <option value="Central America">Central America (Guatemala, Honduras, El Salvador)</option>
-              <option value="Colombia">Colombia</option>
-              <option value="Ecuador">Ecuador</option>
-              <option value="Brazil">Brazil</option>
-              <option value="Southern Cone">Southern Cone (Argentina, Chile, Uruguay)</option>
-              <option value="Caribbean">Caribbean</option>
-              <option value="Multiple / All LatAm">Multiple Regions / All LatAm</option>
-            </select>
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="regions">Region(s) of Interest</label>
+              <select id="regions" name="regions" defaultValue="">
+                <option value="" disabled>Select a region</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Central America">Central America (Guatemala, Honduras, El Salvador)</option>
+                <option value="Colombia">Colombia</option>
+                <option value="Ecuador">Ecuador</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Southern Cone">Southern Cone (Argentina, Chile, Uruguay)</option>
+                <option value="Caribbean">Caribbean</option>
+                <option value="Multiple / All LatAm">Multiple Regions / All LatAm</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="tier">Tier of Interest</label>
+              <select id="tier" name="tier" defaultValue="">
+                <option value="" disabled>Select a tier</option>
+                <option value="Secure AI">Secure AI</option>
+                <option value="Sentinel">Sentinel</option>
+                <option value="Enterprise">Enterprise / Custom</option>
+                <option value="General">General Inquiry</option>
+              </select>
+            </div>
           </div>
 
           <div className="form-group">

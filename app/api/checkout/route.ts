@@ -2,15 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 import getStripe from "@/lib/stripe";
 
 const TIER_PRICES: Record<string, string | undefined> = {
+  // Legacy tiers (backward compat for existing subscribers)
   "1-country": process.env.STRIPE_PRICE_1_COUNTRY,
   "2-country": process.env.STRIPE_PRICE_2_COUNTRY,
   "3-country": process.env.STRIPE_PRICE_3_COUNTRY,
   "all-countries": process.env.STRIPE_PRICE_ALL_COUNTRIES,
+  // Current tiers
+  "monitor-1-country": process.env.STRIPE_PRICE_MONITOR_1,
+  "monitor-corridor": process.env.STRIPE_PRICE_MONITOR_CORRIDOR,
+  "watch-pro-starter": process.env.STRIPE_PRICE_WATCH_PRO_STARTER,
 };
+
+// Watch Pro tiers redirect to /welcome-pro after checkout
+const WATCH_PRO_TIERS = new Set([
+  "watch-pro-starter",
+]);
 
 export async function POST(request: NextRequest) {
   try {
-    const { tier = "1-country" } = await request.json().catch(() => ({}));
+    const { tier = "monitor-1-country" } = await request.json().catch(() => ({}));
 
     const priceId = TIER_PRICES[tier];
     if (!priceId) {
@@ -19,6 +29,11 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://centinelaintel.com";
+    const successPath = WATCH_PRO_TIERS.has(tier)
+      ? "/welcome-pro"
+      : "/onboarding";
 
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
@@ -37,8 +52,8 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://centinelaintel.com"}/onboarding?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://centinelaintel.com"}/watch`,
+      success_url: `${baseUrl}${successPath}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/pricing`,
     });
 
     return NextResponse.json({ url: session.url });

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Centinela Intel — Daily Brief — 10 Feb 2026",
+  title: "Centinela AI — Daily Brief — 10 Feb 2026",
 };
 
 export default function BriefPage() {
@@ -519,7 +519,7 @@ export default function BriefPage() {
 
         {/* FOOTER */}
         <div className="brief-footer">
-          <p><strong>Centinela Intel</strong> — AI-Powered Security Risk Intelligence</p>
+          <p><strong>Centinela AI</strong> — AI-Powered Security Risk Intelligence</p>
           <p>A service of Enfocado Capital LLC</p>
           <p style={{ marginTop: "1rem" }}>This brief is generated using AI-synthesized OSINT analysis, reviewed and annotated by senior analysts with operational experience across Latin America. Sources include government advisories, local media, ACLED conflict data, and proprietary monitoring.</p>
           <p style={{ marginTop: "1.5rem", color: "var(--text-secondary)" }}>Want deeper coverage? <a href="/watch" style={{ color: "var(--accent)", textDecoration: "none" }}>Upgrade to Centinela Watch</a> — daily country-specific briefs, incident alerts, and analyst access.</p>

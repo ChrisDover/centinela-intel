@@ -15,13 +15,13 @@ export async function generateMetadata({
     select: { title: true, htmlContent: true, publishedAt: true },
   });
 
-  if (!post) return { title: "Article Not Found | Centinela Intel" };
+  if (!post) return { title: "Article Not Found | Centinela AI" };
 
   const plainText = post.htmlContent.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
   const description = plainText.length > 160 ? plainText.substring(0, 160) + "..." : plainText;
 
   return {
-    title: `${post.title} | Centinela Intel`,
+    title: `${post.title} | Centinela AI`,
     description,
     openGraph: {
       title: post.title,
@@ -317,7 +317,7 @@ export default async function ArticlePage({
 
         {/* FOOTER */}
         <div className="article-footer">
-          <p>Centinela Intel &mdash; A service of Enfocado Capital LLC</p>
+          <p>Centinela AI &mdash; A service of Enfocado Capital LLC</p>
           <p>AI-accelerated OSINT collection. Human-verified analysis.</p>
         </div>
       </div>

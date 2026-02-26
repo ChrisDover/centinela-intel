@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Centinela Intel — Honduras Country Monitor — 12 Feb 2026",
+  title: "Centinela AI — Honduras Country Monitor — 12 Feb 2026",
   description:
     "Daily intelligence brief for Honduras: security threats, regional assessments, and operational guidance for corporate security teams.",
 };
@@ -952,7 +952,7 @@ export default function HondurasBriefPage() {
         <div className="brief-cta-box">
           <h3>Get This Intelligence Daily</h3>
           <p>
-            This is a sample of the Centinela Intel Country Monitor — delivered
+            This is a sample of the Centinela AI Country Monitor — delivered
             every morning with a live threat map, incident feed, and regional
             breakdown for your specific country of operations.
           </p>
@@ -975,7 +975,7 @@ export default function HondurasBriefPage() {
         {/* FOOTER */}
         <div className="brief-footer">
           <p>
-            <strong>Centinela Intel</strong> — AI-Powered Security Risk
+            <strong>Centinela AI</strong> — AI-Powered Security Risk
             Intelligence
           </p>
           <p>A service of Enfocado Capital LLC</p>
