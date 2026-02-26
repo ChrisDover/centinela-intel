@@ -200,8 +200,8 @@ IMPORTANT: Only report developments that are CURRENT (last 24-48 hours). If OSIN
 
 Write like a person, not a machine. Vary your sentence length. Be direct. Use specific names, numbers, and sources.`;
 
-  console.log("[Generate] Calling Claude...");
-  const response = await anthropic.messages.create({
+  console.log("[Generate] Calling Claude (streaming)...");
+  const stream = anthropic.messages.stream({
     model: "claude-sonnet-4-6",
     max_tokens: 12000,
     system: SYSTEM_PROMPT,
@@ -209,6 +209,8 @@ Write like a person, not a machine. Vary your sentence length. Be direct. Use sp
     tool_choice: { type: "tool", name: "create_brief" },
     messages: [{ role: "user", content: userPrompt }],
   });
+
+  const response = await stream.finalMessage();
 
   // Extract tool use result
   const toolBlock = response.content.find(

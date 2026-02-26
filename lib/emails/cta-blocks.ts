@@ -28,8 +28,9 @@ export function thunderdomeCTA(opts: CTAOptions = {}): string {
 }
 
 export function premiumCTA(opts: CTAOptions = {}): string {
-  const url = `https://centinelaintel.com/watch?${utmParams("premium", opts)}`;
-  return `<p style="margin: 32px 0 0; font-size: 14px; line-height: 1.8; color: #1a1a1a;">Need deeper coverage? <a href="${url}" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">Upgrade to Centinela Watch</a> — daily country-specific briefs, incident alerts, and analyst access.</p>`;
+  const monitorUrl = `https://centinelaintel.com/pricing?${utmParams("monitor", opts)}`;
+  const watchUrl = `https://centinelaintel.com/watch?${utmParams("watch-pro", opts)}`;
+  return `<p style="margin: 32px 0 0; font-size: 14px; line-height: 1.8; color: #1a1a1a;">Want this level of coverage for your specific countries? <a href="${monitorUrl}" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">Centinela Monitor</a> — daily country-specific briefs, incident alerts, and analyst access. $29/mo per country. Need a live terminal? <a href="${watchUrl}" style="color: #1a1a1a; text-decoration: underline; font-weight: bold;">Watch Pro</a> — real-time threat map, flash alerts, and API access. $199/mo.</p>`;
 }
 
 export function briefingCTA(opts: CTAOptions = {}): string {
